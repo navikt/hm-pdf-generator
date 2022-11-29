@@ -1,0 +1,35 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    app: hm-pdf-generator
+    team: teamdigihot
+  name: hm-pdf-generator
+  namespace: teamdigihot
+spec:
+  image: {{ image }}
+  team: teamdigihot
+  liveness:
+    path: /isalive
+  readiness:
+    path: /isready
+  port: 8082
+  prometheus:
+    enabled: true
+    path: /metrics
+  replicas:
+    max: 2
+    min: 4
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+  secureLogs:
+    enabled: true
+  accessPolicy:
+    inbound:
+      rules:
+        - application: hm-brev
