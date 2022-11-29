@@ -122,13 +122,10 @@ class PdfService {
     }
 
     companion object {
-        private val logg = KotlinLogging.logger {}
-
         val colorProfile: ByteArray
-        get() {
-            val resourceAsStream: ByteArray = javaClass.getResource("/sRGB.icc").readBytes()
-            logg.info { resourceAsStream }
-            return resourceAsStream
-        }
+            get() {
+                val resourceAsStream: ByteArray = javaClass.getResource("/sRGB.icc").readBytes()
+                return resourceAsStream
+            }
     }
 }
