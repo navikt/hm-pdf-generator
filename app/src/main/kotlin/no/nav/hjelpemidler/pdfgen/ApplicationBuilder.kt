@@ -14,7 +14,7 @@ internal class ApplicationBuilder() {
 
     fun Application.configure() {
         install(CallLogging) {
-            level = Level.DEBUG
+            level = Level.INFO
             filter { call -> call.request.path().startsWith("/api") }
         }
 
