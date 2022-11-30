@@ -1,4 +1,4 @@
-package no.nav.hjelpemidler.saksbehandling.no.nav.hjelpemidler.pdf
+package no.nav.hjelpemidler.pdfgen.pdf
 
 import io.ktor.server.application.call
 import io.ktor.server.request.receive

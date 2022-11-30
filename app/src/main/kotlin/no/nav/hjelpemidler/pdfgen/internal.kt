@@ -1,4 +1,4 @@
-package no.nav.hjelpemidler.saksbehandling
+package no.nav.hjelpemidler.pdfgen
 
 import io.ktor.http.ContentType
 import io.ktor.server.application.call

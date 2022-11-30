@@ -1,10 +1,10 @@
-package no.nav.hjelpemidler.saksbehandling.no.nav.hjelpemidler.pdf
+package no.nav.hjelpemidler.pdfgen.pdf
 
 import com.openhtmltopdf.extend.FSSupplier
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer
-import mu.KotlinLogging
+import org.apache.pdfbox.io.IOUtils
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.common.PDMetadata
@@ -25,6 +25,7 @@ import java.io.InputStream
 import java.util.Calendar
 
 class PdfService {
+    private val colorProfile = IOUtils.toByteArray(PdfService::class.java.getResourceAsStream("/sRGB.icc"))
 
     fun lagPdf(html: String): ByteArray {
         val pdfOutputStream = ByteArrayOutputStream()
@@ -70,6 +71,8 @@ class PdfService {
             throw RuntimeException("Feil ved generering av PDF", e)
         }
     }
+
+
 
     private fun PDDocument.conform() {
         val xmp = XMPMetadata.createXMPMetadata()
@@ -119,13 +122,5 @@ class PdfService {
         override fun supply(): InputStream {
             return requireNotNull(javaClass.getResourceAsStream("/fonts/$fontName"))
         }
-    }
-
-    companion object {
-        val colorProfile: ByteArray
-            get() {
-                val resourceAsStream: ByteArray = javaClass.getResource("/sRGB.icc").readBytes()
-                return resourceAsStream
-            }
     }
 }
