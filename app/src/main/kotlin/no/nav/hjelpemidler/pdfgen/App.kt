@@ -1,5 +1,7 @@
 package no.nav.hjelpemidler.pdfgen
 
+import com.openhtmltopdf.slf4j.Slf4jLogger
+import com.openhtmltopdf.util.XRLog
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.plugins.callloging.CallLogging
@@ -12,6 +14,8 @@ import org.slf4j.event.Level
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.main() {
+    XRLog.setLoggerImpl(Slf4jLogger())
+
     val pdfService = PdfService()
 
     install(CallLogging) {
