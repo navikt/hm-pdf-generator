@@ -17,9 +17,9 @@ import org.apache.xmpbox.XMPMetadata
 import org.apache.xmpbox.type.BadFieldValueException
 import org.apache.xmpbox.xml.XmpSerializer
 import org.jsoup.Jsoup
-import java.io.ByteArrayOutputStream
 import org.jsoup.helper.W3CDom
 import org.w3c.dom.Document
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.util.Calendar
@@ -72,8 +72,6 @@ class PdfService {
         }
     }
 
-
-
     private fun PDDocument.conform() {
         val xmp = XMPMetadata.createXMPMetadata()
         val catalog = this.documentCatalog
@@ -118,7 +116,6 @@ class PdfService {
     }
 
     private class FontSupplier(val fontName: String) : FSSupplier<InputStream> {
-
         override fun supply(): InputStream {
             return requireNotNull(javaClass.getResourceAsStream("/fonts/$fontName"))
         }

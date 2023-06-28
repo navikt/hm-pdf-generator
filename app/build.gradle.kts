@@ -6,30 +6,21 @@ application {
     mainClass.set("no.nav.hjelpemidler.pdfgen.AppKt")
 }
 
+val openhtmltopdfVersion = "1.0.10"
+val ktorVersion = "2.3.1"
+
 dependencies {
-    // PDFgen
-    implementation("com.openhtmltopdf:openhtmltopdf-core:1.0.10")
-    implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10")
-    implementation("com.openhtmltopdf:openhtmltopdf-svg-support:1.0.10")
-    implementation("org.jsoup:jsoup:1.15.3")
+    implementation("com.openhtmltopdf:openhtmltopdf-core:$openhtmltopdfVersion")
+    implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion")
+    implementation("com.openhtmltopdf:openhtmltopdf-svg-support:$openhtmltopdfVersion")
+    implementation("org.jsoup:jsoup:1.16.1")
 
-    // Ktor
-    fun ktor(name: String) = "io.ktor:ktor-$name:2.1.3"
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
 
-    // Ktor Server
-    fun ktorServer(name: String) = ktor("server-$name")
-    implementation(ktorServer("core"))
-    implementation(ktorServer("netty"))
-    implementation(ktorServer("call-logging"))
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
 
-    // Ktor Client
-    fun ktorClient(name: String) = ktor("client-$name")
-    implementation(ktorClient("core"))
-
-    testImplementation("io.mockk:mockk:1.13.2")
-    testImplementation(ktor("server-test-host")) {
-        // https://youtrack.jetbrains.com/issue/KT-46090
-        exclude("org.jetbrains.kotlin", "kotlin-test-junit")
-    }
+    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
 }
-
