@@ -20,6 +20,8 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
 
+    runtimeOnly("org.slf4j:jcl-over-slf4j:2.0.7")
+
     testImplementation("io.mockk:mockk:1.13.5")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
 }
