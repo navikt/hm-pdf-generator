@@ -7,7 +7,6 @@ application {
 }
 
 val openhtmltopdfVersion = "1.0.10"
-val ktorVersion = "2.3.1"
 
 dependencies {
     implementation("com.openhtmltopdf:openhtmltopdf-core:$openhtmltopdfVersion")
@@ -16,12 +15,12 @@ dependencies {
     implementation("com.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
     implementation("org.jsoup:jsoup:1.16.1")
 
-    implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation("io.ktor:ktor-server-core")
+    implementation("io.ktor:ktor-server-netty")
+    implementation("io.ktor:ktor-server-call-logging")
 
     runtimeOnly("org.slf4j:jcl-over-slf4j:2.0.7")
 
     testImplementation("io.mockk:mockk:1.13.5")
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("io.ktor:ktor-server-test-host")
 }
