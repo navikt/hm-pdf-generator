@@ -22,6 +22,7 @@ import org.w3c.dom.Document
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.io.OutputStream
 import java.util.Calendar
 
 class PdfService {
@@ -35,7 +36,7 @@ class PdfService {
         return pdfOutputStream.toByteArray()
     }
 
-    private fun genererPdf(w3cDokument: Document, outputStream: ByteArrayOutputStream) {
+    private fun genererPdf(w3cDokument: Document, outputStream: OutputStream) {
         try {
             val builder = PdfRendererBuilder()
                 .useFastMode()
@@ -73,27 +74,27 @@ class PdfService {
     }
 
     private fun PDDocument.conform() {
-        val xmp = XMPMetadata.createXMPMetadata()
+        val xmpMetadata = XMPMetadata.createXMPMetadata()
         val catalog = this.documentCatalog
-        val cal = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
         val page = PDPage(PDRectangle.A4)
 
         try {
-            val dc = xmp.createAndAddDublinCoreSchema()
-            dc.addCreator("navikt/hm-pdf-generator")
-            dc.addDate(cal)
+            val schema = xmpMetadata.createAndAddDublinCoreSchema()
+            schema.addCreator("navikt/hm-pdf-generator")
+            schema.addDate(calendar)
 
-            val id = xmp.createAndAddPFAIdentificationSchema()
+            val id = xmpMetadata.createAndAddPFAIdentificationSchema()
             id.part = 2
             id.conformance = "U"
 
             val serializer = XmpSerializer()
-            val baos = ByteArrayOutputStream()
-            serializer.serialize(xmp, baos, true)
+            val outputStream = ByteArrayOutputStream()
+            serializer.serialize(xmpMetadata, outputStream, true)
 
-            val metadata = PDMetadata(this)
-            metadata.importXMPMetadata(baos.toByteArray())
-            catalog.metadata = metadata
+            val pdMetadata = PDMetadata(this)
+            pdMetadata.importXMPMetadata(outputStream.toByteArray())
+            catalog.metadata = pdMetadata
         } catch (e: BadFieldValueException) {
             throw IllegalArgumentException(e)
         }
@@ -106,9 +107,9 @@ class PdfService {
         catalog.addOutputIntent(intent)
         catalog.language = "nb-NO"
 
-        val pdViewer = PDViewerPreferences(page.cosObject)
-        pdViewer.setDisplayDocTitle(true)
-        catalog.viewerPreferences = pdViewer
+        val viewerPreferences = PDViewerPreferences(page.cosObject)
+        viewerPreferences.setDisplayDocTitle(true)
+        catalog.viewerPreferences = viewerPreferences
 
         catalog.markInfo = PDMarkInfo(page.cosObject)
         catalog.structureTreeRoot = PDStructureTreeRoot()
