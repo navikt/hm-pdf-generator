@@ -4,7 +4,11 @@ import com.openhtmltopdf.extend.FSSupplier
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.apache.pdfbox.io.IOUtils
+import org.apache.pdfbox.io.MemoryUsageSetting
+import org.apache.pdfbox.multipdf.PDFMergerUtility
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.common.PDMetadata
@@ -28,42 +32,43 @@ import java.util.Calendar
 class PdfService {
     private val colorProfile = IOUtils.toByteArray(PdfService::class.java.getResourceAsStream("/sRGB.icc"))
 
-    fun lagPdf(html: String): ByteArray {
+    suspend fun lagPdf(html: String): ByteArray = withContext(Dispatchers.IO) {
         val pdfOutputStream = ByteArrayOutputStream()
         val w3cDokument = W3CDom().fromJsoup(Jsoup.parse(html))
         genererPdf(w3cDokument, pdfOutputStream)
+        pdfOutputStream.toByteArray()
+    }
 
-        return pdfOutputStream.toByteArray()
+    suspend fun kombinerPdf(sources: Collection<InputStream>): ByteArray = withContext(Dispatchers.IO) {
+        val pdfOutputStream = ByteArrayOutputStream()
+        try {
+            val merger = PDFMergerUtility()
+            merger.destinationStream = pdfOutputStream
+            sources.forEach(merger::addSource)
+            merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly())
+        } catch (e: IOException) {
+            throw RuntimeException("Feil ved kombinering av PDF", e)
+        }
+        pdfOutputStream.toByteArray()
     }
 
     private fun genererPdf(w3cDokument: Document, outputStream: OutputStream) {
         try {
-            val builder = PdfRendererBuilder()
-                .useFastMode()
-                .useFont(
-                    FontSupplier("SourceSansPro-Regular.ttf"),
-                    "Source Sans Pro",
-                    400,
-                    BaseRendererBuilder.FontStyle.NORMAL,
-                    true
-                )
-                .useFont(
-                    FontSupplier("SourceSansPro-Bold.ttf"),
-                    "Source Sans Pro",
-                    700,
-                    BaseRendererBuilder.FontStyle.OBLIQUE,
-                    true
-                )
-                .useFont(
-                    FontSupplier("SourceSansPro-It.ttf"),
-                    "Source Sans Pro",
-                    400,
-                    BaseRendererBuilder.FontStyle.ITALIC,
-                    true
-                )
-                .useSVGDrawer(BatikSVGDrawer())
-                .withW3cDocument(w3cDokument, "")
-                .buildPdfRenderer()
+            val builder = PdfRendererBuilder().useFastMode().useFont(
+                FontSupplier("SourceSansPro-Regular.ttf"),
+                "Source Sans Pro",
+                400,
+                BaseRendererBuilder.FontStyle.NORMAL,
+                true
+            ).useFont(
+                FontSupplier("SourceSansPro-Bold.ttf"),
+                "Source Sans Pro",
+                700,
+                BaseRendererBuilder.FontStyle.OBLIQUE,
+                true
+            ).useFont(
+                FontSupplier("SourceSansPro-It.ttf"), "Source Sans Pro", 400, BaseRendererBuilder.FontStyle.ITALIC, true
+            ).useSVGDrawer(BatikSVGDrawer()).withW3cDocument(w3cDokument, "").buildPdfRenderer()
             builder.createPDFWithoutClosing()
             builder.pdfDocument.conform()
             builder.pdfDocument.save(outputStream)

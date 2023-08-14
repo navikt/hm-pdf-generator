@@ -22,5 +22,6 @@ dependencies {
     runtimeOnly("org.slf4j:jcl-over-slf4j:2.0.7")
 
     testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("io.kotest:kotest-assertions-core:5.6.2")
     testImplementation("io.ktor:ktor-server-test-host")
 }
