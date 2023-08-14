@@ -33,3 +33,4 @@ spec:
     inbound:
       rules:
         - application: hm-brev
+        - application: hm-joark-sink
