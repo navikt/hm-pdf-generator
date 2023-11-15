@@ -16,6 +16,10 @@ env:
 jobs:
   build:
     name: Build, deploy to dev, and create release
+    permissions:
+      packages: write
+      contents: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
