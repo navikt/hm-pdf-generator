@@ -18,7 +18,6 @@ private val log = KotlinLogging.logger { }
 fun Route.pdfApi(pdfService: PdfService) {
     post("/api/html-til-pdf") {
         val html = call.receive<String>()
-        log.info("Fikk inn HTML: '$html'")
         val pdf = pdfService.lagPdf(html)
         call.respondBytes(pdf, ContentType.Application.Pdf)
     }
