@@ -17,14 +17,14 @@ spec:
     enabled: true
     path: /metrics
   replicas:
-    max: 2
+    max: 1
     min: 1
   resources:
     limits:
       cpu: 500m
       memory: 1024Mi
     requests:
-      cpu: 25m
+      cpu: 10m
       memory: 256Mi
   secureLogs:
     enabled: true
