@@ -5,24 +5,13 @@ on:
     types: [published]
 
 jobs:
-  deploy-prod:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: get release tag
-        env:
-          VERSION_TAG: ${{ github.event.release.tag_name }}
-        run: |
-          APPLICATION=$(echo $GITHUB_REPOSITORY | cut -d "/" -f 2)
-          IMAGE=ghcr.io/$GITHUB_REPOSITORY:$VERSION_TAG
-          echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
-          echo $IMAGE
-      - uses: nais/deploy/actions/deploy@v1
-        name: Deploy to prod
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-gcp
-          RESOURCE: .nais/nais-prod.yaml
-      - uses: navikt/digihot-deploy/actions/post-production@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  deploy:
+    name: Deploy til prod-gcp
+    permissions:
+      contents: read
+      id-token: write
+    uses: navikt/hm-workflows/.github/workflows/deploy-prod.yaml@main
+    with:
+      manifest: .nais/nais-prod.yaml
+    secrets: inherit
+
