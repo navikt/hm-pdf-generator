@@ -8,7 +8,7 @@ on:
       - "LICENCE"
       - "CODEOWNERS"
     branches:
-      - main__
+      - main_
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
