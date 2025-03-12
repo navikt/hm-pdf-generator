@@ -1,6 +1,5 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.FormBuilder
@@ -64,11 +63,10 @@ class PdfApiTest {
     @Test
     fun `skal kombinere til pdf med feil`() = testApplication {
         application { main() }
-        shouldThrow<RuntimeException> {
-            client.submitFormWithBinaryData("/api/kombiner-til-pdf", formData {
-                appendPdf("pdf", ByteArray(0))
-            })
-        }
+        val response = client.submitFormWithBinaryData("/api/kombiner-til-pdf", formData {
+            appendPdf("pdf", "foobar".toByteArray())
+        })
+        response.status shouldBe HttpStatusCode.InternalServerError
     }
 
     private fun FormBuilder.appendPdf(name: String, value: ByteArray) = append("name", value, Headers.build {

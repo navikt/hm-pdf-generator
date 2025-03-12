@@ -5,13 +5,15 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
-import io.ktor.http.content.streamProvider
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondBytes
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
+import io.ktor.utils.io.ByteChannel
+import io.ktor.utils.io.copyAndClose
+import io.ktor.utils.io.jvm.javaio.toInputStream
 import java.io.InputStream
 
 private val log = KotlinLogging.logger { }
@@ -29,7 +31,9 @@ fun Route.pdfApi(pdfService: PdfService) {
             val sources = mutableListOf<InputStream>()
             multiPartData.forEachPart { part ->
                 if (part is PartData.FileItem) {
-                    sources.add(part.streamProvider())
+                    val channel = ByteChannel()
+                    part.provider().copyAndClose(channel)
+                    sources.add(channel.toInputStream())
                 }
             }
             val pdf = pdfService.kombinerPdf(sources)

@@ -10,8 +10,8 @@ application {
 val openhtmltopdfVersion = "1.0.10"
 
 dependencies {
-    implementation(libs.kotlin.logging)
     implementation(libs.hotlibs.http)
+    implementation(libs.hotlibs.logging)
 
     implementation(libs.openhtmltopdf.core)
     implementation(libs.openhtmltopdf.pdfbox)
@@ -25,10 +25,6 @@ dependencies {
     implementation(libs.ktor.server.metrics.micrometer)
 
     implementation(libs.micrometer.registry.prometheus)
-    implementation("io.ktor:ktor-server-core:3.1.1")
-    implementation("io.ktor:ktor-server-metrics-micrometer:3.1.1")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.6.13")
-    implementation("io.ktor:ktor-server-core:3.1.1")
 
     runtimeOnly(libs.jcl.over.slf4j)
 }
