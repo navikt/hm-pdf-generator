@@ -14,6 +14,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.server.testing.testApplication
+import no.nav.hjelpemidler.pdfgen.main
 import org.intellij.lang.annotations.Language
 import java.io.ByteArrayInputStream
 import kotlin.test.Test
@@ -26,6 +27,7 @@ class PdfApiTest {
 
     @Test
     fun `skal konvertere html til pdf`() = testApplication {
+        application { main() }
         val response = client.post("/api/html-til-pdf") {
             setBody(html)
         }
@@ -36,6 +38,7 @@ class PdfApiTest {
 
     @Test
     fun `skal kombinere til pdf`() = testApplication {
+        application { main() }
         val pdf = pdfService.lagPdf(html)
         val response = client.submitFormWithBinaryData("/api/kombiner-til-pdf", formData {
             appendPdf("pdf1", pdf)
@@ -60,6 +63,7 @@ class PdfApiTest {
 
     @Test
     fun `skal kombinere til pdf med feil`() = testApplication {
+        application { main() }
         shouldThrow<RuntimeException> {
             client.submitFormWithBinaryData("/api/kombiner-til-pdf", formData {
                 appendPdf("pdf", ByteArray(0))
