@@ -1,125 +1,81 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
 import com.openhtmltopdf.extend.FSSupplier
-import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
+import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.FontStyle
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.apache.pdfbox.io.IOUtils
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.pdfbox.io.RandomAccessReadBuffer
-import org.apache.pdfbox.io.ScratchFile
 import org.apache.pdfbox.multipdf.PDFMergerUtility
-import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.pdmodel.PDPage
-import org.apache.pdfbox.pdmodel.common.PDMetadata
-import org.apache.pdfbox.pdmodel.common.PDRectangle
-import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDMarkInfo
-import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot
-import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent
-import org.apache.pdfbox.pdmodel.interactive.viewerpreferences.PDViewerPreferences
-import org.apache.xmpbox.XMPMetadata
-import org.apache.xmpbox.xml.XmpSerializer
 import org.jsoup.Jsoup
 import org.jsoup.helper.W3CDom
-import org.w3c.dom.Document
-import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.Calendar
+
+private val log = KotlinLogging.logger {}
 
 class PdfService {
-    suspend fun lagPdf(html: String, outputStream: OutputStream) =
-        withContext(Dispatchers.IO) {
-            val document = W3CDom().fromJsoup(Jsoup.parse(html))
-            genererPdf(document, outputStream)
-        }
-
-    suspend fun kombinerPdf(inputStreams: Iterable<InputStream>, outputStream: OutputStream) =
-        withContext(Dispatchers.IO) {
-            PDFMergerUtility().apply {
-                inputStreams.map(::RandomAccessReadBuffer).forEach(::addSource)
-                destinationStream = outputStream
-                mergeDocuments { ScratchFile.getMainMemoryOnlyInstance() }
-            }
-        }
-
-    private fun genererPdf(document: Document, outputStream: OutputStream) {
+    fun lagPdf(html: String, outputStream: OutputStream) {
+        log.debug { "Lager PDF, html: `$html`" }
+        val document = W3CDom().fromJsoup(Jsoup.parse(html))
         PdfRendererBuilder()
+            .useColorProfile(colorProfile)
             .useFastMode()
-            .useFont(
-                FontSupplier("SourceSansPro-Regular.ttf"),
-                "Source Sans Pro",
-                400,
-                BaseRendererBuilder.FontStyle.NORMAL,
-                true
-            )
-            .useFont(
-                FontSupplier("SourceSansPro-Bold.ttf"),
-                "Source Sans Pro",
-                700,
-                BaseRendererBuilder.FontStyle.OBLIQUE,
-                true
-            )
-            .useFont(
-                FontSupplier("SourceSansPro-It.ttf"),
-                "Source Sans Pro",
-                400,
-                BaseRendererBuilder.FontStyle.ITALIC,
-                true
-            )
+            .useFont(sourceSansBold)
+            .useFont(sourceSansItalic)
+            .useFont(sourceSansRegular)
+            .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_2_A)
+            .usePdfUaAccessibility(true)
             .useSVGDrawer(BatikSVGDrawer())
-            .withW3cDocument(document, "")
-            .buildPdfRenderer()
-            .apply {
-                createPDFWithoutClosing()
-                pdfDocument.apply {
-                    conform(this)
-                    save(outputStream)
-                    close()
-                }
-            }
+            .withW3cDocument(document, null)
+            .toStream(outputStream)
+            .run()
     }
 
-    private val xmpSerializer = XmpSerializer()
-    private val colorProfile = IOUtils.toByteArray(PdfService::class.java.getResourceAsStream("/sRGB.icc"))
-
-    private fun conform(document: PDDocument) {
-        val page = PDPage(PDRectangle.A4)
-        document.documentCatalog.apply {
-            language = "nb-NO"
-            markInfo = PDMarkInfo(page.cosObject).apply { isMarked = true }
-            metadata = PDMetadata(document).apply {
-                val xmpMetadata = XMPMetadata.createXMPMetadata().apply {
-                    createAndAddDublinCoreSchema().apply {
-                        addCreator("navikt/hm-pdf-generator")
-                        addDate(Calendar.getInstance())
-                    }
-                    createAndAddPDFAIdentificationSchema().apply {
-                        part = 2
-                        conformance = "U"
-                    }
-                }
-
-                val outputStream = ByteArrayOutputStream()
-                xmpSerializer.serialize(xmpMetadata, outputStream, true)
-                importXMPMetadata(outputStream.toByteArray())
-            }
-            structureTreeRoot = PDStructureTreeRoot()
-            viewerPreferences = PDViewerPreferences(page.cosObject).apply { setDisplayDocTitle(true) }
-
-            addOutputIntent(PDOutputIntent(document, colorProfile.inputStream()).apply {
-                val profile = "sRGB IEC61966-2.1"
-                info = profile
-                outputCondition = profile
-                outputConditionIdentifier = profile
-                registryName = "http://www.color.org"
-            })
+    fun kombinerPdf(byteArrays: Collection<ByteArray>, outputStream: OutputStream) {
+        log.debug { "Kombinerer PDF, antall: ${byteArrays.size}" }
+        PDFMergerUtility().apply {
+            byteArrays.map(::RandomAccessReadBuffer).forEach(::addSource)
+            destinationStream = outputStream
+            mergeDocuments(null)
         }
     }
 
-    private class FontSupplier(val fontName: String) : FSSupplier<InputStream> {
-        override fun supply(): InputStream =
-            javaClass.getResourceAsStream("/fonts/$fontName") ?: error("Fant ikke font: $fontName")
-    }
+    private val colorProfile: ByteArray = javaClass.inputStream("/sRGB.icc").use(InputStream::readAllBytes)
+
+    private val sourceSansRegular = Font(
+        fileName = "SourceSans3-Regular.ttf",
+        name = "Source Sans Pro", // NB! Font family ikke endret til "Source Sans 3"
+        weight = 400,
+        style = FontStyle.NORMAL,
+        subset = true,
+    )
+    private val sourceSansBold = Font(
+        fileName = "SourceSans3-Bold.ttf",
+        name = "Source Sans Pro", // NB! Font family ikke endret til "Source Sans 3"
+        weight = 700,
+        style = FontStyle.OBLIQUE,
+        subset = true,
+    )
+    private val sourceSansItalic = Font(
+        fileName = "SourceSans3-It.ttf",
+        name = "Source Sans Pro", // NB! Font family ikke endret til "Source Sans 3"
+        weight = 400,
+        style = FontStyle.ITALIC,
+        subset = true,
+    )
 }
+
+private class Font(
+    val fileName: String,
+    val name: String,
+    val weight: Int,
+    val style: FontStyle,
+    val subset: Boolean = true,
+) : FSSupplier<InputStream> {
+    override fun supply(): InputStream = javaClass.inputStream("/fonts/$fileName")
+}
+
+private fun PdfRendererBuilder.useFont(font: Font) = useFont(font, font.name, font.weight, font.style, font.subset)
+
+private fun Class<*>.inputStream(name: String): InputStream = getResourceAsStream(name) ?: error("Fant ikke: '$name'")

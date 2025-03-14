@@ -15,7 +15,6 @@ import io.ktor.http.contentType
 import io.ktor.server.testing.testApplication
 import no.nav.hjelpemidler.pdfgen.main
 import org.intellij.lang.annotations.Language
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.Test
 
@@ -53,11 +52,7 @@ class PdfApiTest {
 
         val kombinertPdf = ByteArrayOutputStream().use {
             pdfService.kombinerPdf(
-                listOf(
-                    ByteArrayInputStream(pdf),
-                    ByteArrayInputStream(pdf),
-                    ByteArrayInputStream(pdf),
-                ),
+                listOf(pdf, pdf, pdf),
                 it
             )
             it.toByteArray()
