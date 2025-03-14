@@ -15,22 +15,22 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            from("no.nav.hjelpemidler:katalog:25.069.123444")
+            from("no.nav.hjelpemidler:katalog:25.071.130447")
 
-            library("jcl-over-slf4j", "org.slf4j", "jcl-over-slf4j")
-                .versionRef("slf4j")
+            library("jcl-over-slf4j", "org.slf4j", "jcl-over-slf4j").versionRef("slf4j")
 
-            library("jsoup", "org.jsoup:jsoup:1.18.3")
+            val jsoup = version("jsoup", "1.19.1")
+            library("jsoup", "org.jsoup", "jsoup").versionRef(jsoup)
 
-            val openhtmltopdf = version("openhtmltopdf", "1.0.10")
-            library("openhtmltopdf-core", "com.openhtmltopdf", "openhtmltopdf-core")
-                .versionRef(openhtmltopdf)
-            library("openhtmltopdf-pdfbox", "com.openhtmltopdf", "openhtmltopdf-pdfbox")
-                .versionRef(openhtmltopdf)
-            library("openhtmltopdf-svg-support", "com.openhtmltopdf", "openhtmltopdf-svg-support")
-                .versionRef(openhtmltopdf)
-            library("openhtmltopdf-slf4j", "com.openhtmltopdf", "openhtmltopdf-slf4j")
-                .versionRef(openhtmltopdf)
+            val openhtmltopdf = version("openhtmltopdf", "1.1.24")
+            listOf(
+                "openhtmltopdf-core",
+                "openhtmltopdf-pdfbox",
+                "openhtmltopdf-slf4j",
+                "openhtmltopdf-svg-support",
+            ).forEach {
+                library(it, "io.github.openhtmltopdf", it).versionRef(openhtmltopdf)
+            }
         }
     }
 }

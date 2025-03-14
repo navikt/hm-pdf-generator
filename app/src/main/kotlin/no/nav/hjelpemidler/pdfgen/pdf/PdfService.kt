@@ -7,7 +7,8 @@ import com.openhtmltopdf.svgsupport.BatikSVGDrawer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.pdfbox.io.IOUtils
-import org.apache.pdfbox.io.MemoryUsageSetting
+import org.apache.pdfbox.io.RandomAccessReadBuffer
+import org.apache.pdfbox.io.ScratchFile
 import org.apache.pdfbox.multipdf.PDFMergerUtility
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
@@ -37,9 +38,9 @@ class PdfService {
     suspend fun kombinerPdf(inputStreams: Iterable<InputStream>, outputStream: OutputStream) =
         withContext(Dispatchers.IO) {
             PDFMergerUtility().apply {
-                inputStreams.forEach(::addSource)
+                inputStreams.map(::RandomAccessReadBuffer).forEach(::addSource)
                 destinationStream = outputStream
-                mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly())
+                mergeDocuments { ScratchFile.getMainMemoryOnlyInstance() }
             }
         }
 
@@ -94,7 +95,7 @@ class PdfService {
                         addCreator("navikt/hm-pdf-generator")
                         addDate(Calendar.getInstance())
                     }
-                    createAndAddPFAIdentificationSchema().apply {
+                    createAndAddPDFAIdentificationSchema().apply {
                         part = 2
                         conformance = "U"
                     }
