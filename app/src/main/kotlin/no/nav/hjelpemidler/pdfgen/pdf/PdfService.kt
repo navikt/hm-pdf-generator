@@ -18,112 +18,107 @@ import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructur
 import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent
 import org.apache.pdfbox.pdmodel.interactive.viewerpreferences.PDViewerPreferences
 import org.apache.xmpbox.XMPMetadata
-import org.apache.xmpbox.type.BadFieldValueException
 import org.apache.xmpbox.xml.XmpSerializer
 import org.jsoup.Jsoup
 import org.jsoup.helper.W3CDom
 import org.w3c.dom.Document
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.Calendar
 
 class PdfService {
-    private val colorProfile = IOUtils.toByteArray(PdfService::class.java.getResourceAsStream("/sRGB.icc"))
-
-    suspend fun lagPdf(html: String): ByteArray = withContext(Dispatchers.IO) {
-        val pdfOutputStream = ByteArrayOutputStream()
-        val w3cDokument = W3CDom().fromJsoup(Jsoup.parse(html))
-        genererPdf(w3cDokument, pdfOutputStream)
-        pdfOutputStream.toByteArray()
-    }
-
-    suspend fun kombinerPdf(sources: Collection<InputStream>): ByteArray = withContext(Dispatchers.IO) {
-        val pdfOutputStream = ByteArrayOutputStream()
-        try {
-            val merger = PDFMergerUtility()
-            merger.destinationStream = pdfOutputStream
-            sources.forEach(merger::addSource)
-            merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly())
-        } catch (e: IOException) {
-            throw RuntimeException("Feil ved kombinering av PDF", e)
+    suspend fun lagPdf(html: String, outputStream: OutputStream) =
+        withContext(Dispatchers.IO) {
+            val document = W3CDom().fromJsoup(Jsoup.parse(html))
+            genererPdf(document, outputStream)
         }
-        pdfOutputStream.toByteArray()
-    }
 
-    private fun genererPdf(w3cDokument: Document, outputStream: OutputStream) {
-        try {
-            val builder = PdfRendererBuilder().useFastMode().useFont(
+    suspend fun kombinerPdf(inputStreams: Iterable<InputStream>, outputStream: OutputStream) =
+        withContext(Dispatchers.IO) {
+            PDFMergerUtility().apply {
+                inputStreams.forEach(::addSource)
+                destinationStream = outputStream
+                mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly())
+            }
+        }
+
+    private fun genererPdf(document: Document, outputStream: OutputStream) {
+        PdfRendererBuilder()
+            .useFastMode()
+            .useFont(
                 FontSupplier("SourceSansPro-Regular.ttf"),
                 "Source Sans Pro",
                 400,
                 BaseRendererBuilder.FontStyle.NORMAL,
                 true
-            ).useFont(
+            )
+            .useFont(
                 FontSupplier("SourceSansPro-Bold.ttf"),
                 "Source Sans Pro",
                 700,
                 BaseRendererBuilder.FontStyle.OBLIQUE,
                 true
-            ).useFont(
-                FontSupplier("SourceSansPro-It.ttf"), "Source Sans Pro", 400, BaseRendererBuilder.FontStyle.ITALIC, true
-            ).useSVGDrawer(BatikSVGDrawer()).withW3cDocument(w3cDokument, "").buildPdfRenderer()
-            builder.createPDFWithoutClosing()
-            builder.pdfDocument.conform()
-            builder.pdfDocument.save(outputStream)
-            builder.pdfDocument.close()
-        } catch (e: IOException) {
-            throw RuntimeException("Feil ved generering av PDF", e)
-        }
+            )
+            .useFont(
+                FontSupplier("SourceSansPro-It.ttf"),
+                "Source Sans Pro",
+                400,
+                BaseRendererBuilder.FontStyle.ITALIC,
+                true
+            )
+            .useSVGDrawer(BatikSVGDrawer())
+            .withW3cDocument(document, "")
+            .buildPdfRenderer()
+            .apply {
+                createPDFWithoutClosing()
+                pdfDocument.apply {
+                    conform(this)
+                    save(outputStream)
+                    close()
+                }
+            }
     }
 
-    private fun PDDocument.conform() {
-        val xmpMetadata = XMPMetadata.createXMPMetadata()
-        val catalog = this.documentCatalog
-        val calendar = Calendar.getInstance()
+    private val xmpSerializer = XmpSerializer()
+    private val colorProfile = IOUtils.toByteArray(PdfService::class.java.getResourceAsStream("/sRGB.icc"))
+
+    private fun conform(document: PDDocument) {
         val page = PDPage(PDRectangle.A4)
+        document.documentCatalog.apply {
+            language = "nb-NO"
+            markInfo = PDMarkInfo(page.cosObject).apply { isMarked = true }
+            metadata = PDMetadata(document).apply {
+                val xmpMetadata = XMPMetadata.createXMPMetadata().apply {
+                    createAndAddDublinCoreSchema().apply {
+                        addCreator("navikt/hm-pdf-generator")
+                        addDate(Calendar.getInstance())
+                    }
+                    createAndAddPFAIdentificationSchema().apply {
+                        part = 2
+                        conformance = "U"
+                    }
+                }
 
-        try {
-            val schema = xmpMetadata.createAndAddDublinCoreSchema()
-            schema.addCreator("navikt/hm-pdf-generator")
-            schema.addDate(calendar)
+                val outputStream = ByteArrayOutputStream()
+                xmpSerializer.serialize(xmpMetadata, outputStream, true)
+                importXMPMetadata(outputStream.toByteArray())
+            }
+            structureTreeRoot = PDStructureTreeRoot()
+            viewerPreferences = PDViewerPreferences(page.cosObject).apply { setDisplayDocTitle(true) }
 
-            val id = xmpMetadata.createAndAddPFAIdentificationSchema()
-            id.part = 2
-            id.conformance = "U"
-
-            val serializer = XmpSerializer()
-            val outputStream = ByteArrayOutputStream()
-            serializer.serialize(xmpMetadata, outputStream, true)
-
-            val pdMetadata = PDMetadata(this)
-            pdMetadata.importXMPMetadata(outputStream.toByteArray())
-            catalog.metadata = pdMetadata
-        } catch (e: BadFieldValueException) {
-            throw IllegalArgumentException(e)
+            addOutputIntent(PDOutputIntent(document, colorProfile.inputStream()).apply {
+                val profile = "sRGB IEC61966-2.1"
+                info = profile
+                outputCondition = profile
+                outputConditionIdentifier = profile
+                registryName = "http://www.color.org"
+            })
         }
-
-        val intent = PDOutputIntent(this, colorProfile.inputStream())
-        intent.info = "sRGB IEC61966-2.1"
-        intent.outputCondition = "sRGB IEC61966-2.1"
-        intent.outputConditionIdentifier = "sRGB IEC61966-2.1"
-        intent.registryName = "http://www.color.org"
-        catalog.addOutputIntent(intent)
-        catalog.language = "nb-NO"
-
-        val viewerPreferences = PDViewerPreferences(page.cosObject)
-        viewerPreferences.setDisplayDocTitle(true)
-        catalog.viewerPreferences = viewerPreferences
-
-        catalog.markInfo = PDMarkInfo(page.cosObject)
-        catalog.structureTreeRoot = PDStructureTreeRoot()
-        catalog.markInfo.isMarked = true
     }
 
     private class FontSupplier(val fontName: String) : FSSupplier<InputStream> {
-        override fun supply(): InputStream {
-            return requireNotNull(javaClass.getResourceAsStream("/fonts/$fontName"))
-        }
+        override fun supply(): InputStream =
+            javaClass.getResourceAsStream("/fonts/$fontName") ?: error("Fant ikke font: $fontName")
     }
 }
