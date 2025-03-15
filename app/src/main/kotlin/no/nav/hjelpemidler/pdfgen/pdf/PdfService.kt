@@ -3,8 +3,10 @@ package no.nav.hjelpemidler.pdfgen.pdf
 import com.openhtmltopdf.extend.FSSupplier
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.FontStyle
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder.PdfAConformance
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer
 import io.github.oshai.kotlinlogging.KotlinLogging
+import no.nav.hjelpemidler.logging.secureDebug
 import org.apache.pdfbox.io.RandomAccessReadBuffer
 import org.apache.pdfbox.multipdf.PDFMergerUtility
 import org.jsoup.Jsoup
@@ -16,7 +18,8 @@ private val log = KotlinLogging.logger {}
 
 class PdfService {
     fun lagPdf(html: String, outputStream: OutputStream) {
-        log.debug { "Lager PDF, html: `$html`" }
+        log.debug { "Lager PDF" }
+        log.secureDebug { "Lager PDF, html: `$html`" }
         val document = W3CDom().fromJsoup(Jsoup.parse(html))
         PdfRendererBuilder()
             .useColorProfile(colorProfile)
@@ -24,7 +27,7 @@ class PdfService {
             .useFont(sourceSansBold)
             .useFont(sourceSansItalic)
             .useFont(sourceSansRegular)
-            .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_2_A)
+            .usePdfAConformance(PdfAConformance.PDFA_2_A)
             .usePdfUaAccessibility(true)
             .useSVGDrawer(BatikSVGDrawer())
             .withW3cDocument(document, null)

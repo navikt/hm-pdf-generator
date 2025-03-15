@@ -15,19 +15,21 @@ import io.ktor.utils.io.toByteArray
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import no.nav.hjelpemidler.logging.secureError
 
 private val log = KotlinLogging.logger { }
 
 fun Route.pdfApi(pdfService: PdfService) {
     post("/api/html-til-pdf") {
+        val html = call.receiveText()
         try {
-            val html = call.receiveText()
             call.respondOutputStream(ContentType.Application.Pdf) {
                 pdfService.lagPdf(html, this)
             }
         } catch (e: Exception) {
             val message = "Feil under generering av PDF"
             log.error(e) { message }
+            log.secureError(e) { "$message, html: `$html`" }
             call.respond(HttpStatusCode.InternalServerError, message)
         }
     }
