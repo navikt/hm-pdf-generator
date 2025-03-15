@@ -14,15 +14,15 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.server.testing.testApplication
 import no.nav.hjelpemidler.pdfgen.main
-import org.intellij.lang.annotations.Language
 import java.io.ByteArrayOutputStream
 import kotlin.test.Test
 
 class PdfApiTest {
     private val pdfService = PdfService()
 
-    @Language("HTML")
-    private val html = """<html><body>test</body></html>"""
+    private val html = javaClass
+        .inputStream("/html/notat.html")
+        .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
 
     @Test
     fun `Skal konvertere HTML til PDF`() = testApplication {

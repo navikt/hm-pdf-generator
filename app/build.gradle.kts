@@ -7,8 +7,6 @@ application {
     mainClass.set("no.nav.hjelpemidler.pdfgen.AppKt")
 }
 
-val openhtmltopdfVersion = "1.0.10"
-
 dependencies {
     implementation(libs.hotlibs.http)
     implementation(libs.hotlibs.logging)

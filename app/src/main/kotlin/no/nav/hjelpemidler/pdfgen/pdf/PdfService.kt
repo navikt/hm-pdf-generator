@@ -1,7 +1,6 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
-import com.openhtmltopdf.extend.FSSupplier
-import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.FontStyle
+import com.openhtmltopdf.extend.impl.FSDefaultCacheStore
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder.PdfAConformance
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer
@@ -12,6 +11,7 @@ import org.apache.pdfbox.io.RandomAccessReadBuffer
 import org.apache.pdfbox.multipdf.PDFMergerUtility
 import org.jsoup.Jsoup
 import org.jsoup.helper.W3CDom
+import org.w3c.dom.Document
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -21,13 +21,13 @@ class PdfService {
     fun lagPdf(html: String, outputStream: OutputStream) {
         log.debug { "Lager PDF" }
         withLoggingContext("html" to html) { log.secureDebug { "Lager PDF" } }
-        val document = W3CDom().fromJsoup(Jsoup.parse(html))
+        val document = parseHtml(html)
         PdfRendererBuilder()
-            .useColorProfile(colorProfile)
             .useFastMode()
-            .useFont(sourceSansBold)
-            .useFont(sourceSansItalic)
-            .useFont(sourceSansRegular)
+            .useColorProfile(colorProfile)
+            .useFontFamily(sourceSans3)
+            .useFontFamily(sourceSansPro)
+            .useCacheStore(PdfRendererBuilder.CacheStore.PDF_FONT_METRICS, cacheStore)
             .usePdfAConformance(PdfAConformance.PDFA_2_A)
             .usePdfUaAccessibility(true)
             .useSVGDrawer(BatikSVGDrawer())
@@ -45,41 +45,20 @@ class PdfService {
         }
     }
 
-    private val colorProfile: ByteArray = javaClass.inputStream("/sRGB.icc").use(InputStream::readAllBytes)
+    private fun parseHtml(html: String): Document = W3CDom().fromJsoup(Jsoup.parse(html))
 
-    private val sourceSansRegular = Font(
-        fileName = "SourceSans3-Regular.ttf",
-        name = "Source Sans Pro", // NB! Font family ikke endret til "Source Sans 3"
-        weight = 400,
-        style = FontStyle.NORMAL,
-        subset = true,
-    )
-    private val sourceSansBold = Font(
-        fileName = "SourceSans3-Bold.ttf",
-        name = "Source Sans Pro", // NB! Font family ikke endret til "Source Sans 3"
-        weight = 700,
-        style = FontStyle.OBLIQUE,
-        subset = true,
-    )
-    private val sourceSansItalic = Font(
-        fileName = "SourceSans3-It.ttf",
-        name = "Source Sans Pro", // NB! Font family ikke endret til "Source Sans 3"
-        weight = 400,
-        style = FontStyle.ITALIC,
-        subset = true,
-    )
+    private val cacheStore = FSDefaultCacheStore()
+    private val colorProfile = javaClass.inputStream("/sRGB.icc").use(InputStream::readAllBytes)
+
+    private val sourceSans3 = fontFamily(name = "Source Sans 3", location = "/fonts/source-sans-3", fallback = true) {
+        normal("SourceSans3-Regular.ttf")
+        italic("SourceSans3-It.ttf")
+        oblique("SourceSans3-Bold.ttf")
+    }
+
+    private val sourceSansPro = fontFamily(name = "Source Sans Pro", location = "/fonts/source-sans-pro") {
+        normal("SourceSansPro-Regular.ttf")
+        italic("SourceSansPro-It.ttf")
+        oblique("SourceSansPro-Bold.ttf")
+    }
 }
-
-private class Font(
-    val fileName: String,
-    val name: String,
-    val weight: Int,
-    val style: FontStyle,
-    val subset: Boolean = true,
-) : FSSupplier<InputStream> {
-    override fun supply(): InputStream = javaClass.inputStream("/fonts/$fileName")
-}
-
-private fun PdfRendererBuilder.useFont(font: Font) = useFont(font, font.name, font.weight, font.style, font.subset)
-
-private fun Class<*>.inputStream(name: String): InputStream = getResourceAsStream(name) ?: error("Fant ikke: '$name'")
