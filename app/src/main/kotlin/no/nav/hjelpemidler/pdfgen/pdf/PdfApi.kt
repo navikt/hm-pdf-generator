@@ -1,6 +1,7 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.coroutines.withLoggingContextAsync
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
@@ -29,7 +30,7 @@ fun Route.pdfApi(pdfService: PdfService) {
         } catch (e: Exception) {
             val message = "Feil under generering av PDF"
             log.error(e) { message }
-            log.secureError(e) { "$message, html: `$html`" }
+            withLoggingContextAsync("html" to html) { log.secureError(e) { message } }
             call.respond(HttpStatusCode.InternalServerError, message)
         }
     }

@@ -6,6 +6,7 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder.PdfAConformance
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.withLoggingContext
 import no.nav.hjelpemidler.logging.secureDebug
 import org.apache.pdfbox.io.RandomAccessReadBuffer
 import org.apache.pdfbox.multipdf.PDFMergerUtility
@@ -19,7 +20,7 @@ private val log = KotlinLogging.logger {}
 class PdfService {
     fun lagPdf(html: String, outputStream: OutputStream) {
         log.debug { "Lager PDF" }
-        log.secureDebug { "Lager PDF, html: `$html`" }
+        withLoggingContext("html" to html) { log.secureDebug { "Lager PDF" } }
         val document = W3CDom().fromJsoup(Jsoup.parse(html))
         PdfRendererBuilder()
             .useColorProfile(colorProfile)
