@@ -27,9 +27,7 @@ dependencies {
     runtimeOnly(libs.jcl.over.slf4j)
 }
 
-kotlin {
-    jvmToolchain(21)
-}
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
 
 @Suppress("UnstableApiUsage")
 testing {
