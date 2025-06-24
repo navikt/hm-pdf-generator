@@ -1,0 +1,27 @@
+<html lang="nb">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>{{commonData.tittel}}</title>
+    {{> style.partial }}
+</head>
+
+<body class="body">
+<div>
+    {{> header.partial }}
+    {{#with flettefelter}}
+        <h3 style="min-height:1rem" class="block">{{dokumenttittel}}</h3>
+        <div style="min-height:1rem" class="block"><strong>Saksnummer</strong>: {{saksnummer}}</div>
+        <div style="min-height:1rem" class="block"><strong>Navn</strong>: {{brukersFulleNavn}}</div>
+        <div style="min-height:1rem" class="block"><strong>Fødselsnummer</strong>: {{brukersFødselsnummer}}</div>
+        <div style="min-height:1rem" class="block"><strong>Enhet</strong>: {{saksbehandlersEnhetsnavn}}</div>
+        <div style="min-height:1rem" class="block"></div>
+        <h4 style="min-height:1rem" class="block">Notat:</h4>
+        <div style="min-height:1rem" class="block">
+            {{markdown markdown}}
+        </div>
+    {{/with}}
+</div>
+</body>
+
+</html>

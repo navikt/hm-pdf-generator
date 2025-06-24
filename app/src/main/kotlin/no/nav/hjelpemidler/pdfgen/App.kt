@@ -10,6 +10,7 @@ import io.ktor.server.request.path
 import io.ktor.server.routing.routing
 import no.nav.hjelpemidler.pdfgen.pdf.PdfService
 import no.nav.hjelpemidler.pdfgen.pdf.pdfApi
+import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import org.slf4j.event.Level
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -18,6 +19,7 @@ fun Application.main() {
     XRLog.setLoggerImpl(Slf4jLogger())
 
     val pdfService = PdfService()
+    val templateService = TemplateService()
 
     install(CallLogging) {
         level = Level.INFO
@@ -30,6 +32,6 @@ fun Application.main() {
 
     routing {
         internal()
-        pdfApi(pdfService)
+        pdfApi(pdfService, templateService)
     }
 }

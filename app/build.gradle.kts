@@ -10,21 +10,25 @@ application {
 dependencies {
     implementation(libs.hotlibs.http)
     implementation(libs.hotlibs.logging)
+    implementation(libs.hotlibs.serialization)
 
+    implementation(libs.handlebars)
+    implementation(libs.jsoup)
     implementation(libs.openhtmltopdf.core)
     implementation(libs.openhtmltopdf.pdfbox)
-    implementation(libs.openhtmltopdf.svg.support)
     implementation(libs.openhtmltopdf.slf4j)
-    implementation(libs.jsoup)
+    implementation(libs.openhtmltopdf.svg.support)
 
-    implementation(libs.ktor.server.core)
-    implementation(libs.ktor.server.netty)
+    implementation("com.github.rjeschke:txtmark:0.13")
+
     implementation(libs.ktor.server.call.logging)
+    implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.metrics.micrometer)
+    implementation(libs.ktor.server.netty)
 
     implementation(libs.micrometer.registry.prometheus)
 
-    runtimeOnly(libs.jcl.over.slf4j)
+    runtimeOnly(libs.jclOverSlf4j)
 }
 
 java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }

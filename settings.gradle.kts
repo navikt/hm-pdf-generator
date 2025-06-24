@@ -15,22 +15,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            from("no.nav.hjelpemidler:katalog:25.071.130447")
-
-            library("jcl-over-slf4j", "org.slf4j", "jcl-over-slf4j").versionRef("slf4j")
-
-            val jsoup = version("jsoup", "1.19.1")
-            library("jsoup", "org.jsoup", "jsoup").versionRef(jsoup)
-
-            val openhtmltopdf = version("openhtmltopdf", "1.1.24")
-            listOf(
-                "openhtmltopdf-core",
-                "openhtmltopdf-pdfbox",
-                "openhtmltopdf-slf4j",
-                "openhtmltopdf-svg-support",
-            ).forEach {
-                library(it, "io.github.openhtmltopdf", it).versionRef(openhtmltopdf)
-            }
+            from("no.nav.hjelpemidler:katalog:25.115.081658")
         }
     }
 }

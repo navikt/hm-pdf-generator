@@ -1,0 +1,13 @@
+{
+  "commonData": {
+    "tittel": "Journalført notat"
+  },
+  "flettefelter": {
+    "dokumenttittel": "Snakket med ergoterapeut",
+    "saksnummer": "102030",
+    "brukersFulleNavn": "Yndig Andrefiolin",
+    "brukersFødselsnummer": "12345678910",
+    "saksbehandlersEnhetsnavn": "Nav hjelpemiddelsentral Rogaland",
+    "markdown": "Noe tekst her.\n\n* Første linje.\n* Andre linje"
+  }
+}
