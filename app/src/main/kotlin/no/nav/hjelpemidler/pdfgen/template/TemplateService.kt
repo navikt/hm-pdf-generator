@@ -14,7 +14,7 @@ class TemplateService {
     }
 
     fun compile(template: String, context: Map<String, Any?> = emptyMap(), writer: Writer) {
-        val commonData = context["commonData"] as MutableMap<String, Any?>? ?: mutableMapOf()
+        val commonData = context["commonData"] as? MutableMap<String, Any?>? ?: mutableMapOf()
         commonData += commonData()
         handlebars.compileInline(template).apply(context + commonData, writer)
     }
