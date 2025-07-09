@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.asFlow
 import io.ktor.server.request.accept
+import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
@@ -17,11 +18,9 @@ import io.ktor.server.routing.post
 import io.ktor.utils.io.toByteArray
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
 import no.nav.hjelpemidler.logging.secureError
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
-import no.nav.hjelpemidler.serialization.jackson.jsonToValue
 import java.io.StringWriter
 
 private val log = KotlinLogging.logger { }
@@ -63,6 +62,31 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
 
     post("/api/template") {
         try {
+            data class Request(val template: String, val data: Map<String, Any> = mapOf())
+            val req = call.receive<Request>()
+
+            val acceptContentType = call.request.accept()?.let { ContentType.parse(it) } ?: ContentType.Text.Html
+            when (acceptContentType) {
+                ContentType.Text.Html -> {
+                    call.respondTextWriter(ContentType.Text.Html) {
+                        templateService.compile(req.template, req.data, this)
+                    }
+                }
+
+                else -> {
+                    call.respondOutputStream(ContentType.Application.Pdf) {
+                        val writer = StringWriter()
+                        templateService.compile(req.template, req.data, writer)
+                        pdfService.lagPdf(writer.toString(), this)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            log.error(e) { e.message }
+            call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
+        }
+
+        /*try {
             val templateParts = call.receiveMultipart().asFlow()
                 .filterIsInstance<PartData.FormItem>()
                 .mapNotNull { partData ->
@@ -104,7 +128,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
             val message = "Fail!"
             log.error(e) { message }
             call.respond(HttpStatusCode.InternalServerError, message)
-        }
+        }*/
     }
 }
 
