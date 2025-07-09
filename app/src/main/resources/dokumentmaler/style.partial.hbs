@@ -1,30 +1,26 @@
+
 <style>
     @page {
         @bottom-right {
-            font-family: "Source Sans 3", sans-serif;
-            content: "Side " counter(page) " av " counter(pages);
+            font-family: 'Source Sans 3', sans-serif;
+            content: 'Side ' counter(page) ' av ' counter(pages);
         }
-
         @bottom-left {
-            font-family: "Source Sans 3", sans-serif;
-            content: "";
+            font-family: 'Source Sans 3', sans-serif;
+            content: '{{bunntekst}}';
         }
     }
 </style>
 <style>
     .body {
-        font-family: "Source Sans 3", sans-serif;
+        font-family: 'Source Sans 3', sans-serif;
         font-size: 12pt;
         line-height: 1.4em;
         margin: 0;
         box-sizing: border-box;
     }
 
-    .header {
-        margin-bottom: 20px;
-    }
-
-    .logo-og-dato {
+    .ikon-og-dato {
         position: absolute;
         right: 0;
         top: 0;
@@ -32,7 +28,7 @@
         padding: 0;
     }
 
-    .nav-logo {
+    .nav-ikon {
         width: 100px;
         height: 65px;
         position: relative;
@@ -41,15 +37,32 @@
         padding: 0;
     }
 
-    .tittel-og-personinformasjon {
+    .inline {
+        display: inline-block;
+    }
+
+    .header {
+        margin-bottom: 20px;
+    }
+
+    .tittel-og-personinfo {
         margin-top: 200px;
+    }
+
+    .lenke {
+        white-space: nowrap;
+    }
+
+    ul {
+        margin: 0;
     }
 
     .block {
         white-space: pre-wrap;
     }
 
-    ul {
-        margin: 0;
+    .høyrestill {
+        float: right;
+        white-space: normal;
     }
 </style>
