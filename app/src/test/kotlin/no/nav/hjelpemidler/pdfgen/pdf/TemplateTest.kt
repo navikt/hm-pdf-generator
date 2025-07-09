@@ -16,29 +16,36 @@ class TemplateTest {
         javaClass
         .inputStream(resource)
         .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
+        // Openhtmltopdf interprets raw newlines as <br/>, lets strip them away
+        .replace(Regex("\\s*\n\\s*"), " ")
 
-    private val templateBrillerVedtakInnvilget: String = fromResrouce("/template/briller.vedtak.innvilget.hbs")
+    private val templateBarnebrillerInnvilgetHotsakBokmaal = fromResrouce("/template/barnebrillerInnvilgetHotsak.bokmaal.hbs")
+    private val templateBarnebrillerInnvilgetHotsakNynorsk = fromResrouce("/template/barnebrillerInnvilgetHotsak.nynorsk.hbs")
 
     @Test
-    fun `Generer vedtak for - Du får tilskudd til briller`() {
+    fun `Template barnebrillerInnvilgetHotsak`() {
         val req = Request(
-            template = templateBrillerVedtakInnvilget,
+            template = templateBarnebrillerInnvilgetHotsakBokmaal,
             data = mapOf(
-                "navn" to "Berømt Aktivitet",
-                "fødselsnummer" to "26848497710",
-                "kravDato" to "28. januar 2025",
-                "beløp" to "1337,99",
-                "satsnummer" to "1234",
-                "høyreSfære" to "+4,50",
-                "satsnummer" to "4",
-                "sats" to "4550",
-                "høyreCylinder" to "-2,50",
-                "venstreSfære" to "+4,50",
-                "venstreCylinder" to "-2,50",
-                "nesteÅrstall" to LocalDate.now().plusYears(1).year.toString(),
+                "brevOpprettetDato" to "28. januar 2025",
+                "barnetsFulleNavn" to "Berømt Aktivitet",
+                "barnetsFodselsnummer" to "26848497710",
+                "mottattDato" to "28. januar 2025",
+                "belop" to "1337,99",
+                "bestillingsDato" to "1. juli 2025",
+                "utbetalesTilNavn" to "Berømt Aktivitet",
+                "sats" to "Sats 2",
+                "satsBelop" to "2050,00",
+                "sfæriskStyrkeHøyre" to "+4,50",
+                "cylinderstyrkeHøyre" to "-2,50",
+                "sfæriskStyrkeVenstre" to "+4,50",
+                "cylinderstyrkeVenstre" to "-2,50",
+                "nesteKravdato" to LocalDate.now().plusYears(1).year.toString(),
+                "bunntekst" to "Saksnummer 1000",
             ),
         )
-        genererPdf(req, "vedtak_innvilget.pdf")
+        genererPdf(req, "barnebrillerInnvilgetHotsak.bokmaal.pdf")
+        genererPdf(req.copy(template = templateBarnebrillerInnvilgetHotsakNynorsk), "barnebrillerInnvilgetHotsak.nynorsk.pdf")
     }
 
     private data class Request(val template: String, val data: Map<String, Any?>? = null)
