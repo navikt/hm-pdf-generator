@@ -48,7 +48,7 @@ class BrevTest {
             "bunntekst" to "Saksnummer 1000",
             "belopMindreEnnSats" to true,
             "viseNavAdresse" to true,
-            "viseNavAdresseHot" to false,
+            "viseNavAdresseHoT" to false,
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.bokmaal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
