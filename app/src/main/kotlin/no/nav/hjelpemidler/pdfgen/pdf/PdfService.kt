@@ -32,6 +32,8 @@ class PdfService {
             .replace(Regex("([^>])(\\s+)<"), "$1<")   // Remove trailing whitespace inside a tag
             // Collapse multiple spaces between words (optional, safer)
             .replace(Regex(" {2,}"), " ")
+            // Fix from hm-brev included here
+            .replace("&#x27;", "'")
             .trim()
 
         val document = parseHtml(sanitizedHtml)
