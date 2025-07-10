@@ -6,7 +6,7 @@ import java.io.File
 import java.io.StringWriter
 import java.time.LocalDate
 
-class TemplateTest {
+class BrevTest {
     private fun fromResrouce(resource: String) =
         javaClass
         .inputStream(resource)
@@ -50,7 +50,7 @@ class TemplateTest {
             "viseNavAdresse" to true,
             "viseNavAdresseHot" to false,
         )
-        genererPdfFraTemplateResource("/template/barnebrillerInnvilgetHotsak.bokmaal.hbs", data)
-        genererPdfFraTemplateResource("/template/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
+        genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.bokmaal.hbs", data)
+        genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
     }
 }
