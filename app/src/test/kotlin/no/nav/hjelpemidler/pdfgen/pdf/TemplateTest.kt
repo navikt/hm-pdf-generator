@@ -17,8 +17,18 @@ class TemplateTest {
     private val pdfService = PdfService()
     private val templateService = TemplateService()
 
-    private val templateBarnebrillerInnvilgetHotsakBokmaal = fromResrouce("/template/barnebrillerInnvilgetHotsak.bokmaal.hbs")
-    private val templateBarnebrillerInnvilgetHotsakNynorsk = fromResrouce("/template/barnebrillerInnvilgetHotsak.nynorsk.hbs")
+    private fun genererPdfFraResource(resource: String, data: Map<String, Any?>? = null) {
+        val template = fromResrouce(resource)
+
+        val htmlWriter = StringWriter()
+        templateService.compile(template, data ?: mapOf(), htmlWriter)
+
+        val dir = File("build/test-results/pdfs")
+        dir.mkdirs()
+
+        val file = File(dir, resource.substringAfterLast("/").removeSuffix(".hbs") + ".pdf")
+        pdfService.lagPdf(htmlWriter.toString(), file.outputStream())
+    }
 
     @Test
     fun `Template barnebrillerInnvilgetHotsak`() {
@@ -39,18 +49,7 @@ class TemplateTest {
             "nesteKravdato" to LocalDate.now().plusYears(1).year.toString(),
             "bunntekst" to "Saksnummer 1000",
         )
-        genererPdf("barnebrillerInnvilgetHotsak.bokmaal.pdf", templateBarnebrillerInnvilgetHotsakBokmaal, data)
-        genererPdf("barnebrillerInnvilgetHotsak.nynorsk.pdf", templateBarnebrillerInnvilgetHotsakNynorsk, data)
-    }
-
-    private fun genererPdf(filename: String, template: String, data: Map<String, Any?>? = null) {
-        val htmlWriter = StringWriter()
-        templateService.compile(template, data ?: mapOf(), htmlWriter)
-
-        val dir = File("build/test-results/pdfs")
-        dir.mkdirs()
-
-        val file = File(dir, filename)
-        pdfService.lagPdf(htmlWriter.toString(), file.outputStream())
+        genererPdfFraResource("/template/barnebrillerInnvilgetHotsak.bokmaal.hbs", data)
+        genererPdfFraResource("/template/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
     }
 }
