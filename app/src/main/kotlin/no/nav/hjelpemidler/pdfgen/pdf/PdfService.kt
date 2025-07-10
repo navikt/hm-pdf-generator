@@ -14,6 +14,7 @@ import org.jsoup.helper.W3CDom
 import org.w3c.dom.Document
 import java.io.InputStream
 import java.io.OutputStream
+import kotlin.text.replace
 
 private val log = KotlinLogging.logger {}
 
@@ -21,7 +22,12 @@ class PdfService {
     fun lagPdf(html: String, outputStream: OutputStream) {
         log.debug { "Lager PDF" }
         withLoggingContext("html" to html) { log.secureDebug { "Lager PDF" } }
-        val document = parseHtml(html)
+
+        // openhtmltopdf interprets raw newlines as <br/>, lets strip them away to make it work as html
+        // was intended
+        val sanitizedHtml = html.replace(Regex("\\s*\n\\s*"), " ")
+
+        val document = parseHtml(sanitizedHtml)
         PdfRendererBuilder()
             .useFastMode()
             .useColorProfile(colorProfile)

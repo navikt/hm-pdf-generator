@@ -11,8 +11,6 @@ class TemplateTest {
         javaClass
         .inputStream(resource)
         .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
-        // Openhtmltopdf interprets raw newlines as <br/>, lets strip them away
-        .replace(Regex("\\s*\n\\s*"), " ")
 
     private val pdfService = PdfService()
     private val templateService = TemplateService()
