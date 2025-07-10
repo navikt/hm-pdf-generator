@@ -22,7 +22,7 @@ class TemplateService {
         )
     }
 
-    private val handlebars: Handlebars = Handlebars(ClassPathTemplateLoader("/dokumentmaler", ".hbs")).apply {
+    private val handlebars: Handlebars = Handlebars(ClassPathTemplateLoader("/maler/")).apply {
         registerHelper("markdown", MarkdownHelper)
     }
 

@@ -3,13 +3,13 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får tilskudd til briller</title>
-    {{> style.partial }}
+    {{> hotsak/style }}
 </head>
 <body class="body">
 <div>
     <div class="header">
         <div class="ikon-og-dato">
-            {{> nav-logo.partial }}
+            {{> nav-logo }}
             <p>{{brevOpprettetDato}}</p></div>
         <div class="tittel-og-personinfo"><h2 class="tittel">Du får tilskudd til briller</h2></div>
     </div>
@@ -33,7 +33,7 @@
     <div style="min-height:1rem" class="block">Neste gang du kan søke om tilskudd etter denne ordningen, er for briller
         som bestilles etter {{nesteKravdato}}.
     </div>
-    <div style="min-height:1rem" class="block"><br/></div>
+    <div style="min-height:1rem" class="block"></div>
     <div style="min-height:1rem" class="block"><strong>Du har fått tilskudd etter et bestemt regelverk</strong></div>
     <div style="min-height:1rem" class="block">Vedtaket er gjort etter folketrygdloven §10-7 a, jf. forskrift av 19.juli
         2022 om stønad til briller til barn. Vi gjør oppmerksom på at hvis opplysningene du har gitt oss er mangelfulle
@@ -43,13 +43,13 @@
         ordninger som kan gi rett til støtte hvis du har nedsatt syn, se nav.no/syn
     </div>
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak.delmal.klage.bokmaal.partial }}
+    {{> hotsak/delmal/klage.bokmaal }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak.delmal.rett-til-innsyn.bokmaal.partial }}
+    {{> hotsak/delmal/rett-til-innsyn.bokmaal }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak.delmal.har-du-sporsmaal.bokmaal.partial }}
+    {{> hotsak/delmal/har-du-sporsmaal.bokmaal }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak.delmal.kontakt-oss.bokmaal.partial }}
+    {{> hotsak/delmal/kontakt-oss.bokmaal }}
 </div>
 </body>
 </html>

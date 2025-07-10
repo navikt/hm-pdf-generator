@@ -3,13 +3,13 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får tilskot til briller</title>
-    {{> style.partial }}
+    {{> hotsak/style }}
 </head>
 <body class="body">
 <div>
     <div class="header">
         <div class="ikon-og-dato">
-            {{> nav-logo.partial }}
+            {{> nav-logo }}
             <p>{{brevOpprettetDato}}</p></div>
         <div class="tittel-og-personinfo"><h2 class="tittel">Du får tilskot til briller</h2></div>
     </div>
@@ -29,9 +29,8 @@
         sendt oss, kosta brilla {{belop}} kroner, og dette er beløpet du vil få utbetalt.{{/if}}
         Ifølgje dokumentasjonen har ditt høgre auge sfærisk styrke
         {{sfæriskStyrkeHøyre}} og cylinderstyrke {{cylinderstyrkeHøyre}}, og ditt venstre auge har sfærisk styrke
-        {{sfæriskStyrkeVenstre}} og cylinderstyrke {{cylinderstyrkeVenstre}}.
+        {{sfæriskStyrkeVenstre}} og cylinderstyrke {{cylinderstyrkeVenstre}}. Du kan lese meir om krava og satsane på nav.no/briller-til-barn
     </div>
-    <div style="min-height:1rem" class="block">Du kan lese meir om krava og satsane på nav.no/briller-til-barn</div>
     <div style="min-height:1rem" class="block"><br/><strong>Du kan få tilskot til eitt par briller kvart
         år</strong><br/>Neste gong du kan søkje om tilskot etter denne ordninga, er for briller som blir bestilte etter
         {{nesteKravdato}}.
@@ -48,13 +47,13 @@
         nedsett syn, sjå nav.no/syn
     </div>
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak.delmal.klage.nynorsk.partial }}
+    {{> hotsak/delmal/klage.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak.delmal.rett-til-innsyn.nynorsk.partial }}
+    {{> hotsak/delmal/rett-til-innsyn.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak.delmal.har-du-sporsmaal.nynorsk.partial }}
+    {{> hotsak/delmal/har-du-sporsmaal.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak.delmal.kontakt-oss.nynorsk.partial }}
+    {{> hotsak/delmal/kontakt-oss.nynorsk }}
 </div>
 </body>
 </html>
