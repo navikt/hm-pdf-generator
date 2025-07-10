@@ -24,7 +24,10 @@
     <div style="min-height:1rem" class="block"></div>
     <div style="min-height:1rem" class="block"><strong>Slik har vi komme fram til kor mykje du får</strong><br/>Det er
         brillestyrken din som avgjer kor mykje du kan få i tilskot. Ut frå brillestyrken du har oppgitt kjem du inn
-        under sats {{sats}} (opptil {{satsBelop}} kroner). Ifølgje dokumentasjonen har ditt høgre auge sfærisk styrke
+        under sats {{sats}} (opptil {{satsBelop}} kroner).
+        {{#if belopMindreEnnSats}}Du kan ikkje få meir i tilskot enn det brilla kosta. Ifølgje dokumentasjonen du har
+        sendt oss, kosta brilla {{belop}} kroner, og dette er beløpet du vil få utbetalt.{{/if}}
+        Ifølgje dokumentasjonen har ditt høgre auge sfærisk styrke
         {{sfæriskStyrkeHøyre}} og cylinderstyrke {{cylinderstyrkeHøyre}}, og ditt venstre auge har sfærisk styrke
         {{sfæriskStyrkeVenstre}} og cylinderstyrke {{cylinderstyrkeVenstre}}.
     </div>
@@ -65,9 +68,7 @@
         </div>
     </div>
     <div style="min-height:1rem" class="block"></div>
-    <div class="delmal">
-        <div style="min-height:1rem" class="block">Med vennleg helsing<br/>Nav</div>
-    </div>
+    {{> hotsak.delmal.kontakt-oss.nynorsk.partial }}
 </div>
 </body>
 </html>

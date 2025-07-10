@@ -17,7 +17,7 @@ class TemplateTest {
     private val pdfService = PdfService()
     private val templateService = TemplateService()
 
-    private fun genererPdfFraResource(resource: String, data: Map<String, Any?>? = null) {
+    private fun genererPdfFraTemplateResource(resource: String, data: Map<String, Any?>? = null) {
         val template = fromResrouce(resource)
 
         val htmlWriter = StringWriter()
@@ -40,7 +40,7 @@ class TemplateTest {
             "belop" to "1337,99",
             "bestillingsDato" to "1. juli 2025",
             "utbetalesTilNavn" to "Berømt Aktivitet",
-            "sats" to "Sats 2",
+            "sats" to "2",
             "satsBelop" to "2050,00",
             "sfæriskStyrkeHøyre" to "+4,50",
             "cylinderstyrkeHøyre" to "-2,50",
@@ -48,8 +48,11 @@ class TemplateTest {
             "cylinderstyrkeVenstre" to "-2,50",
             "nesteKravdato" to LocalDate.now().plusYears(1).year.toString(),
             "bunntekst" to "Saksnummer 1000",
+            "belopMindreEnnSats" to true,
+            "viseNavAdresse" to true,
+            "viseNavAdresseHot" to false,
         )
-        genererPdfFraResource("/template/barnebrillerInnvilgetHotsak.bokmaal.hbs", data)
-        genererPdfFraResource("/template/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
+        genererPdfFraTemplateResource("/template/barnebrillerInnvilgetHotsak.bokmaal.hbs", data)
+        genererPdfFraTemplateResource("/template/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
     }
 }

@@ -23,8 +23,10 @@
     </div>
     <div style="min-height:1rem" class="block"><br/><strong>Slik har vi kommet fram til hvor mye du får</strong></div>
     <div style="min-height:1rem" class="block">Det er brillestyrken din som bestemmer hvor mye du kan få i tilskudd. Ut
-        ifra brillestyrken du har oppgitt kommer du inn under sats {{sats}} (opptil {{satsBelop}} kroner). Ifølge
-        dokumentasjonen har ditt høyre øye sfærisk styrke {{sfæriskStyrkeHøyre}} og cylinderstyrke
+        ifra brillestyrken du har oppgitt kommer du inn under sats {{sats}} (opptil {{satsBelop}} kroner).
+        {{#if belopMindreEnnSats}}Du kan ikke få mer i tilskudd enn det brillene koster. Ifølge dokumentasjonen
+        du har sendt oss, kostet brillene {{belop}} kroner, og dette er beløpet du vil få utbetalt.{{/if}}
+        Ifølge dokumentasjonen har ditt høyre øye sfærisk styrke {{sfæriskStyrkeHøyre}} og cylinderstyrke
         {{cylinderstyrkeHøyre}}, og ditt venstre øye har sfærisk styrke {{sfæriskStyrkeVenstre}} og cylinderstyrke
         {{cylinderstyrkeVenstre}}. Du kan lese mer om kravene og satsene på nav.no/briller-til-barn<br/><br/><strong>Du
             kan få tilskudd til ett par briller hvert år</strong></div>
@@ -63,9 +65,7 @@
         </div>
     </div>
     <div style="min-height:1rem" class="block"></div>
-    <div class="delmal">
-        <div style="min-height:1rem" class="block">Med vennlig hilsen <br/>Nav</div>
-    </div>
+    {{> hotsak.delmal.kontakt-oss.bokmaal.partial }}
 </div>
 </body>
 </html>
