@@ -1,6 +1,5 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
-import com.fasterxml.jackson.annotation.JsonValue
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.coroutines.withLoggingContextAsync
 import io.ktor.http.ContentType
@@ -11,7 +10,6 @@ import io.ktor.server.request.accept
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.receiveNullable
-import io.ktor.server.request.receiveOrNull
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondOutputStream
@@ -25,10 +23,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import no.nav.hjelpemidler.logging.secureError
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
-import no.nav.hjelpemidler.serialization.jackson.jsonMapper
-import no.nav.hjelpemidler.serialization.jackson.value
 import java.io.StringWriter
-import kotlin.jvm.javaClass
 
 private val log = KotlinLogging.logger { }
 

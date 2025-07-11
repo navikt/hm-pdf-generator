@@ -1,7 +1,10 @@
 package no.nav.hjelpemidler.pdfgen.template
 
 import com.github.jknack.handlebars.Handlebars
+import com.github.jknack.handlebars.Handlebars.SafeString
+import com.github.jknack.handlebars.Helper
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
+import com.github.rjeschke.txtmark.Processor
 import no.nav.hjelpemidler.localization.LOCALE_NORWEGIAN_BOKMÅL
 import java.io.Writer
 import java.time.LocalDate
@@ -10,21 +13,16 @@ import java.time.format.FormatStyle
 
 class TemplateService {
     fun compile(template: String, context: Map<String, Any?> = emptyMap(), writer: Writer) {
-        handlebars.compileInline(template).apply(deepMerge(commonData(), context), writer)
+        handlebars.compileInline(template).apply(context, writer)
     }
 
-    private fun commonData(): Map<String, Any?> {
-        val dagensDato = LocalDate.now().format(formatter)
-        return mapOf(
-            "commonData" to mapOf(
-                "dagensDato" to dagensDato,
-            ),
-        )
-    }
-
-    private val handlebars: Handlebars = Handlebars(ClassPathTemplateLoader("/delmaler/")).apply {
-        registerHelper("markdown", MarkdownHelper)
-    }
+    private val handlebars: Handlebars = Handlebars(ClassPathTemplateLoader("/delmaler/"))
+        .registerHelper("markdown", Helper<String> { context, _ ->
+            SafeString(Processor.process(context ?: return@Helper null))
+        })
+        .registerHelper("formatterDato", Helper<LocalDate> { context, _ ->
+            formatter.format(context ?: return@Helper null)
+        })
 
     private val formatter: DateTimeFormatter = DateTimeFormatter
         .ofLocalizedDate(FormatStyle.MEDIUM)

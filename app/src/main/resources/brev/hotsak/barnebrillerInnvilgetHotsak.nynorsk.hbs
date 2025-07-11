@@ -3,21 +3,21 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får tilskot til briller</title>
-    {{> hotsak/style }}
+    {{> hotsak/style bunntekst="Saksnummer {{saksnr}}" }}
 </head>
 <body class="body">
 <div>
     <div class="header">
         <div class="ikon-og-dato">
             {{> nav-logo }}
-            <p>{{brevOpprettetDato}}</p></div>
+            <p>{{formatterDato brevOpprettetDato}}</p></div>
         <div class="tittel-og-personinfo"><h2 class="tittel">Du får tilskot til briller</h2></div>
     </div>
     <div style="min-height:1rem" class="block">Namn: {{barnetsFulleNavn}}</div>
     <div style="min-height:1rem" class="block">Fødselsnummer: {{barnetsFodselsnummer}}</div>
     <div style="min-height:1rem" class="block"></div>
     <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har behandla søknaden din om tilskot til briller, som vi fekk
-        {{mottattDato}}. Du får {{belop}} kroner frå oss for brilla som vart bestilt {{bestillingsDato}}. Pengane vil
+        {{formatterDato mottattDato}}. Du får {{belop}} kroner frå oss for brilla som vart bestilt {{formatterDato bestillingsDato}}. Pengane vil
         bli utbetalte til kontonummeret {{utbetalesTilNavn}} har registrert hos Nav. Viss du lurer på noko rundt
         kontonummer, sjå informasjon på nav.no/kontonummer
     </div>

@@ -33,9 +33,9 @@ class BrevTest {
         val data = mapOf(
             "belopMindreEnnSats" to true,
             "viseNavAdresse" to true,
-            "mottattDato" to "28. januar 2025",
-            "brevOpprettetDato" to "28. januar 2025",
-            "bestillingsDato" to "1. juli 2025",
+            "mottattDato" to LocalDate.of(2025, 1, 28),
+            "brevOpprettetDato" to LocalDate.of(2025, 1, 28),
+            "bestillingsDato" to LocalDate.of(2025, 7, 1),
             "nesteKravdato" to LocalDate.now().plusYears(1).year.toString(),
             "bunntekst" to "Saksnummer 1000",
             "barnetsFulleNavn" to "Berømt Aktivitet",
