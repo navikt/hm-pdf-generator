@@ -113,4 +113,4 @@ private fun fromResrouce(resource: String) =
         .inputStream(resource)
         .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
 
-enum class Målform { Bokmaal, Nynorsk }
+enum class Målform { Bokmal, Nynorsk }
