@@ -37,7 +37,7 @@ class BrevTest {
             "brevOpprettetDato" to LocalDate.of(2025, 1, 28),
             "bestillingsDato" to LocalDate.of(2025, 7, 1),
             "nesteKravdato" to LocalDate.now().plusYears(1).year.toString(),
-            "bunntekst" to "Saksnummer 1000",
+            "saksnr" to "1000",
             "barnetsFulleNavn" to "Berømt Aktivitet",
             "utbetalesTilNavn" to "Berømt Aktivitet",
             "barnetsFodselsnummer" to "26848497710",
