@@ -1,5 +1,6 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
+import com.fasterxml.jackson.annotation.JsonValue
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.coroutines.withLoggingContextAsync
 import io.ktor.http.ContentType
@@ -9,19 +10,25 @@ import io.ktor.http.content.asFlow
 import io.ktor.server.request.accept
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
+import io.ktor.server.request.receiveNullable
+import io.ktor.server.request.receiveOrNull
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondOutputStream
 import io.ktor.server.response.respondTextWriter
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
+import io.ktor.server.util.getValue
 import io.ktor.utils.io.toByteArray
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import no.nav.hjelpemidler.logging.secureError
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
+import no.nav.hjelpemidler.serialization.jackson.jsonMapper
+import no.nav.hjelpemidler.serialization.jackson.value
 import java.io.StringWriter
+import kotlin.jvm.javaClass
 
 private val log = KotlinLogging.logger { }
 
@@ -85,56 +92,30 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
             log.error(e) { e.message }
             call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
         }
+    }
 
-        /*try {
-            val templateParts = call.receiveMultipart().asFlow()
-                .filterIsInstance<PartData.FormItem>()
-                .mapNotNull { partData ->
-                    val templatePart = when (partData.contentType) {
-                        ContentType.Text.Html,
-                        ContentTypeHandlebarsTemplate,
-                            -> TemplatePart.Template(partData.value)
-
-                        ContentType.Application.Json,
-                            -> TemplatePart.Data(jsonToValue(partData.value))
-
-                        else -> null
-                    }
-                    partData.dispose()
-                    templatePart
-                }
-                .toList()
-
-            val template = templateParts.filterIsInstance<TemplatePart.Template>().single()
-            val data = templateParts.filterIsInstance<TemplatePart.Data>().single()
-
-            val acceptContentType = call.request.accept()?.let { ContentType.parse(it) } ?: ContentType.Text.Html
-            when (acceptContentType) {
-                ContentType.Text.Html -> {
-                    call.respondTextWriter(ContentType.Text.Html) {
-                        templateService.compile(template.value, data.value, this)
-                    }
-                }
-
-                ContentType.Application.Pdf -> {
-                    call.respondOutputStream(ContentType.Application.Pdf) {
-                        val writer = StringWriter()
-                        templateService.compile(template.value, data.value, writer)
-                        pdfService.lagPdf(writer.toString(), this)
-                    }
-                }
+    post("/api/brev/{mappe}/{brevId}/{målform}") {
+        try {
+            val mappe: String by call.parameters
+            val brevId: String by call.parameters
+            val målform = call.parameters["målform"]!!.let { Målform.valueOf(it.replaceFirstChar { chr -> chr.uppercase() }) }
+            val template = fromResrouce("/brev/$mappe/$brevId.$målform.hbs")
+            val htmlWriter = StringWriter()
+            templateService.compile(template, call.receiveNullable<Map<String, Any?>>() ?: mapOf(), htmlWriter)
+            call.respondOutputStream(ContentType.Application.Pdf) {
+                pdfService.lagPdf(htmlWriter.toString(), this)
             }
         } catch (e: Exception) {
-            val message = "Fail!"
-            log.error(e) { message }
-            call.respond(HttpStatusCode.InternalServerError, message)
-        }*/
+            log.error(e) { e.message }
+            call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
+        }
     }
 }
 
-sealed interface TemplatePart {
-    class Template(val value: String) : TemplatePart
-    class Data(val value: Map<String, Any?>) : TemplatePart
-}
+private fun fromResrouce(resource: String) =
+    object {}
+        .javaClass
+        .inputStream(resource)
+        .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
 
-val ContentTypeHandlebarsTemplate: ContentType = ContentType.parse("text/x-handlebars-template")
+enum class Målform { Bokmaal, Nynorsk }

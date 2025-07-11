@@ -31,24 +31,23 @@ class BrevTest {
     @Test
     fun `Template barnebrillerInnvilgetHotsak`() {
         val data = mapOf(
-            "brevOpprettetDato" to "28. januar 2025",
-            "barnetsFulleNavn" to "Berømt Aktivitet",
-            "barnetsFodselsnummer" to "26848497710",
+            "belopMindreEnnSats" to true,
+            "viseNavAdresse" to true,
             "mottattDato" to "28. januar 2025",
-            "belop" to "1337,99",
+            "brevOpprettetDato" to "28. januar 2025",
             "bestillingsDato" to "1. juli 2025",
+            "nesteKravdato" to LocalDate.now().plusYears(1).year.toString(),
+            "bunntekst" to "Saksnummer 1000",
+            "barnetsFulleNavn" to "Berømt Aktivitet",
             "utbetalesTilNavn" to "Berømt Aktivitet",
+            "barnetsFodselsnummer" to "26848497710",
+            "belop" to "1337,99",
             "sats" to "2",
             "satsBelop" to "2050,00",
             "sfæriskStyrkeHøyre" to "+4,50",
             "cylinderstyrkeHøyre" to "-2,50",
             "sfæriskStyrkeVenstre" to "+4,50",
             "cylinderstyrkeVenstre" to "-2,50",
-            "nesteKravdato" to LocalDate.now().plusYears(1).year.toString(),
-            "bunntekst" to "Saksnummer 1000",
-            "belopMindreEnnSats" to true,
-            "viseNavAdresse" to true,
-            "viseNavAdresseHoT" to false,
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.bokmaal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
