@@ -12,10 +12,6 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 class TemplateService {
-    fun compile(template: String, context: Map<String, Any?> = emptyMap(), writer: Writer) {
-        handlebars.compileInline(template).apply(context, writer)
-    }
-
     private val handlebars: Handlebars = Handlebars(ClassPathTemplateLoader("/delmaler/"))
         .registerHelper("markdown", Helper<String> { context, _ ->
             SafeString(Processor.process(context ?: return@Helper null))
@@ -31,23 +27,7 @@ class TemplateService {
         .ofLocalizedDate(FormatStyle.MEDIUM)
         .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
 
-    private fun deepMerge(map1: Map<String, Any?>, map2: Map<String, Any?>): Map<String, Any?> {
-        val result = map1.toMutableMap()
-        map2.forEach { (key, value) ->
-            if (result.containsKey(key)) {
-                val existingValue = result[key]
-                if (existingValue is Map<*, *> && value is Map<*, *>) {
-                    // Recursively merge nested maps
-                    @Suppress("UNCHECKED_CAST")
-                    result[key] = deepMerge(existingValue as Map<String, Any?>, value as Map<String, Any?>)
-                } else {
-                    // Overwrite or apply custom logic for non-map values
-                    result[key] = value
-                }
-            } else {
-                result[key] = value
-            }
-        }
-        return result
+    fun compile(template: String, context: Map<String, Any?> = emptyMap(), writer: Writer) {
+        handlebars.compileInline(template).apply(context, writer)
     }
 }
