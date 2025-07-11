@@ -25,8 +25,7 @@ class TemplateService {
             formatter.format(context ?: return@Helper null)
         })
         .registerHelper("concat", Helper<Any> { context, options ->
-            val p0 = context ?: return@Helper null
-            "$p0 ${options.params.joinToString(" ")}"
+            "${context ?: return@Helper null} ${options.params.joinToString(" ")}".trim()
         })
 
     private val formatter: DateTimeFormatter = DateTimeFormatter
