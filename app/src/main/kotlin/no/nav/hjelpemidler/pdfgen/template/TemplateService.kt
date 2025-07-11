@@ -6,7 +6,6 @@ import com.github.jknack.handlebars.Helper
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.github.rjeschke.txtmark.Processor
 import no.nav.hjelpemidler.localization.LOCALE_NORWEGIAN_BOKMÅL
-import no.nav.hjelpemidler.serialization.jackson.jsonMapper
 import java.io.Writer
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
