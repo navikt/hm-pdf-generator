@@ -16,7 +16,7 @@ class TemplateService {
         .registerHelper("markdown", Helper<String> { context, _ ->
             SafeString(Processor.process(context ?: return@Helper null))
         })
-        .registerHelper("formatterDato", Helper<LocalDate> { context, _ ->
+        .registerHelper("formaterDato", Helper<LocalDate> { context, _ ->
             formatter.format(context ?: return@Helper null)
         })
         .registerHelper("concat", Helper<Any> { context, options ->
