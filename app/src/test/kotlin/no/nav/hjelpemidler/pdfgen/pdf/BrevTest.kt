@@ -42,7 +42,7 @@ class BrevTest {
             "utbetalesTilNavn" to "Berømt Aktivitet",
             "barnetsFodselsnummer" to "26848497710",
             "belop" to "1337,99",
-            "sats" to "2",
+            "sats" to 2,
             "satsBelop" to "2050,00",
             "sfæriskStyrkeHøyre" to "+4,50",
             "cylinderstyrkeHøyre" to "-2,50",
