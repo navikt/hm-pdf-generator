@@ -23,16 +23,12 @@ dependencies {
 
     implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.server.metrics.micrometer)
     implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.serialization.jackson)
 
     implementation(libs.micrometer.registry.prometheus)
-    implementation("io.ktor:ktor-server-content-negotiation:3.1.2")
-    implementation("io.ktor:ktor-server-core:3.1.2")
-    implementation("io.ktor:ktor-server-core:3.1.2")
-    implementation("io.ktor:ktor-serialization-jackson:3.1.2")
-    implementation("io.ktor:ktor-server-content-negotiation:3.1.2")
-    implementation("io.ktor:ktor-server-core:3.1.2")
 
     runtimeOnly(libs.jclOverSlf4j)
 }
