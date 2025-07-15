@@ -36,7 +36,7 @@ class BrevTest {
             "mottattDato" to LocalDate.of(2025, 1, 28),
             "brevOpprettetDato" to LocalDate.of(2025, 1, 28),
             "bestillingsDato" to LocalDate.of(2025, 7, 1),
-            "nesteKravdato" to LocalDate.now().plusYears(1).year.toString(),
+            "nesteKravdato" to LocalDate.of(LocalDate.now().plusYears(1).year, 1, 1),
             "saksnr" to 1000,
             "barnetsFulleNavn" to "Berømt Aktivitet",
             "utbetalesTilNavn" to "Berømt Aktivitet",
