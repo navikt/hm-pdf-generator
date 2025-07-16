@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+    <meta charSet="UTF-8"/>
+    <title>Du får ikkje tilskot til briller</title>
+    {{> hotsak/style bunntekst=(concat 'Saksnummer ' sakId) }}
+</head>
+<body class="body">
+<div>
+    <div class="header">
+        <div class="ikon-og-dato">
+            {{> nav-logo }}
+            <p>{{formaterDato brevOpprettetDato}}</p>
+            <p>{{brevOpprettetDato}}</p>
+        </div>
+        <div class="tittel-og-personinfo"><h2 class="tittel">Du får ikkje tilskot til briller</h2></div>
+    </div>
+    <div style="min-height:1rem" class="block">Navn: {{barnetsFulleNavn}}</div>
+    <div style="min-height:1rem" class="block">Fødselsnummer: {{barnetsFodselsnummer}}</div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har avslått søknaden din om tilskot til
+        briller som vi fekk {{formaterDato mottattDato}}. Vedtaket er gjort etter folketrygdloven §10-7 a, jf. forskrift av 19.juli
+        2022 om stønad til briller til barn.</div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block"><strong>Bakgrunn for avslaget</strong></div>
+    <div style="min-height:1rem" class="block">Vi har avslått søknaden din fordi:</div>
+    <div class="delmal">
+        <ul>
+            {{#if begrunnelser.avslagEksisterendeVedtak }}
+                <li class="block">
+                    du fekk tilskot til briller bestilt {{formaterDato forrigeBrilleDato}}. Det er berre mogleg å få
+                    tilskot frå denne ordninga éin gong kvart kalenderår (§3).
+                </li>
+            {{/if}}
+            {{#if begrunnelser.avslagOver18 }}
+                <li class="block">du var over 18 år då brilla vart bestilt, {{formaterDato bestillingsDato}} (§2).</li>
+            {{/if}}
+            {{#if begrunnelser.avslagIkkeMedlem }}
+                <li class="block">
+                    du var ikkje medlem av folketrygda då brilla vart bestilt, {{formaterDato bestillingsDato}}
+                    (folketrygdloven § 10-7 a).
+                </li>
+            {{/if}}
+            {{#if begrunnelser.avslagForLavBrillestyrke }}
+                <li class="block">
+                    brillestyrken din er lågare enn minstekrava for ordninga (§2). Brillestyrken på minst eitt glas må
+                    vere ≥ 1,00D og/eller cylinderstyrke på minst eitt glas må vere ≥ 1,00D. Dokumentasjonen du har
+                    sendt oss viser at ditt høgre auge har sfærisk styrke {{sfæriskStyrkeHøyre}} og cylinderstyrke
+                    {{cylinderstyrkeHøyre}}, og ditt venstre auge har sfærisk styrke {{sfæriskStyrkeVenstre}} og
+                    cylinderstyrke {{cylinderstyrkeVenstre}}. Du kan lese meir om krava på nav.no/briller-til-barn
+                </li>
+            {{/if}}
+            {{#if begrunnelser.avslagBestillingsdatoEldreEnn6Mnd }}
+                <li class="block">det er over 6 månader sidan brilla vart bestilt, {{formaterDato bestillingsDato}} (§6).</li>
+            {{/if}}
+            {{#if begrunnelser.avslagIkkeBestiltHosOptiker }}
+                <li class="block">
+                    vi ikkje kan sjå ut frå dokumentasjonen du har sendt oss at brilla er bestilt hos ein optikar. Dette
+                    er eit krav for å få støtte (§ 2).
+                </li>
+            {{/if}}
+            {{#if begrunnelser.avslagBrilleglass }}
+                <li class="block">
+                    vi ikkje kan sjå ut frå dokumentasjonen du har sendt oss at du har kjøpt brilleglas. Dette
+                    er eit krav for å få støtte (§ 2). Vi kan ikkje gje støtte i tilfelle der det til dømes er bestilt
+                    kontaktlinser, eller innfatning utan brilleglas med styrke.
+                </li>
+            {{/if}}
+            {{#if begrunnelser.avslagAbonnement }}
+                <li class="block">
+                    dokumentasjonen viser at brilla inngår i eit abonnement. Regelverket gir ikkje rett til tilskot til
+                    briller som inngår i ein slik avtale (§ 2). Dette er fordi eit abonnement ikkje blir rekna som kjøp
+                    av brille, men ei form for leigeavtale.
+                </li>
+            {{/if}}
+        </ul>
+    </div>
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/klage.nynorsk }}
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/rett-til-innsyn.nynorsk }}
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/har-du-sporsmaal.nynorsk }}
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/kontakt-oss.nynorsk }}
+</div>
+</body>
+</html>

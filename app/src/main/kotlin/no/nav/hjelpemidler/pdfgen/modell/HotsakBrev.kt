@@ -1,5 +1,6 @@
 package no.nav.hjelpemidler.pdfgen.modell
 
+import com.fasterxml.jackson.annotation.JsonValue
 import java.time.LocalDate
 
 data class BarnebrillerInnvilgetHotsak(
@@ -31,4 +32,32 @@ data class BarnebrillerAvslagManglendeOpplysningerHotsak(
     val barnetsFulleNavn: String,
     val barnetsFodselsnummer: String,
     val fritekstSaksbehandler: String,
+)
+
+data class BarnebrillerAvslagHotsakBegrunnelser (
+    val avslagEksisterendeVedtak: Boolean? = false,
+    val avslagOver18: Boolean? = false,
+    val avslagIkkeMedlem: Boolean? = false,
+    val avslagForLavBrillestyrke: Boolean? = false,
+    val avslagBestillingsdatoEldreEnn6Mnd: Boolean? = false,
+    val avslagIkkeBestiltHosOptiker: Boolean? = false,
+    val avslagBrilleglass: Boolean? = false,
+    val avslagAbonnement: Boolean? = false,
+)
+
+data class BarnebrillerAvslagHotsak(
+    val sakId: String,
+    val viseNavAdresse: Boolean,
+    val mottattDato: LocalDate,
+    val brevOpprettetDato: LocalDate,
+    val bestillingsDato: LocalDate,
+    val forrigeBrilleDato: LocalDate,
+    val barnetsFornavn: String,
+    val barnetsFulleNavn: String,
+    val barnetsFodselsnummer: String,
+    val sfæriskStyrkeHøyre: String,
+    val cylinderstyrkeHøyre: String,
+    val sfæriskStyrkeVenstre: String,
+    val cylinderstyrkeVenstre: String,
+    val begrunnelser: BarnebrillerAvslagHotsakBegrunnelser,
 )

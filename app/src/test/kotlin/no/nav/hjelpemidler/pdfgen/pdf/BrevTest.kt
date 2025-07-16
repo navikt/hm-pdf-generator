@@ -1,5 +1,7 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsak
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsakBegrunnelser
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
@@ -7,13 +9,12 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringWriter
 import java.time.LocalDate
-import kotlin.String
 
 class BrevTest {
     private fun fromResrouce(resource: String) =
         javaClass
-        .inputStream(resource)
-        .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
+            .inputStream(resource)
+            .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
 
     private val pdfService = PdfService()
     private val templateService = TemplateService()
@@ -67,5 +68,36 @@ class BrevTest {
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagManglendeOpplysningerHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagManglendeOpplysningerHotsak.nynorsk.hbs", data)
+    }
+
+    @Test
+    fun `Template barnebrillerAvslagHotsak`() {
+        val data = BarnebrillerAvslagHotsak(
+            sakId = "1002",
+            viseNavAdresse = true,
+            mottattDato = LocalDate.of(2025, 7, 28),
+            brevOpprettetDato = LocalDate.of(2025, 7, 28),
+            bestillingsDato = LocalDate.of(2025, 7, 1),
+            forrigeBrilleDato = LocalDate.of(2025, 4, 1),
+            barnetsFornavn = "Berømt",
+            barnetsFulleNavn = "Berømt Aktivitet",
+            barnetsFodselsnummer = "26848497710",
+            sfæriskStyrkeHøyre = "+4,50",
+            cylinderstyrkeHøyre = "-2,50",
+            sfæriskStyrkeVenstre = "+4,50",
+            cylinderstyrkeVenstre = "-2,50",
+            begrunnelser = BarnebrillerAvslagHotsakBegrunnelser(
+                avslagEksisterendeVedtak = true,
+                avslagOver18 = true,
+                avslagIkkeMedlem = true,
+                avslagForLavBrillestyrke = true,
+                avslagBestillingsdatoEldreEnn6Mnd = true,
+                avslagIkkeBestiltHosOptiker = true,
+                avslagBrilleglass = true,
+                avslagAbonnement = true,
+            ),
+        )
+        genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagHotsak.bokmal.hbs", data)
+        genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagHotsak.nynorsk.hbs", data)
     }
 }
