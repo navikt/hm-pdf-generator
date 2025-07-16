@@ -25,7 +25,7 @@ class TemplateService {
         })
 
     private val formatter: DateTimeFormatter = DateTimeFormatter
-        .ofLocalizedDate(FormatStyle.MEDIUM)
+        .ofLocalizedDate(FormatStyle.LONG)
         .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
 
     fun compile(template: String, context: Any, writer: Writer) {
