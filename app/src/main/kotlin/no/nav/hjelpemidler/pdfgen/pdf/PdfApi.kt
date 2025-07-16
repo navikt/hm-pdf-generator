@@ -89,12 +89,12 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
         }
     }
 
-    post("/api/brev/{mappe}/{brevId}/{målform}") {
+    post("/api/brev/{mappe}/{brevId}/{målform?}") {
         try {
             val mappe: String by call.parameters
             val brevId: String by call.parameters
-            val målform = call.parameters["målform"]!!.let { Målform.valueOf(it.replaceFirstChar { chr -> chr.uppercase() }) }
-            val template = fromResrouce("/brev/$mappe/$brevId.$målform.hbs")
+            val målform = call.parameters["målform"]?.let { runCatching { Målform.valueOf(it.uppercase()) }.getOrNull() } ?: Målform.BOKMÅL
+            val template = fromResrouce("/brev/$mappe/$brevId.${målform.toString().lowercase().replace("å", "a")}.hbs")
             val htmlWriter = StringWriter()
             templateService.compile(template, call.receiveNullable<Map<String, Any?>>() ?: mapOf(), htmlWriter)
             call.respondOutputStream(ContentType.Application.Pdf) {
@@ -113,4 +113,4 @@ private fun fromResrouce(resource: String) =
         .inputStream(resource)
         .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
 
-enum class Målform { Bokmal, Nynorsk }
+enum class Målform { BOKMÅL, NYNORSK }
