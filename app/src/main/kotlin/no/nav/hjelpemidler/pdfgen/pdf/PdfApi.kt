@@ -90,7 +90,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
         }
     }
 
-    post("/api/brev/hotsak/{brevId}/{målform?}") {
+    post("/api/brev/{mappe}/{brevId}/{målform?}") {
         try {
             val mappe: String by call.parameters
             val brevId: String by call.parameters
