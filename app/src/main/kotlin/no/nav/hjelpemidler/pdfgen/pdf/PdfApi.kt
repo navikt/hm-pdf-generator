@@ -9,7 +9,6 @@ import io.ktor.http.content.asFlow
 import io.ktor.server.request.accept
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
-import io.ktor.server.request.receiveNullable
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondOutputStream
@@ -22,6 +21,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import no.nav.hjelpemidler.logging.secureError
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import java.io.StringWriter
 
@@ -65,6 +65,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
     post("/api/template") {
         try {
             data class Request(val template: String, val data: Map<String, Any> = mapOf())
+
             val req = call.receive<Request>()
 
             val acceptContentType = call.request.accept()?.let { ContentType.parse(it) } ?: ContentType.Text.Html
@@ -89,14 +90,23 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
         }
     }
 
-    post("/api/brev/{mappe}/{brevId}/{målform?}") {
+    post("/api/brev/hotsak/{brevId}/{målform?}") {
         try {
             val mappe: String by call.parameters
             val brevId: String by call.parameters
-            val målform = call.parameters["målform"]?.let { runCatching { Målform.valueOf(it.uppercase()) }.getOrNull() } ?: Målform.BOKMÅL
+            val målform =
+                call.parameters["målform"]?.let { runCatching { Målform.valueOf(it.uppercase()) }.getOrNull() }
+                    ?: Målform.BOKMÅL
+            val data = when (brevId) {
+                "barnebrillerInnvilgetHotsak" -> call.receive<BarnebrillerInnvilgetHotsak>()
+                else -> {
+                    call.respond(HttpStatusCode.BadRequest, "ukjent brevkode")
+                    return@post
+                }
+            }
             val template = fromResrouce("/brev/$mappe/$brevId.${målform.toString().lowercase().replace("å", "a")}.hbs")
             val htmlWriter = StringWriter()
-            templateService.compile(template, call.receiveNullable<Map<String, Any?>>() ?: mapOf(), htmlWriter)
+            templateService.compile(template, data, htmlWriter)
             call.respondOutputStream(ContentType.Application.Pdf) {
                 pdfService.lagPdf(htmlWriter.toString(), this)
             }

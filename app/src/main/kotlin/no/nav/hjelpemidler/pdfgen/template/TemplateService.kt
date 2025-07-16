@@ -10,6 +10,7 @@ import java.io.Writer
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import kotlin.reflect.full.memberProperties
 
 class TemplateService {
     private val handlebars: Handlebars = Handlebars(ClassPathTemplateLoader("/delmaler/"))
@@ -27,7 +28,7 @@ class TemplateService {
         .ofLocalizedDate(FormatStyle.MEDIUM)
         .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
 
-    fun compile(template: String, context: Map<String, Any?> = emptyMap(), writer: Writer) {
+    fun compile(template: String, context: Any, writer: Writer) {
         handlebars.compileInline(template).apply(context, writer)
     }
 }
