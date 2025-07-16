@@ -35,13 +35,13 @@ class BrevTest {
     @Test
     fun `Template barnebrillerInnvilgetHotsak`() {
         data class BrevData (
+            val sakId: String,
             val belopMindreEnnSats: Boolean,
             val viseNavAdresse: Boolean,
             val mottattDato: LocalDate,
             val brevOpprettetDato: LocalDate,
             val bestillingsDato: LocalDate,
             val nesteKravdato: LocalDate,
-            val sakId: Long,
             val barnetsFulleNavn: String,
             val utbetalesTilNavn: String,
             val barnetsFodselsnummer: String,
@@ -54,13 +54,13 @@ class BrevTest {
             val cylinderstyrkeVenstre: String,
         )
         val data = BrevData(
+            sakId = "1000",
             belopMindreEnnSats = true,
             viseNavAdresse = true,
             mottattDato = LocalDate.of(2025, 1, 28),
             brevOpprettetDato = LocalDate.of(2025, 1, 28),
             bestillingsDato = LocalDate.of(2025, 7, 1),
             nesteKravdato = LocalDate.of(LocalDate.now().plusYears(1).year, 1, 1),
-            sakId = 1000,
             barnetsFulleNavn = "Berømt Aktivitet",
             utbetalesTilNavn = "Berømt Aktivitet",
             barnetsFodselsnummer = "26848497710",

@@ -31,5 +31,6 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: hm-saksbehandling
         - application: hm-brev
         - application: hm-joark-sink
