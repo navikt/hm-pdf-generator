@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charSet="UTF-8"/>
+    <title>Du får ikke tilskudd til briller</title>
+    {{> hotsak/style bunntekst=(concat 'Saksnummer ' sakId) }}
+</head>
+<body class="body">
+<div>
+    <div class="header">
+        <div class="ikon-og-dato">
+            {{> nav-logo }}
+            <p>{{formaterDato brevOpprettetDato}}</p>
+        </div>
+        <div class="tittel-og-personinfo"><h2 class="tittel">Du får ikke tilskudd til briller</h2></div>
+    </div>
+    <div style="min-height:1rem" class="block">Navn: {{barnetsFulleNavn}}</div>
+    <div style="min-height:1rem" class="block">Fødselsnummer: {{barnetsFodselsnummer}}</div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har avslått søknaden din om tilskudd til briller som vi
+        mottok {{formaterDato mottattDato}}.</div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block"><strong>Begrunnelse for avslaget</strong></div>
+    <div style="min-height:1rem" class="block">Søknaden er avslått fordi
+        vi ikke har mottatt opplysninger fra deg som vi etterspurte i et brev datert
+        {{formaterDato etterspurteOpplysningerBrevDatertDato}}. Fristen for å sende inn opplysningene var tre uker fra du mottok
+        brevet. Disse opplysningene mangler:</div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block">{{fritekstSaksbehandler}}</div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block">
+        Søknaden er vurdert og avgjort på grunnlag av opplysninger vi har mottatt
+        i saken. Ut fra disse opplysningene, kan vi ikke se at du fyller vilkårene for tilskudd til briller til barn.
+        Vedtaket er gjort etter folketrygdloven § 21-3, jfr. § 10-7 a og forskrift om stønad til briller til barn.
+    </div>
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/du-kan-soke-panytt.bokmal }}
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/klage.bokmal klageManglendeOpplysninger=true }}
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/rett-til-innsyn.bokmal }}
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/har-du-sporsmaal.bokmal }}
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/kontakt-oss.bokmal }}
+</div>
+</body>
+</html>

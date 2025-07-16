@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import no.nav.hjelpemidler.logging.secureError
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import java.io.StringWriter
@@ -99,6 +100,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
                     ?: Målform.BOKMÅL
             val data = when (brevId) {
                 "barnebrillerInnvilgetHotsak" -> call.receive<BarnebrillerInnvilgetHotsak>()
+                "barnebrillerAvslagManglendeOpplysningerHotsak" -> call.receive<BarnebrillerAvslagManglendeOpplysningerHotsak>()
                 else -> {
                     call.respond(HttpStatusCode.BadRequest, "ukjent brevkode")
                     return@post

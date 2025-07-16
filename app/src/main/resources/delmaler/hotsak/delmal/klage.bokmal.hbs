@@ -1,7 +1,10 @@
 <div class="delmal">
     <div style="min-height:1rem" class="block"><strong>Du har rett til å klage</strong></div>
     <div style="min-height:1rem" class="block">
-        Hvis du er uenig i vedtaket, har du rett til å klage. Du kan klage innen seks uker fra du mottok vedtaket. Du
-        finner skjemaer og informasjon på nav.no/klage
+        {{#if klageManglendeOpplysninger}}
+            Hvis du er uenig i begrunnelsen for avslaget, kan du klage. Merk at klagen vil bli behandlet med
+            utgangspunkt i saken slik den står nå, så hvis saken mangler opplysninger, er det bedre å søke på nytt.
+        {{else}}Hvis du er uenig i vedtaket, har du rett til å klage.{{/if}}
+        Du kan klage innen seks uker fra du mottok vedtaket. Du finner skjemaer og informasjon på nav.no/klage
     </div>
 </div>

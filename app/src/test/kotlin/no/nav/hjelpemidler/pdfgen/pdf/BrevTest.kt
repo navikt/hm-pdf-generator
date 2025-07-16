@@ -1,12 +1,13 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringWriter
 import java.time.LocalDate
-import kotlin.reflect.full.memberProperties
+import kotlin.String
 
 class BrevTest {
     private fun fromResrouce(resource: String) =
@@ -50,5 +51,21 @@ class BrevTest {
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
+    }
+
+    @Test
+    fun `Template barnebrillerAvslagManglendeOpplysningerHotsak`() {
+        val data = BarnebrillerAvslagManglendeOpplysningerHotsak(
+            sakId = "1001",
+            viseNavAdresse = true,
+            mottattDato = LocalDate.of(2025, 7, 28),
+            brevOpprettetDato = LocalDate.of(2025, 7, 28),
+            etterspurteOpplysningerBrevDatertDato = LocalDate.of(2025, 4, 1),
+            barnetsFulleNavn = "Berømt Aktivitet",
+            barnetsFodselsnummer = "26848497710",
+            fritekstSaksbehandler = "Veldig sen å svare, nå gidder jeg ikke mer!",
+        )
+        genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagManglendeOpplysningerHotsak.bokmal.hbs", data)
+        genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagManglendeOpplysningerHotsak.nynorsk.hbs", data)
     }
 }

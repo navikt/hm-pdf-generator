@@ -2,7 +2,7 @@ package no.nav.hjelpemidler.pdfgen.modell
 
 import java.time.LocalDate
 
-data class BarnebrillerInnvilgetHotsak (
+data class BarnebrillerInnvilgetHotsak(
     val sakId: String,
     val belopMindreEnnSats: Boolean,
     val viseNavAdresse: Boolean,
@@ -20,4 +20,15 @@ data class BarnebrillerInnvilgetHotsak (
     val cylinderstyrkeHøyre: String,
     val sfæriskStyrkeVenstre: String,
     val cylinderstyrkeVenstre: String,
+)
+
+data class BarnebrillerAvslagManglendeOpplysningerHotsak(
+    val sakId: String,
+    val viseNavAdresse: Boolean,
+    val mottattDato: LocalDate,
+    val brevOpprettetDato: LocalDate,
+    val etterspurteOpplysningerBrevDatertDato: LocalDate,
+    val barnetsFulleNavn: String,
+    val barnetsFodselsnummer: String,
+    val fritekstSaksbehandler: String,
 )
