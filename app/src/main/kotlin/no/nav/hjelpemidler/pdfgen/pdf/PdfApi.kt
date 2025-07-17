@@ -107,6 +107,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
                 "barnebrillerAvslagHotsak" -> call.receive<BarnebrillerAvslagHotsak>()
                 "barnebrillerInnhenteOpplysninger" -> call.receive<BarnebrillerInnhenteOpplysninger>()
                 "journalfortNotatHotsak" -> call.receive<JournalfortNotatHotsak>()
+                "barnebrillerAvvisningDirekteoppgjor" -> call.receive<JournalfortNotatHotsak>()
                 else -> {
                     call.respond(HttpStatusCode.BadRequest, "ukjent brevkode")
                     return@post

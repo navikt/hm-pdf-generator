@@ -3,11 +3,11 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får ikke tilskudd til briller</title>
-    {{> hotsak/style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
 </head>
 <body class="body">
 <div>
-    {{> hotsak/delmal/logo-og-bruker.bokmal tittel="Du får ikke tilskudd til briller"}}
+    {{> barnebriller/logo-og-bruker.bokmal tittel="Du får ikke tilskudd til briller"}}
     <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har avslått søknaden din om tilskudd til briller, som
         vi mottok {{formaterDato mottattDato}}. Vedtaket er gjort etter folketrygdloven §10-7 a, jf. forskrift av
         19. juli 2022 om stønad til briller til barn.</div>
@@ -68,13 +68,13 @@
         </ul>
     </div>
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/klage.bokmal }}
+    {{> barnebriller/klage.bokmal }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/rett-til-innsyn.bokmal }}
+    {{> barnebriller/rett-til-innsyn.bokmal }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/har-du-sporsmaal.bokmal }}
+    {{> barnebriller/har-du-sporsmaal.bokmal }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/kontakt-oss.bokmal }}
+    {{> barnebriller/kontakt-oss.bokmal }}
 </div>
 </body>
 </html>

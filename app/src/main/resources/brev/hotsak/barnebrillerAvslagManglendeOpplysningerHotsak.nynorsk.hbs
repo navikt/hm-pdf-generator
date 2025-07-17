@@ -3,11 +3,11 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får ikkje tilskot til briller</title>
-    {{> hotsak/style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
 </head>
 <body class="body">
 <div>
-    {{> hotsak/delmal/logo-og-bruker.nynorsk tittel="Du får ikkje tilskot til briller"}}
+    {{> barnebriller/logo-og-bruker.nynorsk tittel="Du får ikkje tilskot til briller"}}
     <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har avslått søknaden din om tilskot til briller som vi
         fekk {{formaterDato mottattDato}}.</div>
     <div style="min-height:1rem" class="block"></div>
@@ -26,15 +26,15 @@
         Vedtaket er gjort etter folketrygdlova § 21-3, jfr. § 10-7 a og forskrift om stønad til briller til barn.
     </div>
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/du-kan-soke-panytt.nynorsk }}
+    {{> barnebriller/du-kan-soke-panytt.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/klage.nynorsk klageManglendeOpplysninger=true }}
+    {{> barnebriller/klage.nynorsk klageManglendeOpplysninger=true }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/rett-til-innsyn.nynorsk }}
+    {{> barnebriller/rett-til-innsyn.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/har-du-sporsmaal.nynorsk }}
+    {{> barnebriller/har-du-sporsmaal.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/kontakt-oss.nynorsk }}
+    {{> barnebriller/kontakt-oss.nynorsk }}
 </div>
 </body>
 </html>

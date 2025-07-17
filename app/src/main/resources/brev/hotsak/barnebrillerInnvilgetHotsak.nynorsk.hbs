@@ -3,11 +3,11 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får tilskot til briller</title>
-    {{> hotsak/style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
 </head>
 <body class="body">
 <div>
-    {{> hotsak/delmal/logo-og-bruker.nynorsk tittel="Du får tilskot til briller"}}
+    {{> barnebriller/logo-og-bruker.nynorsk tittel="Du får tilskot til briller"}}
     <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har behandla søknaden din om tilskot til briller, som vi fekk
         {{formaterDato mottattDato}}. Du får {{belop}} kroner frå oss for brilla som vart bestilt {{formaterDato bestillingsDato}}. Pengane vil
         bli utbetalte til kontonummeret {{utbetalesTilNavn}} har registrert hos Nav. Viss du lurer på noko rundt
@@ -40,13 +40,13 @@
         nedsett syn, sjå nav.no/syn
     </div>
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/klage.nynorsk }}
+    {{> barnebriller/klage.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/rett-til-innsyn.nynorsk }}
+    {{> barnebriller/rett-til-innsyn.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/har-du-sporsmaal.nynorsk }}
+    {{> barnebriller/har-du-sporsmaal.nynorsk }}
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/kontakt-oss.nynorsk }}
+    {{> barnebriller/kontakt-oss.nynorsk }}
 </div>
 </body>
 </html>

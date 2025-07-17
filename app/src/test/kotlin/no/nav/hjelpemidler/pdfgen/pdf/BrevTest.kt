@@ -3,6 +3,8 @@ package no.nav.hjelpemidler.pdfgen.pdf
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsakBegrunnelser
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvvisningDirekteoppgjor
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvvisningDirekteoppgjorBegrunnelser
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
@@ -167,5 +169,21 @@ class BrevTest {
         )
         genererPdfFraTemplateResource("/brev/hotsak/journalfortNotatHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/journalfortNotatHotsak.nynorsk.hbs", data)
+    }
+
+    @Test
+    fun `Template barnebrillerAvvisningDirekteoppgjor`() {
+        val data = BarnebrillerAvvisningDirekteoppgjor(
+            sakId = "1003",
+            viseNavAdresse = true,
+            mottattDato = LocalDate.of(2025, 7, 28),
+            brevOpprettetDato = LocalDate.of(2025, 7, 28),
+            barnetsFulleNavn = "Berømt Aktivitet",
+            barnetsFodselsnummer = "26848497710",
+            fritekstSaksbehandler = "Fortell meg mere!",
+            begrunnelser = BarnebrillerAvvisningDirekteoppgjorBegrunnelser(),
+        )
+        genererPdfFraTemplateResource("/brev/brille-api/barnebrillerAvvisningDirekteoppgjor.bokmal.hbs", data)
+        genererPdfFraTemplateResource("/brev/brille-api/barnebrillerAvvisningDirekteoppgjor.nynorsk.hbs", data)
     }
 }

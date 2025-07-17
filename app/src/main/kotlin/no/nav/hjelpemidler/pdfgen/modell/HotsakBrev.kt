@@ -80,3 +80,25 @@ data class JournalfortNotatHotsak(
     val tittel: String,
     val innholdMarkdown: String,
 )
+
+data class BarnebrillerAvvisningDirekteoppgjorBegrunnelser (
+    val avslagEksisterendeVedtak: Boolean? = false,
+    val avslagOver18: Boolean? = false,
+    val avslagIkkeMedlem: Boolean? = false,
+    val avslagForLavBrillestyrke: Boolean? = false,
+    val avslagBestillingsdatoEldreEnn6Mnd: Boolean? = false,
+    val avslagIkkeBestiltHosOptiker: Boolean? = false,
+    val avslagBrilleglass: Boolean? = false,
+    val avslagAbonnement: Boolean? = false,
+)
+
+data class BarnebrillerAvvisningDirekteoppgjor(
+    val sakId: String,
+    val viseNavAdresse: Boolean,
+    val mottattDato: LocalDate? = null,
+    val brevOpprettetDato: LocalDate,
+    val barnetsFulleNavn: String,
+    val barnetsFodselsnummer: String,
+    val fritekstSaksbehandler: String,
+    val begrunnelser: BarnebrillerAvvisningDirekteoppgjorBegrunnelser,
+)

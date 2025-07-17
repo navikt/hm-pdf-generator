@@ -3,11 +3,11 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du må sende oss opplysninger</title>
-    {{> hotsak/style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
 </head>
 <body class="body">
 <div>
-    {{> hotsak/delmal/logo-og-bruker.bokmal tittel="Du må sende oss opplysninger"}}
+    {{> barnebriller/logo-og-bruker.bokmal tittel="Du må sende oss opplysninger"}}
     <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har mottatt henvendelsen din om tilskudd til briller
         {{formaterDato mottattDato}}. Saken mangler opplysninger. For at vi skal kunne behandle saken, må du sende
         oss:
@@ -32,7 +32,7 @@
         går fram av folketrygdloven § 21-3.
     </div>
     <div style="min-height:1rem" class="block"></div>
-    {{> hotsak/delmal/kontakt-oss.bokmal }}
+    {{> barnebriller/kontakt-oss.bokmal }}
 </div>
 </body>
 </html>
