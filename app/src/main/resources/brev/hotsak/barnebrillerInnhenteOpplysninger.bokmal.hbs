@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charSet="UTF-8"/>
+    <title>Du må sende oss opplysninger</title>
+    {{> hotsak/style bunntekst=(concat 'Saksnummer ' sakId) }}
+</head>
+<body class="body">
+<div>
+    {{> hotsak/delmal/logo-og-bruker.bokmal tittel="Du må sende oss opplysninger"}}
+    <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har mottatt henvendelsen din om tilskudd til briller
+        {{formaterDato mottattDato}}. Saken mangler opplysninger. For at vi skal kunne behandle saken, må du sende
+        oss:
+    </div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block">{{fritekstSaksbehandler}}</div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block"><strong>Slik sender du opplysningene</strong></div>
+    <div style="min-height:1rem" class="block">
+        Vi ber deg sende oss opplysningene vi mangler sammen med førstesiden som er lagt ved dette brevet. Det er
+        viktig at du legger førstesiden øverst.
+    </div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block"><strong>Frist for innsending</strong></div>
+    <div style="min-height:1rem" class="block">Du må sende oss opplysningene innen 3 uker fra du mottok dette brevet.
+    </div>
+    <div style="min-height:1rem" class="block"></div>
+    <div style="min-height:1rem" class="block"><strong>Hva skjer hvis du ikke sender opplysningene?</strong></div>
+    <div style="min-height:1rem" class="block">
+        Hvis vi ikke får opplysningene innen fristen, kan saken bli avslått på grunn av manglende opplysninger. Dette
+        går fram av folketrygdloven § 21-3.
+    </div>
+    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/kontakt-oss.bokmal }}
+</div>
+</body>
+</html>

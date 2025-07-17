@@ -3,6 +3,7 @@ package no.nav.hjelpemidler.pdfgen.pdf
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsakBegrunnelser
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import org.junit.jupiter.api.Test
@@ -99,5 +100,20 @@ class BrevTest {
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagHotsak.nynorsk.hbs", data)
+    }
+
+    @Test
+    fun `Template barnebrillerInnhenteOpplysninger`() {
+        val data = BarnebrillerInnhenteOpplysninger(
+            sakId = "1003",
+            viseNavAdresse = true,
+            mottattDato = LocalDate.of(2025, 7, 28),
+            brevOpprettetDato = LocalDate.of(2025, 7, 28),
+            barnetsFulleNavn = "Berømt Aktivitet",
+            barnetsFodselsnummer = "26848497710",
+            fritekstSaksbehandler = "Fortell meg mere!",
+        )
+        genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnhenteOpplysninger.bokmal.hbs", data)
+        genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnhenteOpplysninger.nynorsk.hbs", data)
     }
 }

@@ -61,3 +61,13 @@ data class BarnebrillerAvslagHotsak(
     val cylinderstyrkeVenstre: String,
     val begrunnelser: BarnebrillerAvslagHotsakBegrunnelser,
 )
+
+data class BarnebrillerInnhenteOpplysninger(
+    val sakId: String,
+    val viseNavAdresse: Boolean,
+    val mottattDato: LocalDate,
+    val brevOpprettetDato: LocalDate,
+    val barnetsFulleNavn: String,
+    val barnetsFodselsnummer: String,
+    val fritekstSaksbehandler: String,
+)
