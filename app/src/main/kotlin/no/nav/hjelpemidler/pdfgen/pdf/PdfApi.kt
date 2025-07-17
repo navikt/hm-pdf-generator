@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.toList
 import no.nav.hjelpemidler.logging.secureError
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
+import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvvisningDirekteoppgjor
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
@@ -107,7 +108,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
                 "barnebrillerAvslagHotsak" -> call.receive<BarnebrillerAvslagHotsak>()
                 "barnebrillerInnhenteOpplysninger" -> call.receive<BarnebrillerInnhenteOpplysninger>()
                 "journalfortNotatHotsak" -> call.receive<JournalfortNotatHotsak>()
-                "barnebrillerAvvisningDirekteoppgjor" -> call.receive<JournalfortNotatHotsak>()
+                "barnebrillerAvvisningDirekteoppgjor" -> call.receive<BarnebrillerAvvisningDirekteoppgjor>()
                 else -> {
                     call.respond(HttpStatusCode.BadRequest, "ukjent brevkode")
                     return@post
