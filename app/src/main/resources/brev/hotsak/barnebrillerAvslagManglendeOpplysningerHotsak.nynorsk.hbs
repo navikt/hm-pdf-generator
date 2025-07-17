@@ -7,16 +7,7 @@
 </head>
 <body class="body">
 <div>
-    <div class="header">
-        <div class="ikon-og-dato">
-            {{> nav-logo }}
-            <p>{{formaterDato brevOpprettetDato}}</p>
-        </div>
-        <div class="tittel-og-personinfo"><h2 class="tittel">Du får ikkje tilskot til briller</h2></div>
-    </div>
-    <div style="min-height:1rem" class="block">Namn: {{barnetsFulleNavn}}</div>
-    <div style="min-height:1rem" class="block">Fødselsnummer: {{barnetsFodselsnummer}}</div>
-    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/logo-og-bruker.nynorsk tittel="Du får ikkje tilskot til briller"}}
     <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har avslått søknaden din om tilskot til briller som vi
         fekk {{formaterDato mottattDato}}.</div>
     <div style="min-height:1rem" class="block"></div>

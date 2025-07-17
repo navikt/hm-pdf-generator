@@ -7,20 +7,13 @@
 </head>
 <body class="body">
 <div>
-    <div class="header">
-        <div class="ikon-og-dato">
-            {{> nav-logo }}
-            <p>{{formaterDato brevOpprettetDato}}</p></div>
-        <div class="tittel-og-personinfo"><h2 class="tittel">Du får tilskot til briller</h2></div>
-    </div>
-    <div style="min-height:1rem" class="block">Namn: {{barnetsFulleNavn}}</div>
-    <div style="min-height:1rem" class="block">Fødselsnummer: {{barnetsFodselsnummer}}</div>
-    <div style="min-height:1rem" class="block"></div>
+    {{> hotsak/delmal/logo-og-bruker.nynorsk tittel="Du får tilskot til briller"}}
     <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har behandla søknaden din om tilskot til briller, som vi fekk
         {{formaterDato mottattDato}}. Du får {{belop}} kroner frå oss for brilla som vart bestilt {{formaterDato bestillingsDato}}. Pengane vil
         bli utbetalte til kontonummeret {{utbetalesTilNavn}} har registrert hos Nav. Viss du lurer på noko rundt
         kontonummer, sjå informasjon på nav.no/kontonummer
     </div>
+    <div style="min-height:1rem" class="block"></div>
     <div style="min-height:1rem" class="block"></div>
     <div style="min-height:1rem" class="block"><strong>Slik har vi komme fram til kor mykje du får</strong><br/>Det er
         brillestyrken din som avgjer kor mykje du kan få i tilskot. Ut frå brillestyrken du har oppgitt kjem du inn
