@@ -175,7 +175,6 @@ class BrevTest {
     @Test
     fun `Template barnebrillerAvvisningDirekteoppgjor`() {
         val data = BarnebrillerAvvisningDirekteoppgjor(
-            sakId = "1005",
             viseNavAdresse = true,
             mottattDato = LocalDate.of(2025, 7, 28),
             brevOpprettetDato = LocalDate.of(2025, 7, 28),

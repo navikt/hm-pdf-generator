@@ -90,7 +90,6 @@ data class BarnebrillerAvvisningDirekteoppgjorBegrunnelser (
 )
 
 data class BarnebrillerAvvisningDirekteoppgjor(
-    val sakId: String,
     val viseNavAdresse: Boolean,
     val mottattDato: LocalDate? = null,
     val brevOpprettetDato: LocalDate,
