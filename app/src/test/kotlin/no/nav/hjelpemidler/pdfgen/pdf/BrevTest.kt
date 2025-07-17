@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringWriter
 import java.time.LocalDate
+import kotlin.Boolean
 
 class BrevTest {
     private fun fromResrouce(resource: String) =
@@ -174,14 +175,27 @@ class BrevTest {
     @Test
     fun `Template barnebrillerAvvisningDirekteoppgjor`() {
         val data = BarnebrillerAvvisningDirekteoppgjor(
-            sakId = "1003",
+            sakId = "1005",
             viseNavAdresse = true,
             mottattDato = LocalDate.of(2025, 7, 28),
             brevOpprettetDato = LocalDate.of(2025, 7, 28),
+            bestillingsDato = LocalDate.of(2025, 7, 1),
+            forrigeBrilleDato = LocalDate.of(2025, 4, 1),
+            optikerVirksomhetNavn = "KURSIV MODIG APE",
+            optikerVirksomhetOrgnr = "312787350",
             barnetsFulleNavn = "Berømt Aktivitet",
             barnetsFodselsnummer = "26848497710",
-            fritekstSaksbehandler = "Fortell meg mere!",
-            begrunnelser = BarnebrillerAvvisningDirekteoppgjorBegrunnelser(),
+            sfæriskStyrkeHøyre = "+4,50",
+            cylinderstyrkeHøyre = "-2,50",
+            sfæriskStyrkeVenstre = "+4,50",
+            cylinderstyrkeVenstre = "-2,50",
+            begrunnelser = BarnebrillerAvvisningDirekteoppgjorBegrunnelser(
+                stansetEksisterendeVedtak = true,
+                stansetOver18 = true,
+                stansetIkkeMedlem = true,
+                stansetForLavBrillestyrke = true,
+                stansetBestillingsdatoEldreEnn6Mnd = true,
+            ),
         )
         genererPdfFraTemplateResource("/brev/brille-api/barnebrillerAvvisningDirekteoppgjor.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/brille-api/barnebrillerAvvisningDirekteoppgjor.nynorsk.hbs", data)

@@ -82,14 +82,11 @@ data class JournalfortNotatHotsak(
 )
 
 data class BarnebrillerAvvisningDirekteoppgjorBegrunnelser (
-    val avslagEksisterendeVedtak: Boolean? = false,
-    val avslagOver18: Boolean? = false,
-    val avslagIkkeMedlem: Boolean? = false,
-    val avslagForLavBrillestyrke: Boolean? = false,
-    val avslagBestillingsdatoEldreEnn6Mnd: Boolean? = false,
-    val avslagIkkeBestiltHosOptiker: Boolean? = false,
-    val avslagBrilleglass: Boolean? = false,
-    val avslagAbonnement: Boolean? = false,
+    val stansetEksisterendeVedtak: Boolean? = false,
+    val stansetOver18: Boolean? = false,
+    val stansetIkkeMedlem: Boolean? = false,
+    val stansetForLavBrillestyrke: Boolean? = false,
+    val stansetBestillingsdatoEldreEnn6Mnd: Boolean? = false,
 )
 
 data class BarnebrillerAvvisningDirekteoppgjor(
@@ -97,8 +94,15 @@ data class BarnebrillerAvvisningDirekteoppgjor(
     val viseNavAdresse: Boolean,
     val mottattDato: LocalDate? = null,
     val brevOpprettetDato: LocalDate,
+    val bestillingsDato: LocalDate? = null,
+    val forrigeBrilleDato: LocalDate? = null,
+    val optikerVirksomhetNavn: String,
+    val optikerVirksomhetOrgnr: String,
     val barnetsFulleNavn: String,
     val barnetsFodselsnummer: String,
-    val fritekstSaksbehandler: String,
+    val sfæriskStyrkeHøyre: String? = null,
+    val cylinderstyrkeHøyre: String? = null,
+    val sfæriskStyrkeVenstre: String? = null,
+    val cylinderstyrkeVenstre: String? = null,
     val begrunnelser: BarnebrillerAvvisningDirekteoppgjorBegrunnelser,
 )

@@ -8,42 +8,58 @@
 <body class="body">
 <div>
     {{> barnebriller/logo-og-bruker.nynorsk tittel="Din søknad om tilskot til briller til born er stansa"}}
-    <div style="min-height:1rem" class="block">Hei, <br/><br/>Den KEY_mottattDato vart ein søknad om tilskot til briller behandla i den
-        automatiske saksbehandlingsløysinga vår via optikarbedrifta KEY_optikerForretning, ref. folketrygdlova §10-7 a,
-        jf. forskrift av 19. juli 2022 om stønad til briller til barn.
+    <div style="min-height:1rem" class="block">Hei, <br/><br/>Den {{formaterDato mottattDato}} vart ein søknad om tilskot til briller
+        behandla i den automatiske saksbehandlingsløysinga vår via optikarbedrifta {{optikerVirksomhetNavn}}
+        ({{optikerVirksomhetOrgnr}}), ref. folketrygdlova §10-7 a, jf. forskrift av 19. juli 2022 om stønad til
+        briller til barn.
     </div>
     <div style="min-height:1rem" class="block"></div>
     <div style="min-height:1rem" class="block">Søknaden din vart stansa fordi den automatiske behandlinga:</div>
     <div class="delmal">
         <ul>
-            <li class="block">viser at du har fått tilskot frå denne ordninga tidlegare i år, for ei brille bestilt
-                KEY_forrigeBrilleDato. Det er berre mogleg å få tilskot frå denne ordninga éin gong kvart kalenderår
-                (forskrifta § 3).
-            </li>
-            <li class="block">viser at du var over 18 år då brillene vart bestilte, KEY_bestillingsDato (forskrifta
-                §2).
-            </li>
-            <li class="block">ikkje kunne finna ut om du var medlem av folketrygda då brillene vart bestilte
-                KEY_bestillingsDato. Dette er eit vilkår for å ha rett til stønad (folketrygdlova § 10-7 a).
-            </li>
-            <li class="block">viser at du ikkje oppfyller kravet til brillestyrke (forskrifta § 2). Brillestyrken på
-                minst eitt glas må vera ≥ 1,00D og/eller cylinderstyrke på minst eitt glas må vera ≥ 1,00D.
-                Opplysningane som vart sende til oss av optikaren din viser at ditt høgre auge har sfærisk styrke
-                KEY_sfæriskStyrkeHøyre og cylinderstyrke KEY_cylinderstyrkeHøyre, og ditt venstre auge har sfærisk
-                styrke KEY_sfæriskStyrkeVenstre og cylinderstyrke KEY_cylinderstyrkeVenstre.
-            </li>
-            <li class="block">viser at det er over 6 månader sidan brillene vart bestilte, KEY_bestillingsDato
-                (forskrifta §6).
-            </li>
+            {{#if begrunnelser.stansetEksisterendeVedtak}}
+                <li class="block">
+                    viser at du har fått tilskot frå denne ordninga tidlegare i år, for ei brille bestilt
+                    {{formaterDato forrigeBrilleDato}}. Det er berre mogleg å få tilskot frå denne ordninga éin gong
+                    kvart kalenderår (forskrifta § 3).
+                </li>
+            {{/if}}
+            {{#if begrunnelser.stansetOver18}}
+                <li class="block">
+                    viser at du var over 18 år då brillene vart bestilte, {{formaterDato bestillingsDato}} (forskrifta
+                    §2).
+                </li>
+            {{/if}}
+            {{#if begrunnelser.stansetIkkeMedlem}}
+                <li class="block">
+                    ikkje kunne finna ut om du var medlem av folketrygda då brillene vart bestilte
+                    {{formaterDato bestillingsDato}}. Dette er eit vilkår for å ha rett til stønad (folketrygdlova §
+                    10-7 a).
+                </li>
+            {{/if}}
+            {{#if begrunnelser.stansetForLavBrillestyrke}}
+                <li class="block">
+                    viser at du ikkje oppfyller kravet til brillestyrke (forskrifta § 2). Brillestyrken på
+                    minst eitt glas må vera ≥ 1,00D og/eller cylinderstyrke på minst eitt glas må vera ≥ 1,00D.
+                    Opplysningane som vart sende til oss av optikaren din viser at ditt høgre auge har sfærisk styrke
+                    {{sfæriskStyrkeHøyre}} og cylinderstyrke {{cylinderstyrkeHøyre}}, og ditt venstre auge har sfærisk
+                    styrke {{sfæriskStyrkeVenstre}} og cylinderstyrke {{cylinderstyrkeVenstre}}.
+                </li>
+            {{/if}}
+            {{#if begrunnelser.stansetBestillingsdatoEldreEnn6Mnd}}
+                <li class="block">
+                    viser at det er over 6 månader sidan brillene vart bestilte, {{formaterDato bestillingsDato}}
+                    (forskrifta §6).
+                </li>
+            {{/if}}
         </ul>
     </div>
     <div style="min-height:1rem" class="block"></div>
     <div class="delmal">
-        <div style="min-height:1rem" class="block"></div>
-        <div style="min-height:1rem" class="block"><strong>Du kan få søknaden vurdert av ein saksbehandlar</strong>
-        </div>
-        <div style="min-height:1rem" class="block">Dersom du ønskjer å få kravet vurdert av ein saksbehandlar, kan du
-            sjølv senda inn søknad. Søknadsskjema finn du på nav.no/briller-til-barn.
+        <div style="min-height:1rem" class="block"><strong>Du kan få søknaden vurdert av ein saksbehandlar</strong></div>
+        <div style="min-height:1rem" class="block">
+            Dersom du ønskjer å få kravet vurdert av ein saksbehandlar, kan du sjølv senda inn søknad. Søknadsskjema
+            finn du på nav.no/briller-til-barn.
         </div>
     </div>
     <div style="min-height:1rem" class="block"></div>
