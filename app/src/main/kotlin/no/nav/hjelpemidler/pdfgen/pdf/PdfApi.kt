@@ -25,6 +25,7 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
+import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import java.io.StringWriter
 
@@ -105,6 +106,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
                 "barnebrillerAvslagManglendeOpplysningerHotsak" -> call.receive<BarnebrillerAvslagManglendeOpplysningerHotsak>()
                 "barnebrillerAvslagHotsak" -> call.receive<BarnebrillerAvslagHotsak>()
                 "barnebrillerInnhenteOpplysninger" -> call.receive<BarnebrillerInnhenteOpplysninger>()
+                "journalfortNotatHotsak" -> call.receive<JournalfortNotatHotsak>()
                 else -> {
                     call.respond(HttpStatusCode.BadRequest, "ukjent brevkode")
                     return@post

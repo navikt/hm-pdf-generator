@@ -1,6 +1,5 @@
 package no.nav.hjelpemidler.pdfgen.modell
 
-import com.fasterxml.jackson.annotation.JsonValue
 import java.time.LocalDate
 
 data class BarnebrillerInnvilgetHotsak(
@@ -70,4 +69,14 @@ data class BarnebrillerInnhenteOpplysninger(
     val barnetsFulleNavn: String,
     val barnetsFodselsnummer: String,
     val fritekstSaksbehandler: String,
+)
+
+data class JournalfortNotatHotsak(
+    val sakId: String,
+    val brevOpprettetDato: LocalDate,
+    val brukersFulleNavn: String,
+    val brukersFodselsnummer: String,
+    val saksbehandlersEnhetsnavn: String,
+    val tittel: String,
+    val innholdMarkdown: String,
 )
