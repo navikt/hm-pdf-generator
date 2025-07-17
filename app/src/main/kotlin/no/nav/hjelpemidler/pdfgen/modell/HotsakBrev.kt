@@ -65,7 +65,7 @@ data class BarnebrillerAvslagHotsak(
 data class BarnebrillerInnhenteOpplysninger(
     val sakId: String,
     val viseNavAdresse: Boolean,
-    val mottattDato: LocalDate,
+    val mottattDato: LocalDate? = null,
     val brevOpprettetDato: LocalDate,
     val barnetsFulleNavn: String,
     val barnetsFodselsnummer: String,
