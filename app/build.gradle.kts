@@ -19,7 +19,7 @@ dependencies {
     implementation(libs.openhtmltopdf.slf4j)
     implementation(libs.openhtmltopdf.svg.support)
 
-    implementation("com.github.rjeschke:txtmark:0.13")
+    implementation("com.vladsch.flexmark:flexmark-all:0.64.8")
 
     implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.server.core)
