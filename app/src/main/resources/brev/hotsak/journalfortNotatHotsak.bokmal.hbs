@@ -3,27 +3,14 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Journalført notat</title>
-    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer: ' sakId)}}
 </head>
-<body class="body">
-<div>
-    <div class="header">
-        <div class="ikon-og-dato">
-            {{> nav-logo }}
-            <p>{{formaterDato brevOpprettetDato}}</p>
-        </div>
-        <div class="tittel-og-personinfo"><h2 class="tittel">Journalført notat</h2></div>
-    </div>
-    <h3 style="min-height:1rem" class="block">{{tittel}}</h3>
-    <div style="min-height:1rem" class="block"><strong>Saksnummer</strong>: {{sakId}}</div>
-    <div style="min-height:1rem" class="block"><strong>Navn</strong>: {{brukersFulleNavn}}</div>
-    <div style="min-height:1rem" class="block"><strong>Fødselsnummer</strong>: {{brukersFodselsnummer}}</div>
-    <div style="min-height:1rem" class="block"><strong>Enhet</strong>: {{saksbehandlersEnhetsnavn}}</div>
-    <div style="min-height:1rem" class="block"></div>
-    <h4 style="min-height:1rem" class="block">Notat:</h4>
-    <div style="min-height:1rem" class="block">
+<body>
+    {{> barnebriller/logo-og-bruker.bokmal barnetsFulleNavn=brukersFulleNavn barnetsFodselsnummer=brukersFodselsnummer}}
+    <section>
+        <h1>Journalført notat</h1>
+        <h2>{{tittel}}</h2>
         {{markdown innholdMarkdown}}
-    </div>
-</div>
+    </section>
 </body>
 </html>

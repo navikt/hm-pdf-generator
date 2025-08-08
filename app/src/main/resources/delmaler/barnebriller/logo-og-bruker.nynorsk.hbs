@@ -7,6 +7,10 @@
         <dd>{{barnetsFodselsnummer}}</dd>
         <dt>Saksnummer:</dt>
         <dd>{{sakId}}</dd>
+        {{#if saksbehandlersEnhetsnavn}}
+            <dt>Enhet</dt>
+            <dd>{{saksbehandlersEnhetsnavn}}</dd>
+        {{/if}}
     </dl>
     <span>{{formaterDato brevOpprettetDato}}</span>
 </div>
