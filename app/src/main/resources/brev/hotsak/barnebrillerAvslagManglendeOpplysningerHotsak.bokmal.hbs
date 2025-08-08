@@ -3,38 +3,33 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får ikke tilskudd til briller</title>
-    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer: ' sakId) }}
 </head>
-<body class="body">
-<div>
-    {{> barnebriller/logo-og-bruker.bokmal tittel="Du får ikke tilskudd til briller"}}
-    <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har avslått søknaden din om tilskudd til briller som vi
-        mottok {{formaterDato mottattDato}}.</div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"><strong>Begrunnelse for avslaget</strong></div>
-    <div style="min-height:1rem" class="block">Søknaden er avslått fordi
-        vi ikke har mottatt opplysninger fra deg som vi etterspurte i et brev datert
-        {{formaterDato etterspurteOpplysningerBrevDatertDato}}. Fristen for å sende inn opplysningene var tre uker fra du mottok
-        brevet. Disse opplysningene mangler:</div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block">{{fritekstSaksbehandler}}</div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block">
-        Søknaden er vurdert og avgjort på grunnlag av opplysninger vi har mottatt
-        i saken. Ut fra disse opplysningene, kan vi ikke se at du fyller vilkårene for tilskudd til briller til barn.
-        Vedtaket er gjort etter folketrygdloven § 21-3, jfr. § 10-7 a og forskrift om stønad til briller til barn.
-    </div>
-    <div style="min-height:1rem" class="block"></div>
+<body>
+    {{> barnebriller/logo-og-bruker.bokmal}}
+    <section>
+        <h1>Du får ikke tilskudd til briller</h1>
+        <p>Hei,</p>
+        <p>Vi har avslått søknaden din om tilskudd til briller som vi mottok {{formaterDato mottattDato}}.</p>
+    </section>
+    <section>
+        <h2>Begrunnelse for avslaget</h2>
+        <p>
+            Søknaden er avslått fordi vi ikke har mottatt opplysninger fra deg som vi etterspurte i et brev datert
+            {{formaterDato etterspurteOpplysningerBrevDatertDato}}. Fristen for å sende inn opplysningene var tre uker fra du mottok
+            brevet. Disse opplysningene mangler:
+        </p>
+        <p>{{fritekstSaksbehandler}}</p>
+        <p>
+            Søknaden er vurdert og avgjort på grunnlag av opplysninger vi har mottatt
+            i saken. Ut fra disse opplysningene, kan vi ikke se at du fyller vilkårene for tilskudd til briller til barn.
+            Vedtaket er gjort etter folketrygdloven § 21-3, jfr. § 10-7 a og forskrift om stønad til briller til barn.
+        </p>
+    </section>
     {{> barnebriller/du-kan-soke-panytt.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
     {{> barnebriller/klage.bokmal klageManglendeOpplysninger=true }}
-    <div style="min-height:1rem" class="block"></div>
     {{> barnebriller/rett-til-innsyn.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
     {{> barnebriller/har-du-sporsmaal.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/kontakt-oss.bokmal }}
-</div>
+    {{> barnebriller/kontakt-oss.bokmal ingen-signatur-nodvendig=true }}
 </body>
 </html>
