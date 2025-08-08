@@ -3,36 +3,37 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du må sende oss opplysningar</title>
-    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer: ' sakId)}}
 </head>
-<body class="body">
-<div>
-    {{> barnebriller/logo-og-bruker.nynorsk tittel="Du må sende oss opplysningar"}}
-    <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har fått førespurnaden din om tilskot til briller
-        {{formaterDato mottattDato}}. Saken manglar opplysningar. For at vi skal kunne behandle saken, må du sende
-        oss:
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block">{{fritekstSaksbehandler}}</div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"><strong>Slik sender du opplysningane</strong></div>
-    <div style="min-height:1rem" class="block">
-        Vi ber deg sende oss opplysningane saman med førstesida som er lagd ved dette brevet. Det er
-        viktig at du legg førstesida øverst.
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"><strong>Frist for å svare</strong></div>
-    <div style="min-height:1rem" class="block">Du må sende oss opplysningane innan 3 uker frå du fekk dette brevet.
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"><strong>Kva skjer viss du ikkje sender opplysningane?</strong></div>
-    <div style="min-height:1rem" class="block">
-        Viss vi ikkje får opplysningane innan fristen på 3 veker kan saken bli avslått på grunn av manglande
-        opplysningar. Dette går fram av folketrygdlova § 21-3.
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/kontakt-oss.nynorsk }}
-</div>
+<body>
+    {{> barnebriller/logo-og-bruker.nynorsk}}
+    <section>
+        <h1>Du må sende oss opplysningar</h1>
+        <p>Hei,</p>
+        <p>
+            Vi har fått førespurnaden din om tilskot til briller {{formaterDato mottattDato}}. Saken manglar
+            opplysningar. For at vi skal kunne behandle saken, må du sende oss:
+        </p>
+        <p>{{fritekstSaksbehandler}}</p>
+    </section>
+    <section>
+        <h2>Slik sender du opplysningane</h2>
+        <p>
+            Vi ber deg sende oss opplysningane saman med førstesida som er lagd ved dette brevet. Det er
+            viktig at du legg førstesida øverst.
+        </p>
+    </section>
+    <section>
+        <h2>Frist for å svare</h2>
+        <p>Du må sende oss opplysningane innan 3 uker frå du fekk dette brevet.</p>
+    </section>
+    <section>
+        <h2>Kva skjer viss du ikkje sender opplysningane?</h2>
+        <p>
+            Viss vi ikkje får opplysningane innan fristen på 3 veker kan saken bli avslått på grunn av manglande
+            opplysningar. Dette går fram av folketrygdlova § 21-3.
+        </p>
+    </section>
+    {{> barnebriller/kontakt-oss.nynorsk}}
 </body>
 </html>
