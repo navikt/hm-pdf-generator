@@ -5,8 +5,10 @@
         <dd>{{barnetsFulleNavn}}</dd>
         <dt>Fødselsnummer:</dt>
         <dd>{{barnetsFodselsnummer}}</dd>
-        <dt>Saksnummer:</dt>
-        <dd>{{sakId}}</dd>
+        {{#if sakId}}
+            <dt>Saksnummer:</dt>
+            <dd>{{sakId}}</dd>
+        {{/if}}
         {{#if saksbehandlersEnhetsnavn}}
             <dt>Enhet</dt>
             <dd>{{saksbehandlersEnhetsnavn}}</dd>
