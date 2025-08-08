@@ -1,10 +1,12 @@
 <div class="header">
-    <div class="ikon-og-dato">
-        {{> nav-logo }}
-        <p>{{formaterDato brevOpprettetDato}}</p>
-    </div>
-    <div class="tittel-og-personinfo"><h2 class="tittel">{{tittel}}</h2></div>
+    {{> nav-logo }}
+    <dl>
+        <dt>Namn:</dt>
+        <dd>{{barnetsFulleNavn}}</dd>
+        <dt>Fødselsnummer:</dt>
+        <dd>{{barnetsFodselsnummer}}</dd>
+        <dt>Saksnummer:</dt>
+        <dd>{{sakId}}</dd>
+    </dl>
+    <span>{{formaterDato brevOpprettetDato}}</span>
 </div>
-<div style="min-height:1rem" class="block">Namn: {{barnetsFulleNavn}}</div>
-<div style="min-height:1rem" class="block">Fødselsnummer: {{barnetsFodselsnummer}}</div>
-<div style="min-height:1rem" class="block"></div>

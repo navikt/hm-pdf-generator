@@ -1,7 +1,9 @@
-<div class="delmal">
-    <div style="min-height:1rem" class="block">
-        Med vennleg helsing <br/>Nav
+<section>
+    <p>
+        Med vennleg helsing <br />
+        Nav
         {{#if viseNavAdresse}} hjelpemiddelsentral Agder</br>55 55 11 11<br/>Skytterheia 1, 4790 LILLESAND{{/if}}
         {{#if viseNavAdresseHoT}} hjelpemiddel og tilrettelegging{{/if}}
-    </div>
-</div>
+    </p>
+    {{#if ingen-signatur-nodvendig}}<p>Brevet er produsert automatisk og derfor ikkje underskrive av ein saksbehandlar.</p>{{/if}}
+</section>
