@@ -1,42 +1,123 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.editor-container {
+    width: 100%;
+    height: auto;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background: #fff;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.editor-content {
+    width: 794px; /* 595pt converted to px */
+    min-height: 1123px;
+    transform-origin: top left;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.editor-content .page {
+    margin: 64pt 64pt 74pt 64pt;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11pt;
+    font-weight: normal;
+    line-height: 16pt;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.editor-content .page .contentEditable {
+    margin: 0;
+    padding: 0;
 }
 
-.card {
-  padding: 2em;
+.editor-content .page h1 {
+    font-size: 16pt;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+    line-height: 20pt;
+    margin: 0 0 26pt 0;
+    page-break-after: avoid;
 }
 
-.read-the-docs {
-  color: #888;
+.editor-content .page h2 {
+    font-size: 13pt;
+    font-weight: bold;
+    letter-spacing: 0.025em;
+    margin: 0 0 6pt 0;
+    page-break-after: avoid;
+}
+
+.editor-content .page h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+    margin: 0 0 6pt 0;
+    page-break-after: avoid;
+}
+
+.editor-content .page h4 {
+    font-size: 11pt;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+    margin: 0 0 6pt 0;
+    page-break-after: avoid;
+}
+
+.editor-content .page p {
+    margin: 0 0 16pt 0;
+}
+
+.editor-content .page section {
+    margin: 0 0 26pt 0;
+}
+
+/* Fikser noen rare greier med at marginer stackes på toppen av hverandre ved page-breaks */
+.editor-content .page section p:last-child {
+    margin-bottom: 0;
+}
+
+.editor-content .page .header {
+    position: relative;
+    margin-bottom: 48pt;
+}
+
+.editor-content .page .header svg {
+    height: 16pt;
+    margin-bottom: 48pt;
+}
+
+.editor-content .page .header dl dd {
+    display: inline;
+    margin: 0;
+}
+
+.editor-content .page .header dl dd:after {
+    display: block;
+    content: '';
+}
+
+.editor-content .page .header dl dt {
+    display: inline-block;
+    min-width: 160px;
+}
+
+.editor-content .page .header span {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.editor-content .page section.signatur {
+    margin-top: 32pt;
+    page-break-inside: avoid;
+}
+
+.editor-content .page ul, ol {
+    margin: -16pt 0 16pt 0;
+    padding-left: 2em;
+}
+
+.editor-content .page a {
+    color: #000000;
+    white-space: nowrap;
+}
+
+.editor-content .page .merkepenn {
+    background: yellowgreen;
 }
