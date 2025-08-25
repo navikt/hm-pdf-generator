@@ -23,6 +23,10 @@
 .editor-content .page .contentEditable {
     margin: 0;
     padding: 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11pt;
+    font-weight: normal;
+    line-height: 16pt;
 }
 
 .editor-content .page h1 {
@@ -116,6 +120,12 @@
 .editor-content .page a {
     color: #000000;
     white-space: nowrap;
+}
+
+.editor-content .page .no-wrap {
+    white-space: nowrap;
+    page-break-inside: avoid;
+    display: inline-block;
 }
 
 .editor-content .page .merkepenn {
