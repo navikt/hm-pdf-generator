@@ -20,6 +20,8 @@ data class BarnebrillerInnvilgetHotsak(
     val cylinderstyrkeHøyre: String,
     val sfæriskStyrkeVenstre: String,
     val cylinderstyrkeVenstre: String,
+    val signaturTotrinnskontroll: String?,
+    val signaturSaksbehandler: String?,
 )
 
 data class BarnebrillerAvslagManglendeOpplysningerHotsak(
@@ -31,6 +33,8 @@ data class BarnebrillerAvslagManglendeOpplysningerHotsak(
     val barnetsFulleNavn: String,
     val barnetsFodselsnummer: String,
     val fritekstSaksbehandler: String,
+    val signaturTotrinnskontroll: String?,
+    val signaturSaksbehandler: String?,
 )
 
 data class BarnebrillerAvslagHotsakBegrunnelser (
@@ -59,6 +63,8 @@ data class BarnebrillerAvslagHotsak(
     val sfæriskStyrkeVenstre: String,
     val cylinderstyrkeVenstre: String,
     val begrunnelser: BarnebrillerAvslagHotsakBegrunnelser,
+    val signaturTotrinnskontroll: String?,
+    val signaturSaksbehandler: String?,
 )
 
 data class BarnebrillerInnhenteOpplysninger(
@@ -69,6 +75,8 @@ data class BarnebrillerInnhenteOpplysninger(
     val barnetsFulleNavn: String,
     val barnetsFodselsnummer: String,
     val fritekstSaksbehandler: String,
+    val signaturTotrinnskontroll: String?,
+    val signaturSaksbehandler: String?,
 )
 
 data class JournalfortNotatHotsak(
