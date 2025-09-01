@@ -53,6 +53,8 @@ class BrevTest {
             cylinderstyrkeHøyre = "-2,50",
             sfæriskStyrkeVenstre = "+4,50",
             cylinderstyrkeVenstre = "-2,50",
+            signaturTotrinnskontroll = "Ola Nordmann",
+            signaturSaksbehandler = "Kari Hansen",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
@@ -69,6 +71,8 @@ class BrevTest {
             barnetsFulleNavn = "Berømt Aktivitet",
             barnetsFodselsnummer = "26848497710",
             fritekstSaksbehandler = "Veldig sen å svare, nå gidder jeg ikke mer!",
+            signaturTotrinnskontroll = "Ola Nordmann",
+            signaturSaksbehandler = "Kari Hansen",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagManglendeOpplysningerHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagManglendeOpplysningerHotsak.nynorsk.hbs", data)
@@ -100,6 +104,8 @@ class BrevTest {
                 avslagBrilleglass = true,
                 avslagAbonnement = true,
             ),
+            signaturTotrinnskontroll = "Ola Nordmann",
+            signaturSaksbehandler = "Kari Hansen",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagHotsak.nynorsk.hbs", data)
@@ -115,6 +121,8 @@ class BrevTest {
             barnetsFulleNavn = "Berømt Aktivitet",
             barnetsFodselsnummer = "26848497710",
             fritekstSaksbehandler = "Fortell meg mere!",
+            signaturTotrinnskontroll = "Ola Nordmann",
+            signaturSaksbehandler = "Kari Hansen",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnhenteOpplysninger.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnhenteOpplysninger.nynorsk.hbs", data)

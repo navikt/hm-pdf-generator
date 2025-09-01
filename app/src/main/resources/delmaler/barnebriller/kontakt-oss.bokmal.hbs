@@ -1,6 +1,7 @@
 <section class="signatur">
     <p>
         Med vennlig hilsen <br />
+        {{#if signaturSaksbehandler}}{{#if signaturTotrinnskontroll}}{{signaturTotrinnskontroll}}, {{/if}}{{signaturSaksbehandler}} <br />{{/if}}
         Nav
         {{#if viseNavAdresse}} hjelpemiddelsentral Agder</br>55 55 11 11<br/>Skytterheia 1, 4790 LILLESAND{{/if}}
         {{#if viseNavAdresseHoT}} hjelpemidler og tilrettelegging{{/if}}
