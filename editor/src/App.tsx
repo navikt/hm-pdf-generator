@@ -1,20 +1,27 @@
 import {
-  AdmonitionDirectiveDescriptor,
-  directivesPlugin,
+  Button,
+  headingsPlugin,
+  insertJsx$,
+  type JsxComponentDescriptor,
+  jsxPlugin,
   linkPlugin,
   MDXEditor,
+  type MDXEditorMethods,
+  toolbarPlugin,
+  usePublisher,
 } from "@mdxeditor/editor";
-import { headingsPlugin } from "@mdxeditor/editor";
 import NavLogo from "./assets/nav-logo.svg?react";
 import hotsakImg from "./assets/hotsak.png";
 
 import "./App.css";
 import "@mdxeditor/editor/style.css";
 import { useEffect, useRef } from "react";
+import type { MdxJsxAttribute } from "mdast-util-mdx-jsx";
 
 function App() {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorContentRef = useRef<HTMLDivElement>(null);
+  const mdxRef = useRef<MDXEditorMethods>(null);
   useEffect(() => {
     if (editorContainerRef.current && editorContentRef.current) {
       let designedWidth = 794; // 595pt in px
@@ -23,6 +30,67 @@ function App() {
       editorContentRef.current.style.transform = `scale(${scale})`;
     }
   }, [editorContainerRef, editorContentRef]);
+
+  const jsxComponentDescriptors: JsxComponentDescriptor[] = [
+    {
+      name: "Variabel",
+      kind: "text",
+      props: [
+        { name: "variabel", type: "string" },
+        { name: "tittel", type: "string" },
+      ],
+      hasChildren: false,
+      Editor: (props) => {
+        const variabel =
+          (
+            props.mdastNode.attributes.find(
+              (s) => (s as MdxJsxAttribute)?.name == "variabel",
+            ) as MdxJsxAttribute | undefined
+          )?.value?.toString() || "ukjent";
+
+        const tittel =
+          (
+            props.mdastNode.attributes.find(
+              (s) => (s as MdxJsxAttribute)?.name == "tittel",
+            ) as MdxJsxAttribute | undefined
+          )?.value?.toString() || "ukjent";
+
+        console.log("here", props);
+
+        return <span className="variabel">{tittel}</span>;
+      },
+    },
+  ];
+
+  const InsertBrukersPersonnummer = () => {
+    const insertJsx = usePublisher(insertJsx$);
+    return (
+      <Button
+        onClick={() =>
+          insertJsx({
+            name: "Variabel",
+            kind: "text",
+            props: {
+              variabel: "brukersPersonnummer",
+              tittel: "Brukers personnummer",
+            },
+          })
+        }
+      >
+        Brukers personnummer
+      </Button>
+    );
+  };
+
+  const GetMarkdown = () => {
+    return (
+      <Button
+        onClick={() => console.log("markdown", mdxRef.current?.getMarkdown())}
+      >
+        Markdown
+      </Button>
+    );
+  };
 
   const markdown = `
     # Du får tilskudd til briller
@@ -33,21 +101,21 @@ function App() {
     
     ## Slik har vi kommet fram til hvor mye du får
     
-    Det er brillestyrken din som bestemmer hvor mye du kan få i tilskudd. Ut ifra brillestyrken du har oppgitt kommer du inn under sats {{sats}} (opptil {{satsBelop}} kroner). {{#if belopMindreEnnSats}}Du kan ikke få mer i tilskudd enn det brillene koster. Ifølge dokumentasjonen du har sendt oss, kostet brillene {{belop}} kroner, og dette er beløpet du vil få utbetalt.{{/if}} Ifølge dokumentasjonen har ditt høyre øye sfærisk styrke {{sfæriskStyrkeHøyre}} og cylinderstyrke {{cylinderstyrkeHøyre}}, og ditt venstre øye har sfærisk styrke {{sfæriskStyrkeVenstre}} og cylinderstyrke {{cylinderstyrkeVenstre}}. Du kan lese mer om kravene og satsene på [nav.no/briller-til-barn](https://nav.no/briller-til-barn).
+    Det er brillestyrken din som bestemmer hvor mye du kan få i tilskudd. Ut ifra brillestyrken du har oppgitt kommer du inn under sats <Variabel variabel=\"brilleSats\" tittel=\"Brillesats\" /> (opptil <Variabel variabel=\"brilleSatsBelop\" tittel=\"Brillesats beløp\" /> kroner). Du kan ikke få mer i tilskudd enn det brillene koster. Ifølge dokumentasjonen du har sendt oss, kostet brillene <Variabel variabel=\"belopUtbetales\" tittel=\"Beløp utbetales\" /> kroner, og dette er beløpet du vil få utbetalt. Ifølge dokumentasjonen har ditt høyre øye sfærisk styrke <Variabel variabel=\"brilleSfaeriskStyrkeHoyre\" tittel=\"Brille sfærisk styrke høyre\" /> og cylinderstyrke <Variabel variabel=\"brilleCylinderStyrkeHoyre\" tittel=\"Brille cylinder styrke høyre\" />, og ditt venstre øye har sfærisk styrke <Variabel variabel=\"brilleSfaeriskStyrkeVenstre\" tittel=\"Brille sfærisk styrke venstre\" /> og cylinderstyrke <Variabel variabel=\"brilleCylinderStyrkeVenstre\" tittel=\"Brille cylinder styrke venstre\" />. Du kan lese mer om kravene og satsene på [nav.no/briller-til-barn](https://nav.no/briller-til-barn).
     
     ## Du kan få tilskudd til ett par briller hvert år
     
-    Neste gang du kan søke om tilskudd etter denne ordningen, er for briller som bestilles etter {{formaterDato nesteKravdato}}.
+    Neste gang du kan søke om tilskudd etter denne ordningen, er for briller som bestilles etter <Variabel variabel=\"nesteKravdato\" tittel=\"Neste kravdato\" />.
     
     ## Du har fått tilskudd etter et bestemt regelverk
     
-    Vedtaket er gjort etter folketrygdloven §10-7 a, jf. forskrift av 19. juli 2022 om stønad til briller til barn. Vi gjør oppmerksom på at hvis opplysningene du har gitt oss er mangelfulle eller feilaktige, kan det føre til krav om tilbakebetaling av feilutbetalt beløp.
+    Vedtaket er gjort etter folketrygdloven § 10-7 a, jf. forskrift av 19. juli 2022 om stønad til briller til barn. Vi gjør oppmerksom på at hvis opplysningene du har gitt oss er mangelfulle eller feilaktige, kan det føre til krav om tilbakebetaling av feilutbetalt beløp.
     
     Dette er en av flere ordninger for barn som trenger briller. Ordningen dekker briller med glass, innfatning og brilletilpasning. Du kan ikke få tilskudd til synsundersøkelse eller kontaktlinser på denne ordningen. Merk at det finnes andre ordninger som kan gi rett til støtte hvis du har nedsatt syn, se [nav.no/syn](https://nav.no/syn).
     
     ## Du kan klage på vedtaket
     
-    Hvis du mener vedtaket er feil, kan du klage innen seks uker fra den datoen vedtaket har kommet fram til deg. Dette følger av [sett inn lovhenvisning]. Du finner skjema og informasjon på [nav.no/klage](https://nav.no/klage). {{#if klageManglendeOpplysninger}}Merk at klagen vil bli behandlet med utgangspunkt i saken slik den står nå, så hvis saken mangler opplysninger, er det bedre å søke på nytt.{{/if}}
+    Hvis du mener vedtaket er feil, kan du klage innen seks uker fra den datoen vedtaket har kommet fram til deg. Dette følger av [sett inn lovhenvisning]. Du finner skjema og informasjon på [nav.no/klage](https://nav.no/klage). Merk at klagen vil bli behandlet med utgangspunkt i saken slik den står nå, så hvis saken mangler opplysninger, er det bedre å søke på nytt.
     
     Nav kan veilede deg på telefon om hvordan du sender en klage. Nav-kontoret ditt kan også hjelpe deg med å skrive en klage. Kontakt oss på telefon 55 55 33 33 \\<34\\> hvis du trenger hjelp.
     
@@ -93,38 +161,55 @@ function App() {
           top: "152px",
           width: "690px",
           bottom: "0px",
-          overflowY: "scroll",
           padding: "10px",
           background: "#242424",
         }}
       >
-        <div ref={editorContainerRef} className="editor-container">
-          <div ref={editorContentRef} className="editor-content">
-            <div className="page">
-              <div className="header">
-                {/*<img src={NavLogo} />*/}
-                <NavLogo />
-                <dl>
-                  <dt>Navn:</dt>
-                  <dd>Ola Nordmann</dd>
-                  <dt>Fødselsnummer:</dt>
-                  <dd>26848497710</dd>
-                  <dt>Saksnummer:</dt>
-                  <dd>1000</dd>
-                </dl>
-                <span>22. Januar 2025</span>
+        <div
+          style={{
+            height: "100%",
+            overflowY: "auto",
+          }}
+        >
+          <div ref={editorContainerRef} className="editor-container">
+            <div ref={editorContentRef} className="editor-content">
+              <div className="page">
+                <div className="header">
+                  {/*<img src={NavLogo} />*/}
+                  <NavLogo />
+                  <dl>
+                    <dt>Navn:</dt>
+                    <dd>Ola Nordmann</dd>
+                    <dt>Fødselsnummer:</dt>
+                    <dd>26848497710</dd>
+                    <dt>Saksnummer:</dt>
+                    <dd>1000</dd>
+                  </dl>
+                  <span>22. Januar 2025</span>
+                </div>
+                <MDXEditor
+                  ref={mdxRef}
+                  contentEditableClassName="contentEditable"
+                  markdown={markdown}
+                  plugins={[
+                    headingsPlugin(),
+                    linkPlugin(),
+                    jsxPlugin({ jsxComponentDescriptors }),
+                    // toolbarPlugin({
+                    //   toolbarClassName: "mdx-toolbar",
+                    //   toolbarContents: () => (
+                    //     <>
+                    //       <InsertBrukersPersonnummer />
+                    //       <GetMarkdown />
+                    //     </>
+                    //   ),
+                    // }),
+                  ]}
+                  onError={(err) => {
+                    console.error("Markdown error:", err);
+                  }}
+                />
               </div>
-              <MDXEditor
-                contentEditableClassName="contentEditable"
-                markdown={markdown}
-                plugins={[
-                  headingsPlugin(),
-                  linkPlugin(),
-                  directivesPlugin({
-                    directiveDescriptors: [AdmonitionDirectiveDescriptor],
-                  }),
-                ]}
-              />
             </div>
           </div>
         </div>

@@ -75,6 +75,14 @@
     margin-bottom: 0;
 }
 
+.editor-content .page .mdx-toolbar {
+    position: sticky;
+    left: 0;
+    right: 0;
+    top: -74pt;
+    border-radius: 0;
+}
+
 .editor-content .page .header {
     position: relative;
     margin-bottom: 48pt;
@@ -130,4 +138,14 @@
 
 .editor-content .page .merkepenn {
     background: yellowgreen;
+}
+
+.editor-content .page .variabel {
+    background: #ccc;
+    border-radius: 5px;
+    padding: 0.3em;
+}
+
+.editor-content .page .variabel:active, .editor-content .page .variabel:focus {
+    background: #000;
 }
