@@ -27,6 +27,11 @@ class PdfService {
         val sanitizedHtml = html
             // Fix from hm-brev included here
             .replace("&#x27;", "'")
+            // Avoid page-breaks between link and punctuation
+            .replace(Regex("""<a\b[^>]*?>[^<]*?</a>\.""", RegexOption.DOT_MATCHES_ALL)) {
+                val anchor = it.value
+                """<span class="no-wrap">$anchor</span>"""
+            }
             .trim()
 
         val document = parseHtml(sanitizedHtml)
