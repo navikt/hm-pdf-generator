@@ -7,7 +7,6 @@ import {
   linkPlugin,
   MDXEditor,
   type MDXEditorMethods,
-  toolbarPlugin,
   usePublisher,
 } from "@mdxeditor/editor";
 import NavLogo from "./assets/nav-logo.svg?react";
@@ -41,6 +40,7 @@ function App() {
       ],
       hasChildren: false,
       Editor: (props) => {
+        // @ts-ignore
         const variabel =
           (
             props.mdastNode.attributes.find(
@@ -62,6 +62,7 @@ function App() {
     },
   ];
 
+  // @ts-ignore
   const InsertBrukersPersonnummer = () => {
     const insertJsx = usePublisher(insertJsx$);
     return (
@@ -82,6 +83,7 @@ function App() {
     );
   };
 
+  // @ts-ignore
   const GetMarkdown = () => {
     return (
       <Button
@@ -92,20 +94,34 @@ function App() {
     );
   };
 
+  const flettefelter: Record<string, string> = {
+    mottaksDato: "Mottaks dato",
+    beløp: "Beløp",
+    brilleBestillingsdato: "Brille bestillingsdato",
+    brilleSats: "Brille sats",
+    brilleSatsBelop: "Brille sats beløp",
+    belopUtbetales: "Beløp utbetales",
+    brilleSfaeriskStyrkeHoyre: "Brille sfaerisk styrke høyre",
+    brilleCylinderStyrkeHoyre: "Brille cylinder styrke høyre",
+    brilleSfaeriskStyrkeVenstre: "Brille sfaerisk styrke venstre",
+    brilleCylinderStyrkeVenstre: "Brille cylinder styrke venstre",
+    nesteKravdato: "Neste kravdato",
+  };
+
   const markdown = `
     # Du får tilskudd til briller
     
     Hei,
     
-    Vi har behandlet søknaden din om tilskudd til briller, som vi mottok 22. Januar 2025. Du får 2000 kroner fra oss for brillene som ble bestilt 01. Januar 2025. Pengene vil bli utbetalt til kontonummeret Ola Nordmann har registrert hos Nav. Hvis du lurer på noe rundt kontonummer, se informasjon på [nav.no/kontonummer](https://nav.no/kontonummer).
+    Vi har behandlet søknaden din om tilskudd til briller, som vi mottok {{mottaksDato}}. Du får {{beløp}} kroner fra oss for brillene som ble bestilt {{brilleBestillingsdato}}. Pengene vil bli utbetalt til kontonummeret Ola Nordmann har registrert hos Nav. Hvis du lurer på noe rundt kontonummer, se informasjon på [nav.no/kontonummer](https://nav.no/kontonummer).
     
     ## Slik har vi kommet fram til hvor mye du får
     
-    Det er brillestyrken din som bestemmer hvor mye du kan få i tilskudd. Ut ifra brillestyrken du har oppgitt kommer du inn under sats <Variabel variabel=\"brilleSats\" tittel=\"Brillesats\" /> (opptil <Variabel variabel=\"brilleSatsBelop\" tittel=\"Brillesats beløp\" /> kroner). Du kan ikke få mer i tilskudd enn det brillene koster. Ifølge dokumentasjonen du har sendt oss, kostet brillene <Variabel variabel=\"belopUtbetales\" tittel=\"Beløp utbetales\" /> kroner, og dette er beløpet du vil få utbetalt. Ifølge dokumentasjonen har ditt høyre øye sfærisk styrke <Variabel variabel=\"brilleSfaeriskStyrkeHoyre\" tittel=\"Brille sfærisk styrke høyre\" /> og cylinderstyrke <Variabel variabel=\"brilleCylinderStyrkeHoyre\" tittel=\"Brille cylinder styrke høyre\" />, og ditt venstre øye har sfærisk styrke <Variabel variabel=\"brilleSfaeriskStyrkeVenstre\" tittel=\"Brille sfærisk styrke venstre\" /> og cylinderstyrke <Variabel variabel=\"brilleCylinderStyrkeVenstre\" tittel=\"Brille cylinder styrke venstre\" />. Du kan lese mer om kravene og satsene på [nav.no/briller-til-barn](https://nav.no/briller-til-barn).
+    Det er brillestyrken din som bestemmer hvor mye du kan få i tilskudd. Ut ifra brillestyrken du har oppgitt kommer du inn under sats {{brilleSats}} (opptil {{brilleSatsBelop}} kroner). Du kan ikke få mer i tilskudd enn det brillene koster. Ifølge dokumentasjonen du har sendt oss, kostet brillene {{belopUtbetales}} kroner, og dette er beløpet du vil få utbetalt. Ifølge dokumentasjonen har ditt høyre øye sfærisk styrke {{brilleSfaeriskStyrkeHoyre}} og cylinderstyrke {{brilleCylinderStyrkeHoyre}}, og ditt venstre øye har sfærisk styrke {{brilleSfaeriskStyrkeVenstre}} og cylinderstyrke {{brilleCylinderStyrkeVenstre}}. Du kan lese mer om kravene og satsene på [nav.no/briller-til-barn](https://nav.no/briller-til-barn).
     
     ## Du kan få tilskudd til ett par briller hvert år
     
-    Neste gang du kan søke om tilskudd etter denne ordningen, er for briller som bestilles etter <Variabel variabel=\"nesteKravdato\" tittel=\"Neste kravdato\" />.
+    Neste gang du kan søke om tilskudd etter denne ordningen, er for briller som bestilles etter {{nesteKravdato}}.
     
     ## Du har fått tilskudd etter et bestemt regelverk
     
@@ -142,7 +158,13 @@ function App() {
     Med vennlig hilsen
     Jon Åsen, Kari Hansen
     Nav hjelpemiddelsentral Agder
-  `.trim();
+  `
+    .trim()
+    .replace(
+      /\{\{([^}]+)}}/g,
+      (_, m0: string) =>
+        `<Variabel variabel="${m0}" tittel="${flettefelter[m0] ?? m0}" />`,
+    );
 
   return (
     <div
