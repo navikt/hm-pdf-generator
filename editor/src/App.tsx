@@ -4,6 +4,7 @@ import {
   insertJsx$,
   type JsxComponentDescriptor,
   jsxPlugin,
+  linkDialogPlugin,
   linkPlugin,
   MDXEditor,
   type MDXEditorMethods,
@@ -215,6 +216,7 @@ function App() {
                   plugins={[
                     headingsPlugin(),
                     linkPlugin(),
+                    linkDialogPlugin(),
                     jsxPlugin({ jsxComponentDescriptors }),
                     // toolbarPlugin({
                     //   toolbarClassName: "mdx-toolbar",
