@@ -1,100 +1,27 @@
-import {
-  Button,
-  headingsPlugin,
-  insertJsx$,
-  type JsxComponentDescriptor,
-  jsxPlugin,
-  linkDialogPlugin,
-  linkPlugin,
-  MDXEditor,
-  type MDXEditorMethods,
-  usePublisher,
-} from "@mdxeditor/editor";
 import NavLogo from "./assets/nav-logo.svg?react";
 import hotsakImg from "./assets/hotsak.png";
 
 import "./App.css";
-import "@mdxeditor/editor/style.css";
-import { useEffect, useRef } from "react";
-import type { MdxJsxAttribute } from "mdast-util-mdx-jsx";
+import "@navikt/ds-css";
+import { Box, Button, HStack, Tooltip } from "@navikt/ds-react";
+
+import { Plate, PlateContent, usePlateEditor } from "platejs/react";
+import { MarkdownPlugin, remarkMdx } from "@platejs/markdown";
+import {
+  BaseH1Plugin,
+  BaseH2Plugin,
+  BaseH3Plugin,
+  BaseH4Plugin,
+  BaseHeadingPlugin,
+  BaseBoldPlugin,
+  BaseItalicPlugin,
+  BaseUnderlinePlugin,
+} from "@platejs/basic-nodes";
+import { KEYS, BaseParagraphPlugin, type Editor } from "platejs";
+import { type ReactNode, useEffect, useRef } from "react";
 
 function App() {
-  const editorContainerRef = useRef<HTMLDivElement>(null);
-  const editorContentRef = useRef<HTMLDivElement>(null);
-  const mdxRef = useRef<MDXEditorMethods>(null);
-  useEffect(() => {
-    if (editorContainerRef.current && editorContentRef.current) {
-      let designedWidth = 794; // 595pt in px
-      let actualWidth = editorContainerRef.current.clientWidth;
-      let scale = actualWidth / designedWidth;
-      editorContentRef.current.style.transform = `scale(${scale})`;
-    }
-  }, [editorContainerRef, editorContentRef]);
-
-  const jsxComponentDescriptors: JsxComponentDescriptor[] = [
-    {
-      name: "Variabel",
-      kind: "text",
-      props: [
-        { name: "variabel", type: "string" },
-        { name: "tittel", type: "string" },
-      ],
-      hasChildren: false,
-      Editor: (props) => {
-        // @ts-ignore
-        const variabel =
-          (
-            props.mdastNode.attributes.find(
-              (s) => (s as MdxJsxAttribute)?.name == "variabel",
-            ) as MdxJsxAttribute | undefined
-          )?.value?.toString() || "ukjent";
-
-        const tittel =
-          (
-            props.mdastNode.attributes.find(
-              (s) => (s as MdxJsxAttribute)?.name == "tittel",
-            ) as MdxJsxAttribute | undefined
-          )?.value?.toString() || "ukjent";
-
-        console.log("here", props);
-
-        return <span className="variabel">{tittel}</span>;
-      },
-    },
-  ];
-
   // @ts-ignore
-  const InsertBrukersPersonnummer = () => {
-    const insertJsx = usePublisher(insertJsx$);
-    return (
-      <Button
-        onClick={() =>
-          insertJsx({
-            name: "Variabel",
-            kind: "text",
-            props: {
-              variabel: "brukersPersonnummer",
-              tittel: "Brukers personnummer",
-            },
-          })
-        }
-      >
-        Brukers personnummer
-      </Button>
-    );
-  };
-
-  // @ts-ignore
-  const GetMarkdown = () => {
-    return (
-      <Button
-        onClick={() => console.log("markdown", mdxRef.current?.getMarkdown())}
-      >
-        Markdown
-      </Button>
-    );
-  };
-
   const flettefelter: Record<string, string> = {
     mottaksDato: "Mottaks dato",
     beløp: "Beløp",
@@ -109,6 +36,7 @@ function App() {
     nesteKravdato: "Neste kravdato",
   };
 
+  // @ts-ignore
   const markdown = `
     # Du får tilskudd til briller
     
@@ -163,9 +91,61 @@ function App() {
     .trim()
     .replace(
       /\{\{([^}]+)}}/g,
-      (_, m0: string) =>
-        `<Variabel variabel="${m0}" tittel="${flettefelter[m0] ?? m0}" />`,
+      (_) =>
+        //`<Variabel variabel="${m0}" tittel="${flettefelter[m0] ?? m0}" />`,
+        "",
     );
+
+  let editor = usePlateEditor(
+    {
+      plugins: [
+        ...[
+          MarkdownPlugin.configure({
+            options: {
+              plainMarks: [KEYS.suggestion, KEYS.comment],
+              remarkPlugins: [
+                remarkMdx /*, remarkMath, remarkGfm, remarkMention*/,
+              ],
+            },
+          }),
+        ],
+        ...[
+          BaseH1Plugin,
+          BaseH2Plugin,
+          BaseH3Plugin,
+          BaseH4Plugin,
+          BaseParagraphPlugin,
+          BaseHeadingPlugin,
+          BaseBoldPlugin,
+          BaseItalicPlugin,
+          BaseUnderlinePlugin,
+        ],
+      ],
+      //value: [{ type: "p", children: [{ text: "Hello world!" }] }],
+      value: (editor) =>
+        editor.getApi(MarkdownPlugin).markdown.deserialize(markdown, {
+          remarkPlugins: [
+            // remarkMath,
+            // remarkGfm,
+            remarkMdx,
+            // remarkMention,
+            // remarkEmoji as any,
+          ],
+        }),
+    },
+    [],
+  );
+
+  const editorContainerRef = useRef<HTMLDivElement>(null);
+  const editorContentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (editorContainerRef.current && editorContentRef.current) {
+      let designedWidth = 794; // 595pt in px
+      let actualWidth = editorContainerRef.current.clientWidth;
+      let scale = actualWidth / designedWidth;
+      editorContentRef.current.style.transform = `scale(${scale})`;
+    }
+  }, [editorContainerRef, editorContentRef]);
 
   return (
     <div
@@ -181,12 +161,58 @@ function App() {
           position: "absolute",
           left: "417.5px",
           top: "152px",
-          width: "690px",
+          width: "710px",
           bottom: "0px",
           padding: "10px",
           background: "#242424",
         }}
       >
+        <div
+          style={{
+            position: "relative",
+            left: 0,
+            right: 0,
+            top: "0",
+            margin: "-10px",
+            background: "#fff",
+            border: "1px solid gray",
+            borderBottom: "10px solid rgb(36, 36, 36)",
+          }}
+        >
+          <Box className="toolbar">
+            <Box className="toolbar_section">
+              <HStack wrap justify={{ lg: "start", xl: "start" }}>
+                <MarkButton
+                  editor={editor}
+                  format="bold"
+                  icon={<div style={{ color: "black" }}>F</div>}
+                  title="Fet"
+                  //keys={fetHurtigtast}
+                />
+                <MarkButton
+                  editor={editor}
+                  format="italic"
+                  icon={<i style={{ color: "black" }}>K</i>}
+                  title="Kursiv"
+                  //keys={fetHurtigtast}
+                />
+                <MarkButton
+                  editor={editor}
+                  format="underline"
+                  icon={
+                    <div
+                      style={{ color: "black", textDecoration: "underline" }}
+                    >
+                      U
+                    </div>
+                  }
+                  title="Underlinje"
+                  //keys={fetHurtigtast}
+                />
+              </HStack>
+            </Box>
+          </Box>
+        </div>
         <div
           style={{
             height: "100%",
@@ -197,7 +223,6 @@ function App() {
             <div ref={editorContentRef} className="editor-content">
               <div className="page">
                 <div className="header">
-                  {/*<img src={NavLogo} />*/}
                   <NavLogo />
                   <dl>
                     <dt>Navn:</dt>
@@ -209,29 +234,12 @@ function App() {
                   </dl>
                   <span>22. Januar 2025</span>
                 </div>
-                <MDXEditor
-                  ref={mdxRef}
-                  contentEditableClassName="contentEditable"
-                  markdown={markdown}
-                  plugins={[
-                    headingsPlugin(),
-                    linkPlugin(),
-                    linkDialogPlugin(),
-                    jsxPlugin({ jsxComponentDescriptors }),
-                    // toolbarPlugin({
-                    //   toolbarClassName: "mdx-toolbar",
-                    //   toolbarContents: () => (
-                    //     <>
-                    //       <InsertBrukersPersonnummer />
-                    //       <GetMarkdown />
-                    //     </>
-                    //   ),
-                    // }),
-                  ]}
-                  onError={(err) => {
-                    console.error("Markdown error:", err);
-                  }}
-                />
+                <Plate editor={editor}>
+                  <PlateContent
+                    className="contentEditable"
+                    placeholder="Type your amazing content here..."
+                  />
+                </Plate>
               </div>
             </div>
           </div>
@@ -240,5 +248,65 @@ function App() {
     </div>
   );
 }
+
+const isMarkActive = (editor: Editor, format: string) => {
+  const marks: any = editor.api.marks();
+  return marks ? marks[format] === true : false;
+};
+
+const toggleMark = (editor: Editor, format: string) => {
+  const isActive = isMarkActive(editor, format);
+  if (format === "clear") {
+    // remove all styles
+    editor.tf.setNodes(
+      {
+        bold: false,
+        italic: false,
+        underline: false,
+        change: false,
+        light: false,
+      },
+      { match: Text.isText },
+    );
+    // make it a paragrah
+    editor.tf.setNodes({ type: "paragraph", align: "left" });
+  } else if (isActive) {
+    editor.tf.removeMark(format);
+  } else {
+    editor.tf.addMark(format, true);
+  }
+};
+
+const MarkButton = ({
+  editor,
+  format,
+  icon,
+  title,
+  keys,
+}: {
+  editor: Editor;
+  format: string;
+  icon: ReactNode;
+  title?: string;
+  keys?: string[];
+}) => {
+  return (
+    <Tooltip content={title ? title : ""} keys={keys}>
+      <Button
+        // active={isMarkActive(editor, format)}
+        className={
+          isMarkActive(editor, format) ? `menyKnapp ${format}` : `menyKnapp`
+        }
+        onMouseDown={(event: { preventDefault: () => void }) => {
+          event.preventDefault();
+          toggleMark(editor, format);
+        }}
+        variant="tertiary"
+      >
+        {icon}
+      </Button>
+    </Tooltip>
+  );
+};
 
 export default App;

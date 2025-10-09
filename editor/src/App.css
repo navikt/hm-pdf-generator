@@ -29,6 +29,10 @@
     line-height: 16pt;
 }
 
+.editor-content .page .contentEditable:focus-visible {
+    outline-style: none;
+}
+
 .editor-content .page h1 {
     font-size: 16pt;
     font-weight: bold;
@@ -62,7 +66,8 @@
     page-break-after: avoid;
 }
 
-.editor-content .page p {
+.editor-content .page p, .editor-content .page div.slate-p {
+    display: block;
     margin: 0 0 16pt 0;
 }
 
@@ -148,4 +153,8 @@
 
 .editor-content .page .variabel:active, .editor-content .page .variabel:focus {
     background: #000;
+}
+
+.editor-content .page .menyKnapp.bold {
+    background: #ff0000;
 }
