@@ -80,7 +80,13 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
   return (
     <Plate editor={editor}>
       <Verktøylinje />
-      <div style={{ padding: "10px", overflowY: "auto", height: "100%" }}>
+      <div
+        style={{
+          padding: "0 10px 10px 10px",
+          overflowY: "auto",
+          height: "100%",
+        }}
+      >
         <div ref={editorContainerRef} className="editor-container">
           <div ref={editorContentRef} className="editor-content">
             <div className="page">

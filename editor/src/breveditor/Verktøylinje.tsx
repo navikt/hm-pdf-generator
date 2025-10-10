@@ -8,6 +8,7 @@ import { Box, Button, HStack, Select, Tooltip } from "@navikt/ds-react";
 import type { Editor } from "platejs";
 import { TextApi } from "@platejs/slate";
 import { useEditorPlugin, useEditorState } from "platejs/react";
+import { ArrowRedoIcon, ArrowUndoIcon } from "@navikt/aksel-icons";
 
 const Verktøylinje = ({}: {}) => {
   const { editor } = useEditorPlugin(BlockMenuPlugin);
@@ -49,6 +50,30 @@ const Verktøylinje = ({}: {}) => {
     <Box className="toolbar">
       <Box className="toolbar_section">
         <HStack wrap justify={{ lg: "start", xl: "start" }}>
+          <MarkButton
+            format="undo"
+            icon={
+              <ArrowUndoIcon
+                className="menyKnappParent"
+                title="Angre"
+                fontSize="1rem"
+              />
+            }
+            title="Angre"
+            //keys={fetHurtigtast}
+          />
+          <MarkButton
+            format="redo"
+            icon={
+              <ArrowRedoIcon
+                className="menyKnappParent"
+                title="Gjenta"
+                fontSize="1rem"
+              />
+            }
+            title="Gjenta"
+            //keys={fetHurtigtast}
+          />
           <MarkButton
             format="bold"
             icon={
@@ -154,6 +179,28 @@ const MarkButton = ({
   keys?: string[];
 }) => {
   const editor = useEditorState();
+  if (format === "undo" || format === "redo")
+    return (
+      <Tooltip content={title ? title : ""} keys={keys}>
+        <Button
+          disabled={
+            format == "undo"
+              ? editor.history.undos.length == 0
+              : format == "redo"
+                ? editor.history.redos.length == 0
+                : false
+          }
+          onMouseDown={(event: { preventDefault: () => void }) => {
+            event.preventDefault();
+            if (format === "undo") editor.undo();
+            if (format === "redo") editor.redo();
+          }}
+          variant="tertiary"
+        >
+          {icon}
+        </Button>
+      </Tooltip>
+    );
   return (
     <Tooltip content={title ? title : ""} keys={keys}>
       <Button
