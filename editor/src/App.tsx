@@ -2,6 +2,7 @@ import hotsakImg from "./assets/hotsak.png";
 
 import "./App.css";
 import Breveditor from "./breveditor/Breveditor.tsx";
+import { Button } from "@navikt/ds-react";
 
 function App() {
   // @ts-ignore
@@ -99,6 +100,16 @@ function App() {
         }}
       >
         <Breveditor markdown={markdown} />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: "500px",
+          left: "10px",
+          width: "100px",
+        }}
+      >
+        <Button>Focus here</Button>
       </div>
     </div>
   );

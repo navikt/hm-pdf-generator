@@ -14,7 +14,7 @@ import {
   BlockMenuPlugin,
   BlockSelectionPlugin,
 } from "@platejs/selection/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavLogo from "./../assets/nav-logo.svg?react";
 import Verktøylinje from "./Verktøylinje.tsx";
 import { LinkPlugin } from "@platejs/link/react";
@@ -77,9 +77,15 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
     }
   }, [editorContainerRef, editorContentRef]);
 
+  const plateContentRef = useRef(null);
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <Plate editor={editor}>
-      <Verktøylinje />
+      <Verktøylinje
+        editorIsFocused={isFocused}
+        plateContentRef={plateContentRef}
+      />
       <div
         style={{
           padding: "0 10px 10px 10px",
@@ -103,6 +109,9 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
                 <span>22. Januar 2025</span>
               </div>
               <PlateContent
+                ref={plateContentRef}
+                onBlur={() => setIsFocused(false)}
+                onFocus={() => setIsFocused(true)}
                 className="contentEditable"
                 placeholder="Type your amazing content here..."
               />

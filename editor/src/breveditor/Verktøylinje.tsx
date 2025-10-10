@@ -3,14 +3,20 @@ import {
   BlockSelectionPlugin,
 } from "@platejs/selection/react";
 import * as React from "react";
-import { type ReactNode } from "react";
+import { type ReactNode, type RefObject } from "react";
 import { Box, Button, HStack, Select, Tooltip } from "@navikt/ds-react";
 import type { Editor } from "platejs";
 import { TextApi } from "@platejs/slate";
 import { useEditorPlugin, useEditorState } from "platejs/react";
 import { ArrowRedoIcon, ArrowUndoIcon } from "@navikt/aksel-icons";
 
-const Verktøylinje = ({}: {}) => {
+const Verktøylinje = ({
+  editorIsFocused,
+  plateContentRef,
+}: {
+  editorIsFocused: boolean;
+  plateContentRef: RefObject<any>;
+}) => {
   const { editor } = useEditorPlugin(BlockMenuPlugin);
 
   const turnInto = React.useCallback(
@@ -44,13 +50,15 @@ const Verktøylinje = ({}: {}) => {
   })();
   const moreThanOneBlockSelected = (() =>
     editorStateChange.api.blocks().length > 1)();
-  const noBlockSelected = (() => editorStateChange.api.blocks().length == 0)();
+  const noBlockSelected = (() =>
+    !editorIsFocused || editorStateChange.api.blocks().length == 0)();
 
   return (
     <Box className="toolbar">
       <Box className="toolbar_section">
         <HStack wrap justify={{ lg: "start", xl: "start" }}>
           <MarkButton
+            disabled={!editorIsFocused}
             format="undo"
             icon={
               <ArrowUndoIcon
@@ -63,6 +71,7 @@ const Verktøylinje = ({}: {}) => {
             //keys={fetHurtigtast}
           />
           <MarkButton
+            disabled={!editorIsFocused}
             format="redo"
             icon={
               <ArrowRedoIcon
@@ -75,6 +84,7 @@ const Verktøylinje = ({}: {}) => {
             //keys={fetHurtigtast}
           />
           <MarkButton
+            disabled={!editorIsFocused}
             format="bold"
             icon={
               <div
@@ -91,6 +101,7 @@ const Verktøylinje = ({}: {}) => {
             //keys={fetHurtigtast}
           />
           <MarkButton
+            disabled={!editorIsFocused}
             format="italic"
             icon={
               <i
@@ -107,6 +118,7 @@ const Verktøylinje = ({}: {}) => {
             //keys={fetHurtigtast}
           />
           <MarkButton
+            disabled={!editorIsFocused}
             format="underline"
             icon={
               <div
@@ -125,14 +137,13 @@ const Verktøylinje = ({}: {}) => {
           />
           <div style={{ padding: "10px", width: "200px" }}>
             <Select
+              disabled={!editorIsFocused}
               label=""
               hideLabel={true}
               size="small"
               onChange={(e) => {
                 turnInto(e.target.value);
-              }}
-              onMouseDown={(e) => {
-                e.preventDefault();
+                plateContentRef.current?.focus();
               }}
               value={
                 noBlockSelected
@@ -168,18 +179,20 @@ const Verktøylinje = ({}: {}) => {
 export default Verktøylinje;
 
 const MarkButton = ({
+  disabled,
   format,
   icon,
   title,
   keys,
 }: {
+  disabled?: boolean;
   format: string;
   icon: ReactNode;
   title?: string;
   keys?: string[];
 }) => {
   const editor = useEditorState();
-  if (format === "undo" || format === "redo")
+  if (format == "undo" || format == "redo")
     return (
       <Tooltip content={title ? title : ""} keys={keys}>
         <Button
@@ -204,6 +217,7 @@ const MarkButton = ({
   return (
     <Tooltip content={title ? title : ""} keys={keys}>
       <Button
+        disabled={disabled}
         onMouseDown={(event: { preventDefault: () => void }) => {
           event.preventDefault();
           toggleMark(editor, format);
