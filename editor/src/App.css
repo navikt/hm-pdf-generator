@@ -1,3 +1,18 @@
+@import "@navikt/ds-css";
+
+.toolbar {
+    background: #fff;
+    border-bottom: 10px solid #ccc;
+}
+
+.toolbar .menyKnappParent {
+    color: #000;
+}
+
+.toolbar .menyKnappParent.active {
+    color: #fff;
+}
+
 .editor-container {
     width: 100%;
     height: auto;
@@ -80,14 +95,6 @@
     margin-bottom: 0;
 }
 
-.editor-content .page .mdx-toolbar {
-    position: sticky;
-    left: 0;
-    right: 0;
-    top: -74pt;
-    border-radius: 0;
-}
-
 .editor-content .page .header {
     position: relative;
     margin-bottom: 48pt;
@@ -130,9 +137,11 @@
     padding-left: 2em;
 }
 
-.editor-content .page a {
+.editor-content .page a, .editor-content .page div.slate-a {
     color: #000000;
     white-space: nowrap;
+    display: inline-block;
+    text-decoration: underline;
 }
 
 .editor-content .page .no-wrap {
@@ -153,8 +162,4 @@
 
 .editor-content .page .variabel:active, .editor-content .page .variabel:focus {
     background: #000;
-}
-
-.editor-content .page .menyKnapp.bold {
-    background: #ff0000;
 }
