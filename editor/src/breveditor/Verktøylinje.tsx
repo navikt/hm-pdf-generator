@@ -34,6 +34,7 @@ const Verktøylinje = ({
               at: path,
             });
           }
+          editor.tf.resetBlock({ at: path });
           editor.tf.toggleBlock(type, { at: path });
         });
     },
@@ -55,6 +56,7 @@ const Verktøylinje = ({
 
   return (
     <Box
+      style={{ padding: "0.1em 0" }}
       className="toolbar"
       onMouseDown={(e) => {
         const target = e.target as HTMLElement;
@@ -74,7 +76,11 @@ const Verktøylinje = ({
       onBlurCapture={(_) => settVerktøylinjeFokusert(false)}
     >
       <Box className="toolbar_section">
-        <HStack wrap justify={{ lg: "start", xl: "start" }}>
+        <HStack
+          wrap
+          justify={{ lg: "start", xl: "start" }}
+          gap={{ lg: "space-8", xl: "space-8" }}
+        >
           <MarkButton
             disabled={!editorOrToolbarInFocus}
             format="undo"
@@ -107,6 +113,7 @@ const Verktøylinje = ({
             icon={
               <div
                 className={
+                  editorOrToolbarInFocus &&
                   isMarkActive(editorStateChange, "bold")
                     ? "menyKnappParent active"
                     : "menyKnappParent"
@@ -124,6 +131,7 @@ const Verktøylinje = ({
             icon={
               <i
                 className={
+                  editorOrToolbarInFocus &&
                   isMarkActive(editorStateChange, "italic")
                     ? "menyKnappParent active"
                     : "menyKnappParent"
@@ -141,6 +149,7 @@ const Verktøylinje = ({
             icon={
               <div
                 className={
+                  editorOrToolbarInFocus &&
                   isMarkActive(editorStateChange, "underline")
                     ? "menyKnappParent active"
                     : "menyKnappParent"
@@ -167,8 +176,13 @@ const Verktøylinje = ({
                   iconPosition="right"
                   size="small"
                   disabled={!editorOrToolbarInFocus}
+                  // style={{ minWidth: "150px" }}
                 >
-                  {noBlockSelected && <>-</>}
+                  {noBlockSelected && (
+                    <span style={{ minWidth: "50px", display: "inline-block" }}>
+                      -
+                    </span>
+                  )}
                   {moreThanOneBlockSelected && <>Flere</>}
                   {!noBlockSelected && blockType == "p" && <>Brødtekst</>}
                   {!noBlockSelected && blockType == "h1" && <>Overskrift 1</>}
@@ -246,7 +260,8 @@ const MarkButton = ({
             if (format === "undo") editor.undo();
             if (format === "redo") editor.redo();
           }}
-          variant="tertiary"
+          variant="tertiary-neutral"
+          size="small"
         >
           {icon}
         </Button>
@@ -260,7 +275,12 @@ const MarkButton = ({
           event.preventDefault();
           toggleMark(editor, format);
         }}
-        variant={isMarkActive(editor, format) ? "primary" : "tertiary"}
+        variant={
+          !disabled && isMarkActive(editor, format)
+            ? "primary-neutral"
+            : "tertiary-neutral"
+        }
+        size="small"
       >
         {icon}
       </Button>
