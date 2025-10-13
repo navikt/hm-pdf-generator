@@ -17,9 +17,10 @@ import {
   ArrowUndoIcon,
   BulletListIcon,
   ChevronDownIcon,
+  Density3Icon,
+  LineHeightIcon,
   NumberListIcon,
 } from "@navikt/aksel-icons";
-import { ListPlugin } from "@platejs/list/react";
 import { ListStyleType, someList, toggleList } from "@platejs/list";
 
 const Verktøylinje = ({
@@ -52,16 +53,6 @@ const Verktøylinje = ({
   const [erVerktøylinjeFokusert, settVerktøylinjeFokusert] = useState(false);
   const editorOrToolbarInFocus = editorIsFocused || erVerktøylinjeFokusert;
 
-  const editorStateChange = useEditorState();
-  const blockType = (() => {
-    let blocks = editorStateChange.api.blocks();
-    return blocks.length == 1 ? blocks[0]!![0]!!.type : undefined;
-  })();
-  const moreThanOneBlockSelected = (() =>
-    editorStateChange.api.blocks().length > 1)();
-  const noBlockSelected = (() =>
-    !editorOrToolbarInFocus || editorStateChange.api.blocks().length == 0)();
-
   const punktlistePressed = useEditorSelector(
     (editor) =>
       someList(editor, [
@@ -76,6 +67,18 @@ const Verktøylinje = ({
     (editor) => someList(editor, [ListStyleType.Decimal]),
     [],
   );
+
+  const editorStateChange = useEditorState();
+  const blockType = (() => {
+    if (punktlistePressed) return "ul";
+    if (nummerertListePressed) return "ol";
+    let blocks = editorStateChange.api.blocks();
+    return blocks.length == 1 ? blocks[0]!![0]!!.type : undefined;
+  })();
+  const moreThanOneBlockSelected = (() =>
+    editorStateChange.api.blocks().length > 1)();
+  const noBlockSelected = (() =>
+    !editorOrToolbarInFocus || editorStateChange.api.blocks().length == 0)();
 
   return (
     <Box
@@ -185,6 +188,30 @@ const Verktøylinje = ({
             title="Underlinje"
             //keys={fetHurtigtast}
           />
+          <Button
+            disabled={!editorOrToolbarInFocus}
+            icon={<BulletListIcon title="Punktliste" fontSize="1rem" />}
+            size="small"
+            variant={punktlistePressed ? "primary-neutral" : "tertiary-neutral"}
+            onClick={(_) => {
+              toggleList(editor, {
+                listStyleType: ListStyleType.Circle,
+              });
+            }}
+          ></Button>
+          <Button
+            disabled={!editorOrToolbarInFocus}
+            icon={<NumberListIcon title="Nummerert liste" fontSize="1rem" />}
+            size="small"
+            variant={
+              nummerertListePressed ? "primary-neutral" : "tertiary-neutral"
+            }
+            onClick={(_) => {
+              toggleList(editor, {
+                listStyleType: ListStyleType.Decimal,
+              });
+            }}
+          ></Button>
           <div style={{ padding: "10px" }}>
             <ActionMenu
               onOpenChange={(open) => {
@@ -212,63 +239,84 @@ const Verktøylinje = ({
                   {!noBlockSelected && blockType == "h2" && <>Overskrift 2</>}
                   {!noBlockSelected && blockType == "h3" && <>Overskrift 3</>}
                   {!noBlockSelected && blockType == "h4" && <>Overskrift 4</>}
+                  {!noBlockSelected && blockType == "ul" && <>Punktliste</>}
+                  {!noBlockSelected && blockType == "ol" && (
+                    <>Nummerert liste</>
+                  )}
                 </Button>
               </ActionMenu.Trigger>
               <ActionMenu.Content>
                 <ActionMenu.Group label="Grunnleggende stiler">
-                  <ActionMenu.Item onSelect={(_) => turnInto("p")}>
+                  <ActionMenu.Item
+                    icon={<Density3Icon title="Overskrift 1" fontSize="1rem" />}
+                    onSelect={(_) => turnInto("p")}
+                  >
                     Brødtekst
                   </ActionMenu.Item>
                 </ActionMenu.Group>
                 <ActionMenu.Group label="Overskrifter">
-                  <ActionMenu.Item onSelect={(_) => turnInto("h1")}>
+                  <ActionMenu.Item
+                    icon={
+                      <LineHeightIcon title="Overskrift 1" fontSize="1rem" />
+                    }
+                    onSelect={(_) => turnInto("h1")}
+                  >
                     Overskrift 1
                   </ActionMenu.Item>
-                  <ActionMenu.Item onSelect={(_) => turnInto("h2")}>
+                  <ActionMenu.Item
+                    icon={
+                      <LineHeightIcon title="Overskrift 2" fontSize="1rem" />
+                    }
+                    onSelect={(_) => turnInto("h2")}
+                  >
                     Overskrift 2
                   </ActionMenu.Item>
-                  <ActionMenu.Item onSelect={(_) => turnInto("h3")}>
+                  <ActionMenu.Item
+                    icon={
+                      <LineHeightIcon title="Overskrift 3" fontSize="1rem" />
+                    }
+                    onSelect={(_) => turnInto("h3")}
+                  >
                     Overskrift 3
                   </ActionMenu.Item>
-                  <ActionMenu.Item onSelect={(_) => turnInto("h4")}>
+                  <ActionMenu.Item
+                    icon={
+                      <LineHeightIcon title="Overskrift 4" fontSize="1rem" />
+                    }
+                    onSelect={(_) => turnInto("h4")}
+                  >
                     Overskrift 4
                   </ActionMenu.Item>
                 </ActionMenu.Group>
                 <ActionMenu.Group label="Lister">
-                  <ActionMenu.Item onSelect={(_) => turnInto("ul")}>
+                  <ActionMenu.Item
+                    icon={<BulletListIcon title="Punktliste" fontSize="1rem" />}
+                    onSelect={(_) =>
+                      !punktlistePressed &&
+                      toggleList(editor, {
+                        listStyleType: ListStyleType.Circle,
+                      })
+                    }
+                  >
                     Punktliste
                   </ActionMenu.Item>
-                  <ActionMenu.Item onSelect={(_) => turnInto("ol")}>
-                    Numerert liste
+                  <ActionMenu.Item
+                    icon={
+                      <NumberListIcon title="Nummerert liste" fontSize="1rem" />
+                    }
+                    onSelect={(_) =>
+                      !nummerertListePressed &&
+                      toggleList(editor, {
+                        listStyleType: ListStyleType.Decimal,
+                      })
+                    }
+                  >
+                    Nummerert liste
                   </ActionMenu.Item>
                 </ActionMenu.Group>
               </ActionMenu.Content>
             </ActionMenu>
           </div>
-          <Button
-            disabled={!editorOrToolbarInFocus}
-            icon={<BulletListIcon title="Punktliste" fontSize="1.5rem" />}
-            size="small"
-            variant={punktlistePressed ? "primary-neutral" : "tertiary-neutral"}
-            onClick={(_) => {
-              toggleList(editor, {
-                listStyleType: ListStyleType.Circle,
-              });
-            }}
-          ></Button>
-          <Button
-            disabled={!editorOrToolbarInFocus}
-            icon={<NumberListIcon title="Nummerert liste" fontSize="1.5rem" />}
-            size="small"
-            variant={
-              nummerertListePressed ? "primary-neutral" : "tertiary-neutral"
-            }
-            onClick={(_) => {
-              toggleList(editor, {
-                listStyleType: ListStyleType.Decimal,
-              });
-            }}
-          ></Button>
         </HStack>
       </Box>
     </Box>
