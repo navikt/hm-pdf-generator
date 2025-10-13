@@ -1,6 +1,8 @@
 import { Plate, PlateContent, usePlateEditor } from "platejs/react";
 import { MarkdownPlugin, remarkMdx } from "@platejs/markdown";
 import { BaseParagraphPlugin, KEYS } from "platejs";
+import { ListPlugin } from "@platejs/list/react";
+
 import {
   BaseH1Plugin,
   BaseH2Plugin,
@@ -49,6 +51,14 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
           LinkPlugin,
           BlockMenuPlugin,
           BlockSelectionPlugin,
+          ListPlugin.configure({
+            inject: {
+              targetPlugins: [...KEYS.heading, KEYS.p],
+            },
+            /*render: {
+              belowNodes: BlockList,
+            },*/
+          }),
         ],
       ],
       //value: [{ type: "p", children: [{ text: "Hello world!" }] }],

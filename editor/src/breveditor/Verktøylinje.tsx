@@ -7,12 +7,20 @@ import { type ReactNode, type RefObject, useState } from "react";
 import { ActionMenu, Box, Button, HStack, Tooltip } from "@navikt/ds-react";
 import { type Editor, KEYS } from "platejs";
 import { TextApi } from "@platejs/slate";
-import { useEditorPlugin, useEditorState } from "platejs/react";
+import {
+  useEditorPlugin,
+  useEditorState,
+  useEditorSelector,
+} from "platejs/react";
 import {
   ArrowRedoIcon,
   ArrowUndoIcon,
+  BulletListIcon,
   ChevronDownIcon,
+  NumberListIcon,
 } from "@navikt/aksel-icons";
+import { ListPlugin } from "@platejs/list/react";
+import { ListStyleType, someList, toggleList } from "@platejs/list";
 
 const Verktøylinje = ({
   editorIsFocused,
@@ -53,6 +61,21 @@ const Verktøylinje = ({
     editorStateChange.api.blocks().length > 1)();
   const noBlockSelected = (() =>
     !editorOrToolbarInFocus || editorStateChange.api.blocks().length == 0)();
+
+  const punktlistePressed = useEditorSelector(
+    (editor) =>
+      someList(editor, [
+        ListStyleType.Disc,
+        ListStyleType.Circle,
+        ListStyleType.Square,
+      ]),
+    [],
+  );
+
+  const nummerertListePressed = useEditorSelector(
+    (editor) => someList(editor, [ListStyleType.Decimal]),
+    [],
+  );
 
   return (
     <Box
@@ -162,7 +185,7 @@ const Verktøylinje = ({
             title="Underlinje"
             //keys={fetHurtigtast}
           />
-          <div style={{ padding: "10px", width: "200px" }}>
+          <div style={{ padding: "10px" }}>
             <ActionMenu
               onOpenChange={(open) => {
                 if (!open)
@@ -211,9 +234,41 @@ const Verktøylinje = ({
                     Overskrift 4
                   </ActionMenu.Item>
                 </ActionMenu.Group>
+                <ActionMenu.Group label="Lister">
+                  <ActionMenu.Item onSelect={(_) => turnInto("ul")}>
+                    Punktliste
+                  </ActionMenu.Item>
+                  <ActionMenu.Item onSelect={(_) => turnInto("ol")}>
+                    Numerert liste
+                  </ActionMenu.Item>
+                </ActionMenu.Group>
               </ActionMenu.Content>
             </ActionMenu>
           </div>
+          <Button
+            disabled={!editorOrToolbarInFocus}
+            icon={<BulletListIcon title="Punktliste" fontSize="1.5rem" />}
+            size="small"
+            variant={punktlistePressed ? "primary-neutral" : "tertiary-neutral"}
+            onClick={(_) => {
+              toggleList(editor, {
+                listStyleType: ListStyleType.Circle,
+              });
+            }}
+          ></Button>
+          <Button
+            disabled={!editorOrToolbarInFocus}
+            icon={<NumberListIcon title="Nummerert liste" fontSize="1.5rem" />}
+            size="small"
+            variant={
+              nummerertListePressed ? "primary-neutral" : "tertiary-neutral"
+            }
+            onClick={(_) => {
+              toggleList(editor, {
+                listStyleType: ListStyleType.Decimal,
+              });
+            }}
+          ></Button>
         </HStack>
       </Box>
     </Box>

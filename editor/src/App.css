@@ -133,7 +133,8 @@
 }
 
 .editor-content .page ul, ol {
-    margin: -16pt 0 16pt 0;
+    /*margin: -16pt 0 16pt 0;*/
+    margin: -16pt 0 16pt 15pt !important;
     padding-left: 2em;
 }
 
