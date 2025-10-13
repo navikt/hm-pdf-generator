@@ -154,62 +154,51 @@ const Verktøylinje = ({
             //keys={fetHurtigtast}
           />
           <div style={{ padding: "10px", width: "200px" }}>
-            {(() => {
-              const opts: Map<string, string | null> = new Map([
-                ["noBlockSelected", "-"],
-                ["moreThanOneBlockSelected", "Flere"],
-                ["p", "Brødtekst"],
-                ["h1", "Overskrift 1"],
-                ["h2", "Overskrift 2"],
-                ["h3", "Overskrift 3"],
-                ["h4", "Overskrift 4"],
-              ]);
-              return (
-                <ActionMenu
-                  onOpenChange={(open) => {
-                    if (!open)
-                      setTimeout(() => plateContentRef.current?.focus(), 10);
-                  }}
+            <ActionMenu
+              onOpenChange={(open) => {
+                if (!open)
+                  setTimeout(() => plateContentRef.current?.focus(), 10);
+              }}
+            >
+              <ActionMenu.Trigger>
+                <Button
+                  variant="secondary-neutral"
+                  icon={<ChevronDownIcon aria-hidden />}
+                  iconPosition="right"
+                  size="small"
+                  disabled={!editorOrToolbarInFocus}
                 >
-                  <ActionMenu.Trigger>
-                    <Button
-                      variant="secondary-neutral"
-                      icon={<ChevronDownIcon aria-hidden />}
-                      iconPosition="right"
-                      size="small"
-                      disabled={!editorOrToolbarInFocus}
-                    >
-                      {noBlockSelected
-                        ? "-"
-                        : moreThanOneBlockSelected
-                          ? "Flere"
-                          : opts.get(blockType || "") || ""}
-                    </Button>
-                  </ActionMenu.Trigger>
-                  <ActionMenu.Content>
-                    <ActionMenu.Group label="Grunnleggende stiler">
-                      <ActionMenu.Item onSelect={(_) => turnInto("p")}>
-                        Brødtekst
-                      </ActionMenu.Item>
-                    </ActionMenu.Group>
-                    <ActionMenu.Group label="Overskrifter">
-                      <ActionMenu.Item onSelect={(_) => turnInto("h1")}>
-                        Overskrift 1
-                      </ActionMenu.Item>
-                      <ActionMenu.Item onSelect={(_) => turnInto("h2")}>
-                        Overskrift 2
-                      </ActionMenu.Item>
-                      <ActionMenu.Item onSelect={(_) => turnInto("h3")}>
-                        Overskrift 3
-                      </ActionMenu.Item>
-                      <ActionMenu.Item onSelect={(_) => turnInto("h4")}>
-                        Overskrift 4
-                      </ActionMenu.Item>
-                    </ActionMenu.Group>
-                  </ActionMenu.Content>
-                </ActionMenu>
-              );
-            })()}
+                  {noBlockSelected && <>-</>}
+                  {moreThanOneBlockSelected && <>Flere</>}
+                  {!noBlockSelected && blockType == "p" && <>Brødtekst</>}
+                  {!noBlockSelected && blockType == "h1" && <>Overskrift 1</>}
+                  {!noBlockSelected && blockType == "h2" && <>Overskrift 2</>}
+                  {!noBlockSelected && blockType == "h3" && <>Overskrift 3</>}
+                  {!noBlockSelected && blockType == "h4" && <>Overskrift 4</>}
+                </Button>
+              </ActionMenu.Trigger>
+              <ActionMenu.Content>
+                <ActionMenu.Group label="Grunnleggende stiler">
+                  <ActionMenu.Item onSelect={(_) => turnInto("p")}>
+                    Brødtekst
+                  </ActionMenu.Item>
+                </ActionMenu.Group>
+                <ActionMenu.Group label="Overskrifter">
+                  <ActionMenu.Item onSelect={(_) => turnInto("h1")}>
+                    Overskrift 1
+                  </ActionMenu.Item>
+                  <ActionMenu.Item onSelect={(_) => turnInto("h2")}>
+                    Overskrift 2
+                  </ActionMenu.Item>
+                  <ActionMenu.Item onSelect={(_) => turnInto("h3")}>
+                    Overskrift 3
+                  </ActionMenu.Item>
+                  <ActionMenu.Item onSelect={(_) => turnInto("h4")}>
+                    Overskrift 4
+                  </ActionMenu.Item>
+                </ActionMenu.Group>
+              </ActionMenu.Content>
+            </ActionMenu>
           </div>
         </HStack>
       </Box>
