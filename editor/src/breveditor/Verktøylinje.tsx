@@ -3,12 +3,16 @@ import {
   BlockSelectionPlugin,
 } from "@platejs/selection/react";
 import * as React from "react";
-import { type ReactNode, type RefObject } from "react";
-import { Box, Button, HStack, Select, Tooltip } from "@navikt/ds-react";
-import type { Editor } from "platejs";
+import { type ReactNode, type RefObject, useState } from "react";
+import { ActionMenu, Box, Button, HStack, Tooltip } from "@navikt/ds-react";
+import { type Editor, KEYS } from "platejs";
 import { TextApi } from "@platejs/slate";
 import { useEditorPlugin, useEditorState } from "platejs/react";
-import { ArrowRedoIcon, ArrowUndoIcon } from "@navikt/aksel-icons";
+import {
+  ArrowRedoIcon,
+  ArrowUndoIcon,
+  ChevronDownIcon,
+} from "@navikt/aksel-icons";
 
 const Verktøylinje = ({
   editorIsFocused,
@@ -21,27 +25,23 @@ const Verktøylinje = ({
 
   const turnInto = React.useCallback(
     (type: string) => {
-      console.log(
-        "turn into 1",
-        "type",
-        type,
-        editor.getApi(BlockSelectionPlugin).blocks(),
-      );
       editor
         .getApi(BlockSelectionPlugin)
         .blocks()
-        .forEach(([_, path]) => {
-          //if (node[KEYS.listType]) {
-          //  editor.tf.unsetNodes([KEYS.listType, "indent"], {
-          //    at: path,
-          //  });
-          //}
-          console.log("turn into 2", "type", type, "path", path);
+        .forEach(([node, path]) => {
+          if (node[KEYS.listType]) {
+            editor.tf.unsetNodes([KEYS.listType, "indent"], {
+              at: path,
+            });
+          }
           editor.tf.toggleBlock(type, { at: path });
         });
     },
     [editor],
   );
+
+  const [erVerktøylinjeFokusert, settVerktøylinjeFokusert] = useState(false);
+  const editorOrToolbarInFocus = editorIsFocused || erVerktøylinjeFokusert;
 
   const editorStateChange = useEditorState();
   const blockType = (() => {
@@ -51,14 +51,32 @@ const Verktøylinje = ({
   const moreThanOneBlockSelected = (() =>
     editorStateChange.api.blocks().length > 1)();
   const noBlockSelected = (() =>
-    !editorIsFocused || editorStateChange.api.blocks().length == 0)();
+    !editorOrToolbarInFocus || editorStateChange.api.blocks().length == 0)();
 
   return (
-    <Box className="toolbar">
+    <Box
+      className="toolbar"
+      onMouseDown={(e) => {
+        const target = e.target as HTMLElement;
+        // Allow text inputs, textareas, selects, and contenteditable elements
+        if (
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable
+        ) {
+          return; // Do not prevent default
+        }
+        // Prevent default for all other elements
+        e.preventDefault();
+      }}
+      onFocusCapture={(_) => settVerktøylinjeFokusert(true)}
+      onBlurCapture={(_) => settVerktøylinjeFokusert(false)}
+    >
       <Box className="toolbar_section">
         <HStack wrap justify={{ lg: "start", xl: "start" }}>
           <MarkButton
-            disabled={!editorIsFocused}
+            disabled={!editorOrToolbarInFocus}
             format="undo"
             icon={
               <ArrowUndoIcon
@@ -71,7 +89,7 @@ const Verktøylinje = ({
             //keys={fetHurtigtast}
           />
           <MarkButton
-            disabled={!editorIsFocused}
+            disabled={!editorOrToolbarInFocus}
             format="redo"
             icon={
               <ArrowRedoIcon
@@ -84,7 +102,7 @@ const Verktøylinje = ({
             //keys={fetHurtigtast}
           />
           <MarkButton
-            disabled={!editorIsFocused}
+            disabled={!editorOrToolbarInFocus}
             format="bold"
             icon={
               <div
@@ -101,7 +119,7 @@ const Verktøylinje = ({
             //keys={fetHurtigtast}
           />
           <MarkButton
-            disabled={!editorIsFocused}
+            disabled={!editorOrToolbarInFocus}
             format="italic"
             icon={
               <i
@@ -118,7 +136,7 @@ const Verktøylinje = ({
             //keys={fetHurtigtast}
           />
           <MarkButton
-            disabled={!editorIsFocused}
+            disabled={!editorOrToolbarInFocus}
             format="underline"
             icon={
               <div
@@ -136,39 +154,62 @@ const Verktøylinje = ({
             //keys={fetHurtigtast}
           />
           <div style={{ padding: "10px", width: "200px" }}>
-            <Select
-              disabled={!editorIsFocused}
-              label=""
-              hideLabel={true}
-              size="small"
-              onChange={(e) => {
-                turnInto(e.target.value);
-                plateContentRef.current?.focus();
-              }}
-              value={
-                noBlockSelected
-                  ? "noBlockSelected"
-                  : moreThanOneBlockSelected
-                    ? "moreThanOneBlockSelected"
-                    : blockType
-              }
-            >
-              {noBlockSelected && (
-                <option value="noBlockSelected" disabled={true}>
-                  -
-                </option>
-              )}
-              {moreThanOneBlockSelected && (
-                <option value="moreThanOneBlockSelected" disabled={true}>
-                  Flere
-                </option>
-              )}
-              <option value="p">Brødtekst</option>
-              <option value="h1">Overskrift 1</option>
-              <option value="h2">Overskrift 2</option>
-              <option value="h3">Overskrift 3</option>
-              <option value="h4">Overskrift 4</option>
-            </Select>
+            {(() => {
+              const opts: Map<string, string | null> = new Map([
+                ["noBlockSelected", "-"],
+                ["moreThanOneBlockSelected", "Flere"],
+                ["p", "Brødtekst"],
+                ["h1", "Overskrift 1"],
+                ["h2", "Overskrift 2"],
+                ["h3", "Overskrift 3"],
+                ["h4", "Overskrift 4"],
+              ]);
+              return (
+                <ActionMenu
+                  onOpenChange={(open) => {
+                    if (!open)
+                      setTimeout(() => plateContentRef.current?.focus(), 10);
+                  }}
+                >
+                  <ActionMenu.Trigger>
+                    <Button
+                      variant="secondary-neutral"
+                      icon={<ChevronDownIcon aria-hidden />}
+                      iconPosition="right"
+                      size="small"
+                      disabled={!editorOrToolbarInFocus}
+                    >
+                      {noBlockSelected
+                        ? "-"
+                        : moreThanOneBlockSelected
+                          ? "Flere"
+                          : opts.get(blockType || "") || ""}
+                    </Button>
+                  </ActionMenu.Trigger>
+                  <ActionMenu.Content>
+                    <ActionMenu.Group label="Grunnleggende stiler">
+                      <ActionMenu.Item onSelect={(_) => turnInto("p")}>
+                        Brødtekst
+                      </ActionMenu.Item>
+                    </ActionMenu.Group>
+                    <ActionMenu.Group label="Overskrifter">
+                      <ActionMenu.Item onSelect={(_) => turnInto("h1")}>
+                        Overskrift 1
+                      </ActionMenu.Item>
+                      <ActionMenu.Item onSelect={(_) => turnInto("h2")}>
+                        Overskrift 2
+                      </ActionMenu.Item>
+                      <ActionMenu.Item onSelect={(_) => turnInto("h3")}>
+                        Overskrift 3
+                      </ActionMenu.Item>
+                      <ActionMenu.Item onSelect={(_) => turnInto("h4")}>
+                        Overskrift 4
+                      </ActionMenu.Item>
+                    </ActionMenu.Group>
+                  </ActionMenu.Content>
+                </ActionMenu>
+              );
+            })()}
           </div>
         </HStack>
       </Box>
@@ -205,6 +246,14 @@ const MarkButton = ({
           }
           onMouseDown={(event: { preventDefault: () => void }) => {
             event.preventDefault();
+            if (
+              format == "undo"
+                ? editor.history.undos.length == 0
+                : format == "redo"
+                  ? editor.history.redos.length == 0
+                  : false
+            )
+              return;
             if (format === "undo") editor.undo();
             if (format === "redo") editor.redo();
           }}
