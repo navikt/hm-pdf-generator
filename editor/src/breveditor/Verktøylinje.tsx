@@ -19,11 +19,12 @@ import {
   ChevronDownIcon,
   Density3Icon,
   ExpandIcon,
-  LineHeightIcon,
   NumberListIcon,
+  PencilWritingFillIcon,
   ShrinkIcon,
 } from "@navikt/aksel-icons";
 import { ListStyleType, someList, toggleList } from "@platejs/list";
+import { TypeH1, TypeH2, TypeH3 } from "@styled-icons/bootstrap";
 
 const Verktøylinje = ({
   editorIsFocused,
@@ -247,7 +248,7 @@ const Verktøylinje = ({
           <ActionMenu.Content>
             <ActionMenu.Group label="Grunnleggende stiler">
               <ActionMenu.Item
-                icon={<Density3Icon title="Overskrift 1" fontSize="1rem" />}
+                icon={<Density3Icon title="Brødtekst" fontSize="1rem" />}
                 onSelect={(_) => turnInto("p")}
               >
                 Brødtekst
@@ -255,25 +256,43 @@ const Verktøylinje = ({
             </ActionMenu.Group>
             <ActionMenu.Group label="Overskrifter">
               <ActionMenu.Item
-                icon={<LineHeightIcon title="Tittel" fontSize="1rem" />}
+                icon={<PencilWritingFillIcon title="Tittel" fontSize="1rem" />}
                 onSelect={(_) => turnInto("h1")}
               >
                 Tittel
               </ActionMenu.Item>
               <ActionMenu.Item
-                icon={<LineHeightIcon title="Overskrift 1" fontSize="1rem" />}
+                icon={
+                  <TypeH1
+                    title="Overskrift 1"
+                    fontSize="1rem"
+                    style={{ scale: "0.7" }}
+                  />
+                }
                 onSelect={(_) => turnInto("h2")}
               >
                 Overskrift 1
               </ActionMenu.Item>
               <ActionMenu.Item
-                icon={<LineHeightIcon title="Overskrift 2" fontSize="1rem" />}
+                icon={
+                  <TypeH2
+                    title="Overskrift 2"
+                    fontSize="1rem"
+                    style={{ scale: "0.7" }}
+                  />
+                }
                 onSelect={(_) => turnInto("h3")}
               >
                 Overskrift 2
               </ActionMenu.Item>
               <ActionMenu.Item
-                icon={<LineHeightIcon title="Overskrift 3" fontSize="1rem" />}
+                icon={
+                  <TypeH3
+                    title="Overskrift 3"
+                    fontSize="1rem"
+                    style={{ scale: "0.7" }}
+                  />
+                }
                 onSelect={(_) => turnInto("h4")}
               >
                 Overskrift 3
