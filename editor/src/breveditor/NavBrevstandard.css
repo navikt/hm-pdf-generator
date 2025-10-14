@@ -1,0 +1,116 @@
+.editor-content .page h1 {
+  font-size: 16pt;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  line-height: 20pt;
+  margin: 0 0 26pt 0;
+  page-break-after: avoid;
+}
+
+.editor-content .page h2 {
+  font-size: 13pt;
+  font-weight: bold;
+  letter-spacing: 0.025em;
+  margin: 0 0 6pt 0;
+  page-break-after: avoid;
+}
+
+.editor-content .page h3 {
+  font-size: 12pt;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+  margin: 0 0 6pt 0;
+  page-break-after: avoid;
+}
+
+.editor-content .page h4 {
+  font-size: 11pt;
+  font-weight: bold;
+  letter-spacing: 0.01em;
+  margin: 0 0 6pt 0;
+  page-break-after: avoid;
+}
+
+.editor-content .page p, .editor-content .page div.slate-p {
+  display: block;
+  margin: 0 0 16pt 0;
+}
+
+.editor-content .page section {
+  margin: 0 0 26pt 0;
+}
+
+/* Fikser noen rare greier med at marginer stackes på toppen av hverandre ved page-breaks */
+.editor-content .page section p:last-child {
+  margin-bottom: 0;
+}
+
+.editor-content .page .header {
+  position: relative;
+  margin-bottom: 48pt;
+}
+
+.editor-content .page .header svg {
+  height: 16pt;
+  margin-bottom: 48pt;
+}
+
+.editor-content .page .header dl dd {
+  display: inline;
+  margin: 0;
+}
+
+.editor-content .page .header dl dd:after {
+  display: block;
+  content: '';
+}
+
+.editor-content .page .header dl dt {
+  display: inline-block;
+  min-width: 160px;
+}
+
+.editor-content .page .header span {
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.editor-content .page section.signatur {
+  margin-top: 32pt;
+  page-break-inside: avoid;
+}
+
+.editor-content .page ul, ol {
+  /*margin: -16pt 0 16pt 0;*/
+  margin: -16pt 0 16pt 15pt !important;
+  padding-left: 2em;
+}
+
+.editor-content .page a, .editor-content .page div.slate-a {
+  color: #000000;
+  white-space: nowrap;
+  display: inline-block;
+  text-decoration: underline;
+}
+
+.editor-content .page .no-wrap {
+  white-space: nowrap;
+  page-break-inside: avoid;
+  display: inline-block;
+}
+
+.editor-content .page .merkepenn {
+  background: yellowgreen;
+}
+
+.editor-content .page .variabel {
+  background: #ccc;
+  border-radius: 5px;
+  padding: 0.3em;
+}
+
+.editor-content .page .variabel:active, .editor-content .page .variabel:focus {
+  background: #000;
+}

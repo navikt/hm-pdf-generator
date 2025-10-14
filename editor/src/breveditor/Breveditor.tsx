@@ -1,8 +1,10 @@
+import "./Breveditor.css";
+import "./NavBrevstandard.css";
+
 import { Plate, PlateContent, usePlateEditor } from "platejs/react";
 import { MarkdownPlugin, remarkMdx } from "@platejs/markdown";
 import { BaseParagraphPlugin, KEYS } from "platejs";
 import { ListPlugin } from "@platejs/list/react";
-
 import {
   BaseH1Plugin,
   BaseH2Plugin,
@@ -18,7 +20,7 @@ import {
 } from "@platejs/selection/react";
 import { useEffect, useRef, useState } from "react";
 import NavLogo from "./../assets/nav-logo.svg?react";
-import Verktøylinje from "./Verktøylinje.tsx";
+import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { LinkPlugin } from "@platejs/link/react";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
 
