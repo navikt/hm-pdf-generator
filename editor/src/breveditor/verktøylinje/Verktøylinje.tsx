@@ -1,5 +1,4 @@
 import { BlockMenuPlugin } from "@platejs/selection/react";
-import * as React from "react";
 import { type ReactNode, type RefObject, useState } from "react";
 import { Box, Button, Tooltip } from "@navikt/ds-react";
 import { type Editor } from "platejs";
@@ -189,26 +188,19 @@ const Verktøylinje = ({
         />
       </div>
       <div className="right-items">
-        {!erZoomed && (
-          <Tooltip content={"Zoom inn"} keys={[]}>
-            <Button
-              icon={<ExpandIcon title="Zoom inn" fontSize="1rem" />}
-              onClick={() => settZoomed(true)}
-              variant="tertiary-neutral"
-              size="small"
-            />
-          </Tooltip>
-        )}
-        {erZoomed && (
-          <Tooltip content={"Zoom ut"} keys={[]}>
-            <Button
-              icon={<ShrinkIcon title="Zoom ut" fontSize="1rem" />}
-              onClick={() => settZoomed(false)}
-              variant="primary-neutral"
-              size="small"
-            />
-          </Tooltip>
-        )}
+        <Tooltip content={erZoomed ? "Zoom ut" : "Zoom inn"} keys={[]}>
+          <Button
+            icon={
+              <ExpandIcon
+                title={erZoomed ? "Zoom ut" : "Zoom inn"}
+                fontSize="1rem"
+              />
+            }
+            onClick={() => settZoomed(!erZoomed)}
+            variant="tertiary-neutral"
+            size="small"
+          />
+        </Tooltip>
       </div>
     </Box>
   );
