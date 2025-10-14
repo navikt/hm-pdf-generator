@@ -76,25 +76,29 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
     [],
   );
 
+  const plateContentRef = useRef(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [erZoomed, settZoomed] = useState(false);
+
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorContentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (editorContainerRef.current && editorContentRef.current) {
       let designedWidth = 794; // 595pt in px
+      if (erZoomed) designedWidth = 650; // 595pt - 108pt ((64-10)*2=108)
       let actualWidth = editorContainerRef.current.clientWidth;
       let scale = actualWidth / designedWidth;
       editorContentRef.current.style.transform = `scale(${scale})`;
     }
-  }, [editorContainerRef, editorContentRef]);
-
-  const plateContentRef = useRef(null);
-  const [isFocused, setIsFocused] = useState(false);
+  }, [editorContainerRef, editorContentRef, erZoomed]);
 
   return (
     <Plate editor={editor}>
       <Verktøylinje
         editorIsFocused={isFocused}
         plateContentRef={plateContentRef}
+        erZoomed={erZoomed}
+        settZoomed={settZoomed}
       />
       <div
         style={{
@@ -103,8 +107,14 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
           height: "100%",
         }}
       >
-        <div ref={editorContainerRef} className="editor-container">
-          <div ref={editorContentRef} className="editor-content">
+        <div
+          ref={editorContainerRef}
+          className={erZoomed ? "editor-container zoomed" : "editor-container"}
+        >
+          <div
+            ref={editorContentRef}
+            className={erZoomed ? "editor-content zoomed" : "editor-content"}
+          >
             <div className="page">
               <div className="header">
                 <NavLogo />

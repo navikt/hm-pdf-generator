@@ -27,12 +27,19 @@
     transform-origin: top left;
 }
 
+.editor-content.zoomed {
+    width: 650px; /* 595pt - 108pt ((64-10)*2=108) */
+}
+
 .editor-content .page {
     margin: 64pt 64pt 74pt 64pt;
     font-family: 'Source Sans 3', sans-serif;
     font-size: 11pt;
     font-weight: normal;
     line-height: 16pt;
+}
+.editor-content.zoomed .page {
+    margin: 30pt 10pt 74pt 10pt !important;
 }
 
 .editor-content .page .contentEditable {

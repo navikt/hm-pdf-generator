@@ -18,17 +18,23 @@ import {
   BulletListIcon,
   ChevronDownIcon,
   Density3Icon,
+  ExpandIcon,
   LineHeightIcon,
   NumberListIcon,
+  ShrinkIcon,
 } from "@navikt/aksel-icons";
 import { ListStyleType, someList, toggleList } from "@platejs/list";
 
 const Verktøylinje = ({
   editorIsFocused,
   plateContentRef,
+  erZoomed,
+  settZoomed,
 }: {
   editorIsFocused: boolean;
   plateContentRef: RefObject<any>;
+  erZoomed: boolean;
+  settZoomed: (zoomed: boolean) => void;
 }) => {
   const { editor } = useEditorPlugin(BlockMenuPlugin);
 
@@ -317,6 +323,38 @@ const Verktøylinje = ({
               </ActionMenu.Content>
             </ActionMenu>
           </div>
+          {!erZoomed && (
+            <Button
+              icon={
+                <ExpandIcon
+                  onClick={() => {
+                    console.log("herfe");
+                  }}
+                  title="a11y-title"
+                  fontSize="1rem"
+                />
+              }
+              onClick={() => settZoomed(true)}
+              variant="tertiary-neutral"
+              size="small"
+            />
+          )}
+          {erZoomed && (
+            <Button
+              icon={
+                <ShrinkIcon
+                  onClick={() => {
+                    console.log("herfe");
+                  }}
+                  title="a11y-title"
+                  fontSize="1rem"
+                />
+              }
+              onClick={() => settZoomed(false)}
+              variant="tertiary-neutral"
+              size="small"
+            />
+          )}
         </HStack>
       </Box>
     </Box>
