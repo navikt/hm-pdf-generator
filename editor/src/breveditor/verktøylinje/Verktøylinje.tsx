@@ -9,15 +9,14 @@ import {
   useEditorState,
 } from "platejs/react";
 import {
-  ArrowRedoIcon,
-  ArrowUndoIcon,
   BulletListIcon,
   ExpandIcon,
   NumberListIcon,
-  ShrinkIcon,
 } from "@navikt/aksel-icons";
 import { ListStyleType, someList, toggleList } from "@platejs/list";
 import BlokktypeMeny from "./BlokktypeMeny.tsx";
+import AngreKnapp from "./AngreKnapp.tsx";
+import GjentaKnapp from "./GjentaKnapp.tsx";
 
 const Verktøylinje = ({
   editorIsFocused,
@@ -73,32 +72,8 @@ const Verktøylinje = ({
       onBlurCapture={(_) => settVerktøylinjeFokusert(false)}
     >
       <div className="left-items">
-        <MarkButton
-          disabled={!editorOrToolbarInFocus}
-          format="undo"
-          icon={
-            <ArrowUndoIcon
-              className="menyKnappParent"
-              title="Angre"
-              fontSize="1rem"
-            />
-          }
-          title="Angre"
-          //keys={fetHurtigtast}
-        />
-        <MarkButton
-          disabled={!editorOrToolbarInFocus}
-          format="redo"
-          icon={
-            <ArrowRedoIcon
-              className="menyKnappParent"
-              title="Gjenta"
-              fontSize="1rem"
-            />
-          }
-          title="Gjenta"
-          //keys={fetHurtigtast}
-        />
+        <AngreKnapp />
+        <GjentaKnapp />
         <MarkButton
           disabled={!editorOrToolbarInFocus}
           format="bold"
