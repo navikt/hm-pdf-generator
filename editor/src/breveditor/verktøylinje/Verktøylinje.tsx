@@ -188,11 +188,11 @@ const Verktøylinje = ({
         />
       </div>
       <div className="right-items">
-        <Tooltip content={erZoomed ? "Zoom ut" : "Zoom inn"} keys={[]}>
+        <Tooltip content={erZoomed ? "Vis marger" : "Skjul marger"} keys={[]}>
           <Button
             icon={
               <ExpandIcon
-                title={erZoomed ? "Zoom ut" : "Zoom inn"}
+                title={erZoomed ? "Vis marger" : "Skjul marger"}
                 fontSize="1rem"
               />
             }
