@@ -351,7 +351,7 @@ const Verktøylinje = ({
                 />
               }
               onClick={() => settZoomed(false)}
-              variant="tertiary-neutral"
+              variant="primary-neutral"
               size="small"
             />
           )}
