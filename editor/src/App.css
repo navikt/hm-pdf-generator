@@ -1,8 +1,23 @@
 @import "@navikt/ds-css";
 
+.editor-container-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background: #fff;
     border-bottom: 10px solid #242424;
+    padding: 10px;
+}
+
+.toolbar .left-items, .toolbar .right-items {
+    display: flex;
+    gap: 10px;
 }
 
 .toolbar .menyKnappParent {
@@ -14,8 +29,7 @@
 }
 
 .editor-container {
-    width: 100%;
-    height: auto;
+    flex: 1;
     overflow-y: auto;
     border: 1px solid #ccc;
     background: #fff;

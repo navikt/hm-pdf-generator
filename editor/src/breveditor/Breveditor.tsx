@@ -94,47 +94,51 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
 
   return (
     <Plate editor={editor}>
-      <Verktøylinje
-        editorIsFocused={isFocused}
-        plateContentRef={plateContentRef}
-        erZoomed={erZoomed}
-        settZoomed={settZoomed}
-      />
-      <div
-        style={{
-          padding: "0 10px 10px 10px",
-          overflowY: "auto",
-          height: "100%",
-        }}
-      >
+      <div className="editor-container-container">
+        <Verktøylinje
+          editorIsFocused={isFocused}
+          plateContentRef={plateContentRef}
+          erZoomed={erZoomed}
+          settZoomed={settZoomed}
+        />
         <div
-          ref={editorContainerRef}
-          className={erZoomed ? "editor-container zoomed" : "editor-container"}
+          style={{
+            padding: "0 10px 10px 10px",
+            overflowY: "auto",
+            height: "100%",
+          }}
         >
           <div
-            ref={editorContentRef}
-            className={erZoomed ? "editor-content zoomed" : "editor-content"}
+            ref={editorContainerRef}
+            className={
+              erZoomed ? "editor-container zoomed" : "editor-container"
+            }
           >
-            <div className="page">
-              <div className="header">
-                <NavLogo />
-                <dl>
-                  <dt>Navn:</dt>
-                  <dd>Ola Nordmann</dd>
-                  <dt>Fødselsnummer:</dt>
-                  <dd>26848497710</dd>
-                  <dt>Saksnummer:</dt>
-                  <dd>1000</dd>
-                </dl>
-                <span>22. Januar 2025</span>
+            <div
+              ref={editorContentRef}
+              className={erZoomed ? "editor-content zoomed" : "editor-content"}
+            >
+              <div className="page">
+                <div className="header">
+                  <NavLogo />
+                  <dl>
+                    <dt>Navn:</dt>
+                    <dd>Ola Nordmann</dd>
+                    <dt>Fødselsnummer:</dt>
+                    <dd>26848497710</dd>
+                    <dt>Saksnummer:</dt>
+                    <dd>1000</dd>
+                  </dl>
+                  <span>22. Januar 2025</span>
+                </div>
+                <PlateContent
+                  ref={plateContentRef}
+                  onBlur={() => setIsFocused(false)}
+                  onFocus={() => setIsFocused(true)}
+                  className="contentEditable"
+                  placeholder="Type your amazing content here..."
+                />
               </div>
-              <PlateContent
-                ref={plateContentRef}
-                onBlur={() => setIsFocused(false)}
-                onFocus={() => setIsFocused(true)}
-                className="contentEditable"
-                placeholder="Type your amazing content here..."
-              />
             </div>
           </div>
         </div>

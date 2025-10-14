@@ -4,7 +4,7 @@ import {
 } from "@platejs/selection/react";
 import * as React from "react";
 import { type ReactNode, type RefObject, useState } from "react";
-import { ActionMenu, Box, Button, HStack, Tooltip } from "@navikt/ds-react";
+import { ActionMenu, Box, Button, Tooltip } from "@navikt/ds-react";
 import { type Editor, KEYS } from "platejs";
 import { TextApi } from "@platejs/slate";
 import {
@@ -88,7 +88,6 @@ const Verktøylinje = ({
 
   return (
     <Box
-      style={{ padding: "0.1em 0" }}
       className="toolbar"
       onMouseDown={(e) => {
         const target = e.target as HTMLElement;
@@ -107,93 +106,89 @@ const Verktøylinje = ({
       onFocusCapture={(_) => settVerktøylinjeFokusert(true)}
       onBlurCapture={(_) => settVerktøylinjeFokusert(false)}
     >
-      <Box className="toolbar_section">
-        <HStack
-          wrap
-          justify={{ lg: "start", xl: "start" }}
-          gap={{ lg: "space-8", xl: "space-8" }}
-        >
-          <MarkButton
-            disabled={!editorOrToolbarInFocus}
-            format="undo"
-            icon={
-              <ArrowUndoIcon
-                className="menyKnappParent"
-                title="Angre"
-                fontSize="1rem"
-              />
-            }
-            title="Angre"
-            //keys={fetHurtigtast}
-          />
-          <MarkButton
-            disabled={!editorOrToolbarInFocus}
-            format="redo"
-            icon={
-              <ArrowRedoIcon
-                className="menyKnappParent"
-                title="Gjenta"
-                fontSize="1rem"
-              />
-            }
-            title="Gjenta"
-            //keys={fetHurtigtast}
-          />
-          <MarkButton
-            disabled={!editorOrToolbarInFocus}
-            format="bold"
-            icon={
-              <div
-                className={
-                  editorOrToolbarInFocus &&
-                  isMarkActive(editorStateChange, "bold")
-                    ? "menyKnappParent active"
-                    : "menyKnappParent"
-                }
-              >
-                F
-              </div>
-            }
-            title="Fet"
-            //keys={fetHurtigtast}
-          />
-          <MarkButton
-            disabled={!editorOrToolbarInFocus}
-            format="italic"
-            icon={
-              <i
-                className={
-                  editorOrToolbarInFocus &&
-                  isMarkActive(editorStateChange, "italic")
-                    ? "menyKnappParent active"
-                    : "menyKnappParent"
-                }
-              >
-                K
-              </i>
-            }
-            title="Kursiv"
-            //keys={fetHurtigtast}
-          />
-          <MarkButton
-            disabled={!editorOrToolbarInFocus}
-            format="underline"
-            icon={
-              <div
-                className={
-                  editorOrToolbarInFocus &&
-                  isMarkActive(editorStateChange, "underline")
-                    ? "menyKnappParent active"
-                    : "menyKnappParent"
-                }
-                style={{ textDecoration: "underline" }}
-              >
-                U
-              </div>
-            }
-            title="Underlinje"
-            //keys={fetHurtigtast}
-          />
+      <div className="left-items">
+        <MarkButton
+          disabled={!editorOrToolbarInFocus}
+          format="undo"
+          icon={
+            <ArrowUndoIcon
+              className="menyKnappParent"
+              title="Angre"
+              fontSize="1rem"
+            />
+          }
+          title="Angre"
+          //keys={fetHurtigtast}
+        />
+        <MarkButton
+          disabled={!editorOrToolbarInFocus}
+          format="redo"
+          icon={
+            <ArrowRedoIcon
+              className="menyKnappParent"
+              title="Gjenta"
+              fontSize="1rem"
+            />
+          }
+          title="Gjenta"
+          //keys={fetHurtigtast}
+        />
+        <MarkButton
+          disabled={!editorOrToolbarInFocus}
+          format="bold"
+          icon={
+            <div
+              className={
+                editorOrToolbarInFocus &&
+                isMarkActive(editorStateChange, "bold")
+                  ? "menyKnappParent active"
+                  : "menyKnappParent"
+              }
+            >
+              F
+            </div>
+          }
+          title="Fet"
+          //keys={fetHurtigtast}
+        />
+        <MarkButton
+          disabled={!editorOrToolbarInFocus}
+          format="italic"
+          icon={
+            <i
+              className={
+                editorOrToolbarInFocus &&
+                isMarkActive(editorStateChange, "italic")
+                  ? "menyKnappParent active"
+                  : "menyKnappParent"
+              }
+            >
+              K
+            </i>
+          }
+          title="Kursiv"
+          //keys={fetHurtigtast}
+        />
+        <MarkButton
+          disabled={!editorOrToolbarInFocus}
+          format="underline"
+          icon={
+            <div
+              className={
+                editorOrToolbarInFocus &&
+                isMarkActive(editorStateChange, "underline")
+                  ? "menyKnappParent active"
+                  : "menyKnappParent"
+              }
+              style={{ textDecoration: "underline" }}
+            >
+              U
+            </div>
+          }
+          title="Underlinje"
+          //keys={fetHurtigtast}
+        />
+        <Tooltip content={"Punktliste"} keys={[]}>
           <Button
             disabled={!editorOrToolbarInFocus}
             icon={<BulletListIcon title="Punktliste" fontSize="1rem" />}
@@ -204,7 +199,9 @@ const Verktøylinje = ({
                 listStyleType: ListStyleType.Circle,
               });
             }}
-          ></Button>
+          />
+        </Tooltip>
+        <Tooltip content={"Nummerert liste"} keys={[]}>
           <Button
             disabled={!editorOrToolbarInFocus}
             icon={<NumberListIcon title="Nummerert liste" fontSize="1rem" />}
@@ -217,146 +214,122 @@ const Verktøylinje = ({
                 listStyleType: ListStyleType.Decimal,
               });
             }}
-          ></Button>
-          <div style={{ padding: "10px" }}>
-            <ActionMenu
-              onOpenChange={(open) => {
-                if (!open)
-                  setTimeout(() => plateContentRef.current?.focus(), 10);
-              }}
-            >
-              <ActionMenu.Trigger>
-                <Button
-                  variant="secondary-neutral"
-                  icon={<ChevronDownIcon aria-hidden />}
-                  iconPosition="right"
-                  size="small"
-                  disabled={!editorOrToolbarInFocus}
-                  // style={{ minWidth: "150px" }}
-                >
-                  {noBlockSelected && (
-                    <span style={{ minWidth: "50px", display: "inline-block" }}>
-                      -
-                    </span>
-                  )}
-                  {moreThanOneBlockSelected && <>Flere</>}
-                  {!noBlockSelected && blockType == "p" && <>Brødtekst</>}
-                  {!noBlockSelected && blockType == "h1" && <>Overskrift 1</>}
-                  {!noBlockSelected && blockType == "h2" && <>Overskrift 2</>}
-                  {!noBlockSelected && blockType == "h3" && <>Overskrift 3</>}
-                  {!noBlockSelected && blockType == "h4" && <>Overskrift 4</>}
-                  {!noBlockSelected && blockType == "ul" && <>Punktliste</>}
-                  {!noBlockSelected && blockType == "ol" && (
-                    <>Nummerert liste</>
-                  )}
-                </Button>
-              </ActionMenu.Trigger>
-              <ActionMenu.Content>
-                <ActionMenu.Group label="Grunnleggende stiler">
-                  <ActionMenu.Item
-                    icon={<Density3Icon title="Overskrift 1" fontSize="1rem" />}
-                    onSelect={(_) => turnInto("p")}
-                  >
-                    Brødtekst
-                  </ActionMenu.Item>
-                </ActionMenu.Group>
-                <ActionMenu.Group label="Overskrifter">
-                  <ActionMenu.Item
-                    icon={
-                      <LineHeightIcon title="Overskrift 1" fontSize="1rem" />
-                    }
-                    onSelect={(_) => turnInto("h1")}
-                  >
-                    Overskrift 1
-                  </ActionMenu.Item>
-                  <ActionMenu.Item
-                    icon={
-                      <LineHeightIcon title="Overskrift 2" fontSize="1rem" />
-                    }
-                    onSelect={(_) => turnInto("h2")}
-                  >
-                    Overskrift 2
-                  </ActionMenu.Item>
-                  <ActionMenu.Item
-                    icon={
-                      <LineHeightIcon title="Overskrift 3" fontSize="1rem" />
-                    }
-                    onSelect={(_) => turnInto("h3")}
-                  >
-                    Overskrift 3
-                  </ActionMenu.Item>
-                  <ActionMenu.Item
-                    icon={
-                      <LineHeightIcon title="Overskrift 4" fontSize="1rem" />
-                    }
-                    onSelect={(_) => turnInto("h4")}
-                  >
-                    Overskrift 4
-                  </ActionMenu.Item>
-                </ActionMenu.Group>
-                <ActionMenu.Group label="Lister">
-                  <ActionMenu.Item
-                    icon={<BulletListIcon title="Punktliste" fontSize="1rem" />}
-                    onSelect={(_) =>
-                      !punktlistePressed &&
-                      toggleList(editor, {
-                        listStyleType: ListStyleType.Circle,
-                      })
-                    }
-                  >
-                    Punktliste
-                  </ActionMenu.Item>
-                  <ActionMenu.Item
-                    icon={
-                      <NumberListIcon title="Nummerert liste" fontSize="1rem" />
-                    }
-                    onSelect={(_) =>
-                      !nummerertListePressed &&
-                      toggleList(editor, {
-                        listStyleType: ListStyleType.Decimal,
-                      })
-                    }
-                  >
-                    Nummerert liste
-                  </ActionMenu.Item>
-                </ActionMenu.Group>
-              </ActionMenu.Content>
-            </ActionMenu>
-          </div>
-          {!erZoomed && (
+          />
+        </Tooltip>
+        <ActionMenu
+          onOpenChange={(open) => {
+            if (!open) setTimeout(() => plateContentRef.current?.focus(), 10);
+          }}
+        >
+          <ActionMenu.Trigger>
             <Button
-              icon={
-                <ExpandIcon
-                  onClick={() => {
-                    console.log("herfe");
-                  }}
-                  title="a11y-title"
-                  fontSize="1rem"
-                />
-              }
+              variant="secondary-neutral"
+              icon={<ChevronDownIcon aria-hidden />}
+              iconPosition="right"
+              size="small"
+              disabled={!editorOrToolbarInFocus}
+            >
+              {noBlockSelected && (
+                <span style={{ minWidth: "50px", display: "inline-block" }}>
+                  -
+                </span>
+              )}
+              {moreThanOneBlockSelected && <>Flere</>}
+              {!noBlockSelected && blockType == "p" && <>Brødtekst</>}
+              {!noBlockSelected && blockType == "h1" && <>Tittel</>}
+              {!noBlockSelected && blockType == "h2" && <>Overskrift 1</>}
+              {!noBlockSelected && blockType == "h3" && <>Overskrift 2</>}
+              {!noBlockSelected && blockType == "h4" && <>Overskrift 3</>}
+              {!noBlockSelected && blockType == "ul" && <>Punktliste</>}
+              {!noBlockSelected && blockType == "ol" && <>Nummerert liste</>}
+            </Button>
+          </ActionMenu.Trigger>
+          <ActionMenu.Content>
+            <ActionMenu.Group label="Grunnleggende stiler">
+              <ActionMenu.Item
+                icon={<Density3Icon title="Overskrift 1" fontSize="1rem" />}
+                onSelect={(_) => turnInto("p")}
+              >
+                Brødtekst
+              </ActionMenu.Item>
+            </ActionMenu.Group>
+            <ActionMenu.Group label="Overskrifter">
+              <ActionMenu.Item
+                icon={<LineHeightIcon title="Tittel" fontSize="1rem" />}
+                onSelect={(_) => turnInto("h1")}
+              >
+                Tittel
+              </ActionMenu.Item>
+              <ActionMenu.Item
+                icon={<LineHeightIcon title="Overskrift 1" fontSize="1rem" />}
+                onSelect={(_) => turnInto("h2")}
+              >
+                Overskrift 1
+              </ActionMenu.Item>
+              <ActionMenu.Item
+                icon={<LineHeightIcon title="Overskrift 2" fontSize="1rem" />}
+                onSelect={(_) => turnInto("h3")}
+              >
+                Overskrift 2
+              </ActionMenu.Item>
+              <ActionMenu.Item
+                icon={<LineHeightIcon title="Overskrift 3" fontSize="1rem" />}
+                onSelect={(_) => turnInto("h4")}
+              >
+                Overskrift 3
+              </ActionMenu.Item>
+            </ActionMenu.Group>
+            <ActionMenu.Group label="Lister">
+              <ActionMenu.Item
+                icon={<BulletListIcon title="Punktliste" fontSize="1rem" />}
+                onSelect={(_) =>
+                  !punktlistePressed &&
+                  toggleList(editor, {
+                    listStyleType: ListStyleType.Circle,
+                  })
+                }
+              >
+                Punktliste
+              </ActionMenu.Item>
+              <ActionMenu.Item
+                icon={
+                  <NumberListIcon title="Nummerert liste" fontSize="1rem" />
+                }
+                onSelect={(_) =>
+                  !nummerertListePressed &&
+                  toggleList(editor, {
+                    listStyleType: ListStyleType.Decimal,
+                  })
+                }
+              >
+                Nummerert liste
+              </ActionMenu.Item>
+            </ActionMenu.Group>
+          </ActionMenu.Content>
+        </ActionMenu>
+      </div>
+      <div className="right-items">
+        {!erZoomed && (
+          <Tooltip content={"Zoom inn"} keys={[]}>
+            <Button
+              icon={<ExpandIcon title="Zoom inn" fontSize="1rem" />}
               onClick={() => settZoomed(true)}
               variant="tertiary-neutral"
               size="small"
             />
-          )}
-          {erZoomed && (
+          </Tooltip>
+        )}
+        {erZoomed && (
+          <Tooltip content={"Zoom ut"} keys={[]}>
             <Button
-              icon={
-                <ShrinkIcon
-                  onClick={() => {
-                    console.log("herfe");
-                  }}
-                  title="a11y-title"
-                  fontSize="1rem"
-                />
-              }
+              icon={<ShrinkIcon title="Zoom ut" fontSize="1rem" />}
               onClick={() => settZoomed(false)}
               variant="primary-neutral"
               size="small"
             />
-          )}
-        </HStack>
-      </Box>
+          </Tooltip>
+        )}
+      </div>
     </Box>
   );
 };
@@ -403,9 +376,8 @@ const MarkButton = ({
           }}
           variant="tertiary-neutral"
           size="small"
-        >
-          {icon}
-        </Button>
+          icon={icon}
+        />
       </Tooltip>
     );
   return (
@@ -422,9 +394,8 @@ const MarkButton = ({
             : "tertiary-neutral"
         }
         size="small"
-      >
-        {icon}
-      </Button>
+        icon={icon}
+      />
     </Tooltip>
   );
 };
