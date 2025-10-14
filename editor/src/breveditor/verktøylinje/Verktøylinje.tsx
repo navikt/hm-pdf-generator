@@ -1,9 +1,5 @@
-import { BlockMenuPlugin } from "@platejs/selection/react";
 import { type RefObject, useState } from "react";
-import { Box, Button, Tooltip } from "@navikt/ds-react";
-import { useEditorPlugin, useEditorSelector } from "platejs/react";
-import { ExpandIcon, NumberListIcon } from "@navikt/aksel-icons";
-import { ListStyleType, someList, toggleList } from "@platejs/list";
+import { Box } from "@navikt/ds-react";
 import BlokktypeMeny from "./BlokktypeMeny.tsx";
 import AngreKnapp from "./AngreKnapp.tsx";
 import GjentaKnapp from "./GjentaKnapp.tsx";
@@ -12,6 +8,7 @@ import KursivKnapp from "./KursivKnapp.tsx";
 import UnderlinjeKnapp from "./UnderlinjeKnapp.tsx";
 import PunktlisteKnapp from "./PunktlisteKnapp.tsx";
 import NummerertListeKnapp from "./NummerertListeKnapp.tsx";
+import SvitsjMargerKnapp from "./SvitsjMargerKnapp.tsx";
 
 const Verktøylinje = ({
   editorIsFocused,
@@ -24,15 +21,8 @@ const Verktøylinje = ({
   erZoomed: boolean;
   settZoomed: (zoomed: boolean) => void;
 }) => {
-  const { editor } = useEditorPlugin(BlockMenuPlugin);
-
   const [erVerktøylinjeFokusert, settVerktøylinjeFokusert] = useState(false);
   const editorOrToolbarInFocus = editorIsFocused || erVerktøylinjeFokusert;
-
-  const nummerertListePressed = useEditorSelector(
-    (editor) => someList(editor, [ListStyleType.Decimal]),
-    [],
-  );
 
   return (
     <Box
@@ -68,19 +58,7 @@ const Verktøylinje = ({
         />
       </div>
       <div className="right-items">
-        <Tooltip content={erZoomed ? "Vis marger" : "Skjul marger"} keys={[]}>
-          <Button
-            icon={
-              <ExpandIcon
-                title={erZoomed ? "Vis marger" : "Skjul marger"}
-                fontSize="1rem"
-              />
-            }
-            onClick={() => settZoomed(!erZoomed)}
-            variant="tertiary-neutral"
-            size="small"
-          />
-        </Tooltip>
+        <SvitsjMargerKnapp erZoomed={erZoomed} settZoomed={settZoomed} />
       </div>
     </Box>
   );
