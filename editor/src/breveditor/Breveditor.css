@@ -18,11 +18,11 @@
   gap: 10px;
 }
 
-.toolbar .menyKnappParent {
+.toolbar .toolbar-button {
   color: #000;
 }
 
-.toolbar .menyKnappParent.active {
+.toolbar .toolbar-button.toolbar-button-active {
   color: #fff;
 }
 

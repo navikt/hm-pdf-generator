@@ -1,13 +1,7 @@
 import { BlockMenuPlugin } from "@platejs/selection/react";
-import { type ReactNode, type RefObject, useState } from "react";
+import { type RefObject, useState } from "react";
 import { Box, Button, Tooltip } from "@navikt/ds-react";
-import { type Editor } from "platejs";
-import { TextApi } from "@platejs/slate";
-import {
-  useEditorPlugin,
-  useEditorSelector,
-  useEditorState,
-} from "platejs/react";
+import { useEditorPlugin, useEditorSelector } from "platejs/react";
 import {
   BulletListIcon,
   ExpandIcon,
@@ -17,6 +11,9 @@ import { ListStyleType, someList, toggleList } from "@platejs/list";
 import BlokktypeMeny from "./BlokktypeMeny.tsx";
 import AngreKnapp from "./AngreKnapp.tsx";
 import GjentaKnapp from "./GjentaKnapp.tsx";
+import FetKnapp from "./FetKnapp.tsx";
+import KursivKnapp from "./KursivKnapp.tsx";
+import UnderlinjeKnapp from "./UnderlinjeKnapp.tsx";
 
 const Verktøylinje = ({
   editorIsFocused,
@@ -49,8 +46,6 @@ const Verktøylinje = ({
     [],
   );
 
-  const editorStateChange = useEditorState();
-
   return (
     <Box
       className="toolbar"
@@ -74,61 +69,9 @@ const Verktøylinje = ({
       <div className="left-items">
         <AngreKnapp />
         <GjentaKnapp />
-        <MarkButton
-          disabled={!editorOrToolbarInFocus}
-          format="bold"
-          icon={
-            <div
-              className={
-                editorOrToolbarInFocus &&
-                isMarkActive(editorStateChange, "bold")
-                  ? "menyKnappParent active"
-                  : "menyKnappParent"
-              }
-            >
-              F
-            </div>
-          }
-          title="Fet"
-          //keys={fetHurtigtast}
-        />
-        <MarkButton
-          disabled={!editorOrToolbarInFocus}
-          format="italic"
-          icon={
-            <i
-              className={
-                editorOrToolbarInFocus &&
-                isMarkActive(editorStateChange, "italic")
-                  ? "menyKnappParent active"
-                  : "menyKnappParent"
-              }
-            >
-              K
-            </i>
-          }
-          title="Kursiv"
-          //keys={fetHurtigtast}
-        />
-        <MarkButton
-          disabled={!editorOrToolbarInFocus}
-          format="underline"
-          icon={
-            <div
-              className={
-                editorOrToolbarInFocus &&
-                isMarkActive(editorStateChange, "underline")
-                  ? "menyKnappParent active"
-                  : "menyKnappParent"
-              }
-              style={{ textDecoration: "underline" }}
-            >
-              U
-            </div>
-          }
-          title="Underlinje"
-          //keys={fetHurtigtast}
-        />
+        <FetKnapp editorOrToolbarInFocus={editorOrToolbarInFocus} />
+        <KursivKnapp editorOrToolbarInFocus={editorOrToolbarInFocus} />
+        <UnderlinjeKnapp editorOrToolbarInFocus={editorOrToolbarInFocus} />
         <Tooltip content={"Punktliste"} keys={[]}>
           <Button
             disabled={!editorOrToolbarInFocus}
@@ -182,96 +125,3 @@ const Verktøylinje = ({
 };
 
 export default Verktøylinje;
-
-const MarkButton = ({
-  disabled,
-  format,
-  icon,
-  title,
-  keys,
-}: {
-  disabled?: boolean;
-  format: string;
-  icon: ReactNode;
-  title?: string;
-  keys?: string[];
-}) => {
-  const editor = useEditorState();
-  if (format == "undo" || format == "redo")
-    return (
-      <Tooltip content={title ? title : ""} keys={keys}>
-        <Button
-          disabled={
-            format == "undo"
-              ? editor.history.undos.length == 0
-              : format == "redo"
-                ? editor.history.redos.length == 0
-                : false
-          }
-          onMouseDown={(event: { preventDefault: () => void }) => {
-            event.preventDefault();
-            if (
-              format == "undo"
-                ? editor.history.undos.length == 0
-                : format == "redo"
-                  ? editor.history.redos.length == 0
-                  : false
-            )
-              return;
-            if (format === "undo") editor.undo();
-            if (format === "redo") editor.redo();
-          }}
-          variant="tertiary-neutral"
-          size="small"
-          icon={icon}
-        />
-      </Tooltip>
-    );
-  return (
-    <Tooltip content={title ? title : ""} keys={keys}>
-      <Button
-        disabled={disabled}
-        onMouseDown={(event: { preventDefault: () => void }) => {
-          event.preventDefault();
-          toggleMark(editor, format);
-        }}
-        variant={
-          !disabled && isMarkActive(editor, format)
-            ? "primary-neutral"
-            : "tertiary-neutral"
-        }
-        size="small"
-        icon={icon}
-      />
-    </Tooltip>
-  );
-};
-
-const isMarkActive = (editor: Editor, format: string) => {
-  const marks: any = editor.api.marks();
-  //console.log("here", marks ? marks[format] === true : false, format);
-  return marks ? marks[format] === true : false;
-};
-
-const toggleMark = (editor: Editor, format: string) => {
-  const isActive = isMarkActive(editor, format);
-  if (format === "clear") {
-    // remove all styles
-    editor.tf.setNodes(
-      {
-        bold: false,
-        italic: false,
-        underline: false,
-        change: false,
-        light: false,
-      },
-      { match: TextApi.isText },
-    );
-    // make it a paragrah
-    editor.tf.setNodes({ type: "paragraph", align: "left" });
-  } else if (isActive) {
-    editor.tf.removeMark(format);
-  } else {
-    editor.tf.addMark(format, true);
-  }
-};
