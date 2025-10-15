@@ -18,7 +18,7 @@ import {
   type RefObject,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -133,16 +133,19 @@ const Breveditor = ({
 
   // Skallér breveditor sitt innhold slik at Navs brevstandard sine px/pt verdier vises korrekt og propersjonalt.
   const editorContainerRef = useRef<HTMLDivElement>(null);
-  const editorContentRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (editorContainerRef.current && editorContentRef.current) {
+  const [editorContentScale, setEditorContentScale] = useState(1.0);
+  useLayoutEffect(() => {
+    if (editorContainerRef.current) {
       let designedWidth = 794; // 595pt in px
       if (!visMarger) designedWidth = 650; // 595pt - 108pt ((64-10)*2=108)
       let actualWidth = editorContainerRef.current.clientWidth;
       let scale = actualWidth / designedWidth;
-      editorContentRef.current.style.transform = `scale(${scale})`;
+      if (editorContentScale != scale) {
+        console.log("updating editor content scale");
+        setEditorContentScale(scale);
+      }
     }
-  }, [editorContainerRef, editorContentRef, visMarger]);
+  }, [visMarger]);
 
   return (
     <BreveditorContext
@@ -186,10 +189,12 @@ const Breveditor = ({
               }
             >
               <div
-                ref={editorContentRef}
                 className={
                   !visMarger ? "editor-content zoomed" : "editor-content"
                 }
+                style={{
+                  scale: editorContentScale,
+                }}
               >
                 <div className="page">
                   <div className="header">
