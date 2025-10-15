@@ -167,7 +167,7 @@ const Breveditor = ({
     >
       <Plate
         editor={editor}
-        onTextChange={(_) =>
+        onValueChange={(_) =>
           onChange &&
           onChange(
             editor.getApi(MarkdownPlugin).markdown.serialize({
