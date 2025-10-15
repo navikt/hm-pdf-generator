@@ -32,10 +32,12 @@ import { LinkPlugin } from "@platejs/link/react";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
 
 export interface BreveditorContextType {
-  fokuser: () => void;
-  harFokus: boolean;
-  breveditorEllerVerktøylinjeHarFokus: boolean;
-  settBreveditorEllerVerktøylinjeHarFokus: (harFokus: boolean) => void;
+  erPlateContentFokusert: boolean;
+  fokuserPlateContent: () => void;
+  erVerktoylinjeFokusert: boolean;
+  settVerktoylinjeFokusert: (fokus: boolean) => void;
+  erBreveditorEllerVerktoylinjeFokusert: boolean;
+  settBreveditorEllerVerktoylinjeFokusert: (fokus: boolean) => void;
   visMarger: boolean;
   settVisMarger: (visMarger: boolean) => void;
 }
@@ -93,15 +95,43 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
     [],
   );
 
-  const plateContentRef = useRef(null);
-  const [visMarger, settVisMarger] = useState(true);
-  const [breveditorHarFokus, settBreveditorHarFokus] = useState(false);
+  // Sett opp breveditor-context state
+  const [erPlateContentFokusert, settPlateContentFokusert] = useState(false);
+  const [erVerktoylinjeFokusert, settVerktoylinjeFokusert] = useState(false);
   const [
-    breveditorEllerVerktøylinjeHarFokus,
-    settBreveditorEllerVerktøylinjeHarFokus,
+    erBreveditorEllerVerktoylinjeFokusert,
+    settBreveditorEllerVerktoylinjeFokusert,
   ] = useState(false);
+  const [visMarger, settVisMarger] = useState(true);
 
-  // Skaller breveditor sitt innhold slik at Navs brevstandard sine px/pt verdier vises korrekt og propersjonalt.
+  const settPlateContentFokusertWrapped = useCallback(
+    (b: boolean) => {
+      settPlateContentFokusert(b);
+      settBreveditorEllerVerktoylinjeFokusert(b || erVerktoylinjeFokusert);
+    },
+    [settPlateContentFokusert, erVerktoylinjeFokusert],
+  );
+
+  const settVerktoylinjeFokusertWrapped = useCallback(
+    (b: boolean) => {
+      settVerktoylinjeFokusert(b);
+      settBreveditorEllerVerktoylinjeFokusert(b || erPlateContentFokusert);
+    },
+    [settVerktoylinjeFokusert, erPlateContentFokusert],
+  );
+
+  const plateContentRef = useRef(null);
+  const fokuserPlateContent = useCallback(() => {
+    if (plateContentRef)
+      // Har en liten timeout her for å la eventer propagere opp og ned før vi fokuserer på PlateContent igjen, hvis delay
+      // er for liten så mister vi selection i Platejs editoren
+      setTimeout(
+        () => (plateContentRef as RefObject<any>).current?.focus(),
+        100,
+      );
+  }, [plateContentRef]);
+
+  // Skallér breveditor sitt innhold slik at Navs brevstandard sine px/pt verdier vises korrekt og propersjonalt.
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorContentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -114,25 +144,17 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
     }
   }, [editorContainerRef, editorContentRef, visMarger]);
 
-  const fokuserBreveditor = useCallback(() => {
-    // Har en liten timeout her for å la eventer propagere opp og ned før vi fokuserer på PlateContent igjen, hvis delay
-    // er for liten så mister vi selection i Platejs editoren
-    if (plateContentRef)
-      setTimeout(
-        () => (plateContentRef as RefObject<any>).current?.focus(),
-        100,
-      );
-  }, [plateContentRef]);
-
   return (
     <BreveditorContext
       value={{
-        fokuser: fokuserBreveditor,
-        harFokus: breveditorHarFokus,
-        breveditorEllerVerktøylinjeHarFokus:
-          breveditorEllerVerktøylinjeHarFokus,
-        settBreveditorEllerVerktøylinjeHarFokus:
-          settBreveditorEllerVerktøylinjeHarFokus,
+        erPlateContentFokusert: erPlateContentFokusert,
+        fokuserPlateContent: fokuserPlateContent,
+        erVerktoylinjeFokusert: erVerktoylinjeFokusert,
+        settVerktoylinjeFokusert: settVerktoylinjeFokusertWrapped,
+        erBreveditorEllerVerktoylinjeFokusert:
+          erBreveditorEllerVerktoylinjeFokusert,
+        settBreveditorEllerVerktoylinjeFokusert:
+          settBreveditorEllerVerktoylinjeFokusert,
         visMarger: visMarger,
         settVisMarger: settVisMarger,
       }}
@@ -174,11 +196,8 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
                   </div>
                   <PlateContent
                     ref={plateContentRef}
-                    onBlur={() => settBreveditorHarFokus(false)}
-                    onFocus={() => {
-                      settBreveditorHarFokus(true);
-                      settBreveditorEllerVerktøylinjeHarFokus(true);
-                    }}
+                    onBlur={() => settPlateContentFokusertWrapped(false)}
+                    onFocus={() => settPlateContentFokusertWrapped(true)}
                     placeholder="Skriv et fantastisk brev her..."
                     className="contentEditable"
                   />

@@ -19,11 +19,11 @@ const ListeKnapp = ({
     (editor) => someList(editor, [listeStilType]),
     [],
   );
-  const active = breveditor.harFokus && pressed;
+  const active = breveditor.erPlateContentFokusert && pressed;
   return (
     <Tooltip content={tittel} keys={[]}>
       <Button
-        disabled={!breveditor.harFokus}
+        disabled={!breveditor.erPlateContentFokusert}
         icon={ikon}
         size="small"
         variant={active ? "primary-neutral" : "tertiary-neutral"}

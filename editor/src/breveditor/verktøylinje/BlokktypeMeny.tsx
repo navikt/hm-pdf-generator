@@ -63,13 +63,13 @@ const BlokktypeMeny = ({}: {}) => {
   const moreThanOneBlockSelected = (() =>
     editorStateChange.api.blocks().length > 1)();
   const noBlockSelected = (() =>
-    !breveditor.breveditorEllerVerktøylinjeHarFokus ||
+    !breveditor.erBreveditorEllerVerktoylinjeFokusert ||
     editorStateChange.api.blocks().length == 0)();
 
   return (
     <ActionMenu
       onOpenChange={(open) => {
-        if (!open) breveditor.fokuser();
+        if (!open) breveditor.fokuserPlateContent();
       }}
     >
       <ActionMenu.Trigger>
@@ -78,7 +78,7 @@ const BlokktypeMeny = ({}: {}) => {
           icon={<ChevronDownIcon aria-hidden />}
           iconPosition="right"
           size="small"
-          disabled={!breveditor.breveditorEllerVerktøylinjeHarFokus}
+          disabled={!breveditor.erBreveditorEllerVerktoylinjeFokusert}
         >
           {noBlockSelected && (
             <span style={{ minWidth: "50px", display: "inline-block" }}>-</span>

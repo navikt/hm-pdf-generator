@@ -14,11 +14,12 @@ const MarkKnapp = ({
 }) => {
   const breveditor = useBreveditorContext();
   const editor = useEditorState();
-  const active = breveditor.harFokus && !!editor.api.mark(markKey);
+  const active =
+    breveditor.erPlateContentFokusert && !!editor.api.mark(markKey);
   return (
     <Tooltip content={tittel} keys={[]}>
       <Button
-        disabled={!breveditor.harFokus}
+        disabled={!breveditor.erPlateContentFokusert}
         onMouseDown={(event: { preventDefault: () => void }) => {
           event.preventDefault();
           editor.tf.toggleMark(markKey);

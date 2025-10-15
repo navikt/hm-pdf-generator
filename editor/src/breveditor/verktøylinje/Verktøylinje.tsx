@@ -16,24 +16,16 @@ const Verktøylinje = ({}: {}) => {
     <Box
       className="toolbar"
       onMouseDown={(e) => {
-        const target = e.target as HTMLElement;
-        // Allow text inputs, textareas, selects, and contenteditable elements
-        if (
-          target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.tagName === "SELECT" ||
-          target.isContentEditable
-        ) {
-          return; // Do not prevent default
-        }
         // Prevent default for all other elements
         e.preventDefault();
       }}
       onFocusCapture={(_) =>
-        breveditor.settBreveditorEllerVerktøylinjeHarFokus(true)
+        breveditor.settBreveditorEllerVerktoylinjeFokusert(true)
       }
       onBlurCapture={(_) =>
-        breveditor.settBreveditorEllerVerktøylinjeHarFokus(breveditor.harFokus)
+        breveditor.settBreveditorEllerVerktoylinjeFokusert(
+          breveditor.erPlateContentFokusert,
+        )
       }
     >
       <div className="left-items">
