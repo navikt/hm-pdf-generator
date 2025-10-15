@@ -55,7 +55,13 @@ export const useBreveditorContext = () => {
   return ctx!!;
 };
 
-const Breveditor = ({ markdown }: { markdown: string }) => {
+const Breveditor = ({
+  templateMarkdown: markdown,
+  onChange,
+}: {
+  templateMarkdown: string;
+  onChange?: (markdown: string) => void;
+}) => {
   let editor = usePlateEditor(
     {
       plugins: [
@@ -159,7 +165,17 @@ const Breveditor = ({ markdown }: { markdown: string }) => {
         settVisMarger: settVisMarger,
       }}
     >
-      <Plate editor={editor}>
+      <Plate
+        editor={editor}
+        onTextChange={(_) =>
+          onChange &&
+          onChange(
+            editor.getApi(MarkdownPlugin).markdown.serialize({
+              remarkPlugins: [remarkMdx],
+            }),
+          )
+        }
+      >
         <div className="editor-container-container">
           <Verktøylinje />
           <div

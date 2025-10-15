@@ -21,7 +21,7 @@ function App() {
   };
 
   // @ts-ignore
-  const markdown = `
+  const template = `
     # Du får tilskudd til briller
     
     Hei,
@@ -99,7 +99,10 @@ function App() {
           background: "#242424",
         }}
       >
-        <Breveditor markdown={markdown} />
+        <Breveditor
+          templateMarkdown={template}
+          onChange={(md) => console.log("onChange", md.substring(0, 400))}
+        />
       </div>
       <div
         style={{
