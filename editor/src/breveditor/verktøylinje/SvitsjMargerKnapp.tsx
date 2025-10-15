@@ -1,24 +1,24 @@
 import { Button, Tooltip } from "@navikt/ds-react";
-import { ExpandIcon } from "@navikt/aksel-icons";
+import { ExpandIcon, ShrinkIcon } from "@navikt/aksel-icons";
+import { useBreveditorContext } from "../Breveditor.tsx";
 
-const SvitsjMargerKnapp = ({
-  erZoomed,
-  settZoomed,
-}: {
-  erZoomed: boolean;
-  settZoomed: (zoom: boolean) => void;
-}) => {
+const SvitsjMargerKnapp = ({}: {}) => {
+  const breveditor = useBreveditorContext();
   return (
-    <Tooltip content={erZoomed ? "Vis marger" : "Skjul marger"} keys={[]}>
+    <Tooltip
+      content={!breveditor.visMarger ? "Vis marger" : "Skjul marger"}
+      keys={[]}
+    >
       <Button
         icon={
-          <ExpandIcon
-            title={erZoomed ? "Vis marger" : "Skjul marger"}
-            fontSize="1rem"
-          />
+          !breveditor.visMarger ? (
+            <ShrinkIcon title="Vis marger" fontSize="1rem" />
+          ) : (
+            <ExpandIcon title="Skjul marger" fontSize="1rem" />
+          )
         }
-        onClick={() => settZoomed(!erZoomed)}
-        variant="tertiary-neutral"
+        onClick={() => breveditor.settVisMarger(!breveditor.visMarger)}
+        variant={breveditor.visMarger ? "tertiary-neutral" : "primary-neutral"}
         size="small"
       />
     </Tooltip>

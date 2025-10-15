@@ -3,7 +3,6 @@ import {
   BlockSelectionPlugin,
 } from "@platejs/selection/react";
 import * as React from "react";
-import { type RefObject } from "react";
 import { ActionMenu, Button } from "@navikt/ds-react";
 import { KEYS } from "platejs";
 import {
@@ -20,14 +19,10 @@ import {
 } from "@navikt/aksel-icons";
 import { ListStyleType, someList, toggleList } from "@platejs/list";
 import { TypeH1, TypeH2, TypeH3 } from "@styled-icons/bootstrap";
+import { useBreveditorContext } from "../Breveditor.tsx";
 
-const BlokktypeMeny = ({
-  editorOrToolbarInFocus,
-  plateContentRef,
-}: {
-  editorOrToolbarInFocus: boolean;
-  plateContentRef: RefObject<any>;
-}) => {
+const BlokktypeMeny = ({}: {}) => {
+  const breveditor = useBreveditorContext();
   const { editor } = useEditorPlugin(BlockMenuPlugin);
 
   const turnInto = React.useCallback(
@@ -49,12 +44,7 @@ const BlokktypeMeny = ({
   );
 
   const punktlistePressed = useEditorSelector(
-    (editor) =>
-      someList(editor, [
-        ListStyleType.Disc,
-        ListStyleType.Circle,
-        ListStyleType.Square,
-      ]),
+    (editor) => someList(editor, [ListStyleType.Circle]),
     [],
   );
 
@@ -65,20 +55,21 @@ const BlokktypeMeny = ({
 
   const editorStateChange = useEditorState();
   const blockType = (() => {
-    if (punktlistePressed) return "ul";
-    if (nummerertListePressed) return "ol";
+    if (punktlistePressed) return KEYS.ulClassic;
+    if (nummerertListePressed) return KEYS.olClassic;
     let blocks = editorStateChange.api.blocks();
     return blocks.length == 1 ? blocks[0]!![0]!!.type : undefined;
   })();
   const moreThanOneBlockSelected = (() =>
     editorStateChange.api.blocks().length > 1)();
   const noBlockSelected = (() =>
-    !editorOrToolbarInFocus || editorStateChange.api.blocks().length == 0)();
+    !breveditor.breveditorEllerVerktøylinjeHarFokus ||
+    editorStateChange.api.blocks().length == 0)();
 
   return (
     <ActionMenu
       onOpenChange={(open) => {
-        if (!open) setTimeout(() => plateContentRef.current?.focus(), 10);
+        if (!open) breveditor.fokuser();
       }}
     >
       <ActionMenu.Trigger>
@@ -87,30 +78,30 @@ const BlokktypeMeny = ({
           icon={<ChevronDownIcon aria-hidden />}
           iconPosition="right"
           size="small"
-          disabled={!editorOrToolbarInFocus}
+          disabled={!breveditor.breveditorEllerVerktøylinjeHarFokus}
         >
           {noBlockSelected && (
             <span style={{ minWidth: "50px", display: "inline-block" }}>-</span>
           )}
           {!noBlockSelected && moreThanOneBlockSelected && <>Flere</>}
-          {!noBlockSelected && blockType == "p" && <>Brødtekst</>}
-          {!noBlockSelected && blockType == "h1" && <>Tittel</>}
-          {!noBlockSelected && blockType == "h2" && <>Overskrift 1</>}
-          {!noBlockSelected && blockType == "h3" && <>Overskrift 2</>}
-          {!noBlockSelected && blockType == "h4" && <>Overskrift 3</>}
+          {!noBlockSelected && blockType == KEYS.p && <>Brødtekst</>}
+          {!noBlockSelected && blockType == KEYS.h1 && <>Tittel</>}
+          {!noBlockSelected && blockType == KEYS.h2 && <>Overskrift 1</>}
+          {!noBlockSelected && blockType == KEYS.h3 && <>Overskrift 2</>}
+          {!noBlockSelected && blockType == KEYS.h4 && <>Overskrift 3</>}
           {!noBlockSelected &&
             !moreThanOneBlockSelected &&
-            blockType == "ul" && <>Punktliste</>}
+            blockType == KEYS.ulClassic && <>Punktliste</>}
           {!noBlockSelected &&
             !moreThanOneBlockSelected &&
-            blockType == "ol" && <>Nummerert liste</>}
+            blockType == KEYS.olClassic && <>Nummerert liste</>}
         </Button>
       </ActionMenu.Trigger>
       <ActionMenu.Content>
         <ActionMenu.Group label="Grunnleggende stiler">
           <ActionMenu.Item
             icon={<Density3Icon title="Brødtekst" fontSize="1rem" />}
-            onSelect={(_) => turnInto("p")}
+            onSelect={(_) => turnInto(KEYS.p)}
           >
             Brødtekst
           </ActionMenu.Item>
@@ -118,7 +109,7 @@ const BlokktypeMeny = ({
         <ActionMenu.Group label="Overskrifter">
           <ActionMenu.Item
             icon={<PencilWritingFillIcon title="Tittel" fontSize="1rem" />}
-            onSelect={(_) => turnInto("h1")}
+            onSelect={(_) => turnInto(KEYS.h1)}
           >
             Tittel
           </ActionMenu.Item>
@@ -130,7 +121,7 @@ const BlokktypeMeny = ({
                 style={{ scale: "0.7" }}
               />
             }
-            onSelect={(_) => turnInto("h2")}
+            onSelect={(_) => turnInto(KEYS.h2)}
           >
             Overskrift 1
           </ActionMenu.Item>
@@ -142,7 +133,7 @@ const BlokktypeMeny = ({
                 style={{ scale: "0.7" }}
               />
             }
-            onSelect={(_) => turnInto("h3")}
+            onSelect={(_) => turnInto(KEYS.h3)}
           >
             Overskrift 2
           </ActionMenu.Item>
@@ -154,7 +145,7 @@ const BlokktypeMeny = ({
                 style={{ scale: "0.7" }}
               />
             }
-            onSelect={(_) => turnInto("h4")}
+            onSelect={(_) => turnInto(KEYS.h4)}
           >
             Overskrift 3
           </ActionMenu.Item>

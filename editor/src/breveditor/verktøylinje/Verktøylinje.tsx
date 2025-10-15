@@ -1,4 +1,3 @@
-import { type RefObject, useState } from "react";
 import { Box } from "@navikt/ds-react";
 import BlokktypeMeny from "./BlokktypeMeny.tsx";
 import AngreKnapp from "./AngreKnapp.tsx";
@@ -9,21 +8,10 @@ import UnderlinjeKnapp from "./UnderlinjeKnapp.tsx";
 import PunktlisteKnapp from "./PunktlisteKnapp.tsx";
 import NummerertListeKnapp from "./NummerertListeKnapp.tsx";
 import SvitsjMargerKnapp from "./SvitsjMargerKnapp.tsx";
+import { useBreveditorContext } from "../Breveditor.tsx";
 
-const Verktøylinje = ({
-  editorIsFocused,
-  plateContentRef,
-  erZoomed,
-  settZoomed,
-}: {
-  editorIsFocused: boolean;
-  plateContentRef: RefObject<any>;
-  erZoomed: boolean;
-  settZoomed: (zoomed: boolean) => void;
-}) => {
-  const [erVerktøylinjeFokusert, settVerktøylinjeFokusert] = useState(false);
-  const editorOrToolbarInFocus = editorIsFocused || erVerktøylinjeFokusert;
-
+const Verktøylinje = ({}: {}) => {
+  const breveditor = useBreveditorContext();
   return (
     <Box
       className="toolbar"
@@ -41,24 +29,25 @@ const Verktøylinje = ({
         // Prevent default for all other elements
         e.preventDefault();
       }}
-      onFocusCapture={(_) => settVerktøylinjeFokusert(true)}
-      onBlurCapture={(_) => settVerktøylinjeFokusert(false)}
+      onFocusCapture={(_) =>
+        breveditor.settBreveditorEllerVerktøylinjeHarFokus(true)
+      }
+      onBlurCapture={(_) =>
+        breveditor.settBreveditorEllerVerktøylinjeHarFokus(breveditor.harFokus)
+      }
     >
       <div className="left-items">
         <AngreKnapp />
         <GjentaKnapp />
-        <FetKnapp editorOrToolbarInFocus={editorOrToolbarInFocus} />
-        <KursivKnapp editorOrToolbarInFocus={editorOrToolbarInFocus} />
-        <UnderlinjeKnapp editorOrToolbarInFocus={editorOrToolbarInFocus} />
-        <PunktlisteKnapp editorOrToolbarInFocus={editorOrToolbarInFocus} />
-        <NummerertListeKnapp editorOrToolbarInFocus={editorOrToolbarInFocus} />
-        <BlokktypeMeny
-          editorOrToolbarInFocus={editorOrToolbarInFocus}
-          plateContentRef={plateContentRef}
-        />
+        <FetKnapp />
+        <KursivKnapp />
+        <UnderlinjeKnapp />
+        <PunktlisteKnapp />
+        <NummerertListeKnapp />
+        <BlokktypeMeny />
       </div>
       <div className="right-items">
-        <SvitsjMargerKnapp erZoomed={erZoomed} settZoomed={settZoomed} />
+        <SvitsjMargerKnapp />
       </div>
     </Box>
   );

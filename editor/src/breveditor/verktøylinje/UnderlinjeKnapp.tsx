@@ -1,10 +1,6 @@
 import MarkKnapp from "./hjelpere/MarkKnapp.tsx";
 
-const UnderlinjeKnapp = ({
-  editorOrToolbarInFocus,
-}: {
-  editorOrToolbarInFocus: boolean;
-}) => {
+const UnderlinjeKnapp = ({}: {}) => {
   return (
     <MarkKnapp
       tittel="Underlinje"
@@ -18,7 +14,6 @@ const UnderlinjeKnapp = ({
           U
         </span>
       }
-      editorOrToolbarInFocus={editorOrToolbarInFocus}
     />
   );
 };

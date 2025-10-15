@@ -1,10 +1,6 @@
 import MarkKnapp from "./hjelpere/MarkKnapp.tsx";
 
-const KursivKnapp = ({
-  editorOrToolbarInFocus,
-}: {
-  editorOrToolbarInFocus: boolean;
-}) => {
+const KursivKnapp = ({}: {}) => {
   return (
     <MarkKnapp
       tittel="Kursiv"
@@ -18,7 +14,6 @@ const KursivKnapp = ({
           K
         </span>
       }
-      editorOrToolbarInFocus={editorOrToolbarInFocus}
     />
   );
 };
