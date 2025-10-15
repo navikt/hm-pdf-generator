@@ -14,10 +14,6 @@ import {
   BaseUnderlinePlugin,
 } from "@platejs/basic-nodes";
 import {
-  BlockMenuPlugin,
-  BlockSelectionPlugin,
-} from "@platejs/selection/react";
-import {
   createContext,
   type RefObject,
   useCallback,
@@ -84,8 +80,6 @@ const Breveditor = ({
           BaseUnderlinePlugin,
           BoldPlugin,
           LinkPlugin,
-          BlockMenuPlugin,
-          BlockSelectionPlugin,
           ListPlugin.configure({
             inject: {
               targetPlugins: [...KEYS.heading, KEYS.p],

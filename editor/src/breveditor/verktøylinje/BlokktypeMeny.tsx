@@ -1,15 +1,7 @@
-import {
-  BlockMenuPlugin,
-  BlockSelectionPlugin,
-} from "@platejs/selection/react";
 import * as React from "react";
 import { ActionMenu, Button } from "@navikt/ds-react";
 import { KEYS } from "platejs";
-import {
-  useEditorPlugin,
-  useEditorSelector,
-  useEditorState,
-} from "platejs/react";
+import { useEditorSelector, useEditorState } from "platejs/react";
 import {
   BulletListIcon,
   ChevronDownIcon,
@@ -23,22 +15,20 @@ import { useBreveditorContext } from "../Breveditor.tsx";
 
 const BlokktypeMeny = ({}: {}) => {
   const breveditor = useBreveditorContext();
-  const { editor } = useEditorPlugin(BlockMenuPlugin);
+  // const { editor } = useEditorPlugin(BlockMenuPlugin);
 
+  const editor = useEditorState();
   const turnInto = React.useCallback(
     (type: string) => {
-      editor
-        .getApi(BlockSelectionPlugin)
-        .blocks()
-        .forEach(([node, path]) => {
-          if (node[KEYS.listType]) {
-            editor.tf.unsetNodes([KEYS.listType, "indent"], {
-              at: path,
-            });
-          }
-          editor.tf.resetBlock({ at: path });
-          editor.tf.toggleBlock(type, { at: path });
-        });
+      editor.api.blocks().forEach(([node, path]) => {
+        if (node[KEYS.listType]) {
+          editor.tf.unsetNodes([KEYS.listType, "indent"], {
+            at: path,
+          });
+        }
+        editor.tf.resetBlock({ at: path });
+        editor.tf.toggleBlock(type, { at: path });
+      });
     },
     [editor],
   );
