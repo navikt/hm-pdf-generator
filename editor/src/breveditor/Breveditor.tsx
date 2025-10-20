@@ -26,6 +26,8 @@ import NavLogo from "./../assets/nav-logo.svg?react";
 import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { LinkPlugin } from "@platejs/link/react";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
+import { LinkElement } from "./hjelpere/LinkElement.tsx";
+import { LinkFlytendeVerktøylinje } from "./hjelpere/LinkFlytendeVerktøylinje.tsx";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
@@ -79,7 +81,12 @@ const Breveditor = ({
           BaseItalicPlugin,
           BaseUnderlinePlugin,
           BoldPlugin,
-          LinkPlugin,
+          LinkPlugin.configure({
+            render: {
+              node: LinkElement,
+              afterEditable: () => <LinkFlytendeVerktøylinje />,
+            },
+          }),
           ListPlugin.configure({
             inject: {
               targetPlugins: [...KEYS.heading, KEYS.p],
@@ -192,9 +199,11 @@ const Breveditor = ({
                 className={
                   !visMarger ? "editor-content zoomed" : "editor-content"
                 }
-                style={{
-                  scale: editorContentScale,
-                }}
+                style={
+                  {
+                    //scale: editorContentScale,
+                  }
+                }
               >
                 <div className="page">
                   <div className="header">

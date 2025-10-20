@@ -48,6 +48,7 @@
   font-size: 11pt;
   font-weight: normal;
   line-height: 16pt;
+  position: relative;
 }
 .editor-content.zoomed .page {
   margin: 30pt 10pt 74pt 10pt !important;
