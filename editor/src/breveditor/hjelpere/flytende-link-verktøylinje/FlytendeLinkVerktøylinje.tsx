@@ -27,9 +27,9 @@ import {
   FloppydiskIcon,
   LinkBrokenIcon,
 } from "@navikt/aksel-icons";
-import breveditor, { useBreveditorContext } from "../Breveditor.tsx";
+import { useBreveditorContext } from "../../Breveditor.tsx";
 
-export function LinkFlytendeVerktøylinje({
+export function FlytendeLinkVerktYlinje({
   state,
 }: {
   state?: LinkFloatingToolbarState;

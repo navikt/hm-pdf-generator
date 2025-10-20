@@ -26,8 +26,8 @@ import NavLogo from "./../assets/nav-logo.svg?react";
 import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { LinkPlugin } from "@platejs/link/react";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
-import { LinkElement } from "./hjelpere/LinkElement.tsx";
-import { LinkFlytendeVerktøylinje } from "./hjelpere/LinkFlytendeVerktøylinje.tsx";
+import { LinkElement } from "./hjelpere/flytende-link-verktøylinje/LinkElement.tsx";
+import { FlytendeLinkVerktYlinje } from "./hjelpere/flytende-link-verktøylinje/FlytendeLinkVerktøylinje.tsx";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
@@ -84,7 +84,7 @@ const Breveditor = ({
           LinkPlugin.configure({
             render: {
               node: LinkElement,
-              afterEditable: () => <LinkFlytendeVerktøylinje />,
+              afterEditable: () => <FlytendeLinkVerktYlinje />,
             },
             options: {
               allowedSchemes: ["http", "https"],
