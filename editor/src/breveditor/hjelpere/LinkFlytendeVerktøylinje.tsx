@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { type KeyboardEvent, useState } from "react";
 import type { TLinkElement } from "platejs";
 import { KEYS } from "platejs";
 import {
@@ -27,12 +27,15 @@ import {
   FloppydiskIcon,
   LinkBrokenIcon,
 } from "@navikt/aksel-icons";
+import breveditor, { useBreveditorContext } from "../Breveditor.tsx";
 
 export function LinkFlytendeVerktøylinje({
   state,
 }: {
   state?: LinkFloatingToolbarState;
 }) {
+  const breveditor = useBreveditorContext();
+
   const floatingOptions: UseVirtualFloatingOptions = React.useMemo(() => {
     return {
       middleware: [
@@ -92,7 +95,7 @@ export function LinkFlytendeVerktøylinje({
   };
 
   // Overstyr lagringsforsøk til å bruke vår funksjon slik at vi får feilhåndtering
-  const onKeyDownCapture = (e) => {
+  const onKeyDownCapture = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       attemptSubmit();
@@ -124,6 +127,17 @@ export function LinkFlytendeVerktøylinje({
         onClick={attemptSubmit}
       >
         Lagre
+      </Button>
+      <Button
+        icon={<LinkBrokenIcon />}
+        variant="tertiary-neutral"
+        size="small"
+        onClick={() => {
+          unlinkButtonProps.onClick();
+          breveditor.fokuserPlateContent();
+        }}
+      >
+        Fjern link
       </Button>
     </VStack>
   );

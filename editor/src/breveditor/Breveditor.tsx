@@ -89,7 +89,7 @@ const Breveditor = ({
             options: {
               allowedSchemes: ["http", "https"],
               transformInput: (url) => {
-                if (!/^(http|https):\/\//.test(url)) return `http://${url}`;
+                if (!/^[^:]+:\/\//.test(url)) return `http://${url}`;
                 return url;
               },
             },
