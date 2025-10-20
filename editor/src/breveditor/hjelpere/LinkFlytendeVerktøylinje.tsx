@@ -1,34 +1,32 @@
-"use client";
-
 import * as React from "react";
-
+import { useState } from "react";
 import type { TLinkElement } from "platejs";
 import { KEYS } from "platejs";
-
-import { type UseVirtualFloatingOptions } from "@platejs/floating";
+import {
+  flip,
+  offset,
+  type UseVirtualFloatingOptions,
+} from "@platejs/floating";
 import { getLinkAttributes } from "@platejs/link";
 import {
   type LinkFloatingToolbarState,
+  submitFloatingLink,
   useFloatingLinkEdit,
   useFloatingLinkEditState,
   useFloatingLinkInsert,
   useFloatingLinkInsertState,
+  useFloatingLinkUrlInput,
+  useFloatingLinkUrlInputState,
 } from "@platejs/link/react";
-//import { ExternalLink, Link, Text, Unlink } from "lucide-react";
+
 import { useEditorRef, useEditorSelection } from "platejs/react";
-
-//import { buttonVariants } from "@/components/ui/button";
-//import { Separator } from "@/components/ui/separator";
-
-const buttonVariants = (_: any) => "";
-
-const popoverVariants = () => "fixed-width"; /*cva(
-  "z-50 w-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden",
-);*/
-
-// const inputVariants = () => ""; /*cva(
-//   "flex h-[28px] w-full rounded-md border-none bg-transparent px-1.5 py-1 text-base placeholder:text-muted-foreground focus-visible:ring-transparent focus-visible:outline-none md:text-sm",
-// );*/
+import { Box, Button, HStack, TextField, VStack } from "@navikt/ds-react";
+import {
+  DocPencilIcon,
+  ExternalLinkIcon,
+  FloppydiskIcon,
+  LinkBrokenIcon,
+} from "@navikt/aksel-icons";
 
 export function LinkFlytendeVerktøylinje({
   state,
@@ -37,13 +35,13 @@ export function LinkFlytendeVerktøylinje({
 }) {
   const floatingOptions: UseVirtualFloatingOptions = React.useMemo(() => {
     return {
-      // middleware: [
-      //   offset(8),
-      //   flip({
-      //     fallbackPlacements: ["bottom-end", "top-start", "top-end"],
-      //     padding: 12,
-      //   }),
-      // ],
+      middleware: [
+        offset(8),
+        flip({
+          fallbackPlacements: ["bottom-end", "top-start", "top-end"],
+          padding: 12,
+        }),
+      ],
       placement: "bottom-start",
     };
   }, []);
@@ -58,11 +56,10 @@ export function LinkFlytendeVerktøylinje({
 
   const {
     hidden,
-    //props: insertProps,
-    //ref: insertRef,
-    //textInputProps,
+    props: insertProps,
+    ref: insertRef,
+    textInputProps,
   } = useFloatingLinkInsert(insertState);
-
   const editState = useFloatingLinkEditState({
     ...state,
     floatingOptions: {
@@ -71,6 +68,10 @@ export function LinkFlytendeVerktøylinje({
     },
   });
 
+  const { props: linkProps, ref: linkRef } = useFloatingLinkUrlInput(
+    useFloatingLinkUrlInputState(),
+  );
+
   const {
     editButtonProps,
     props: editProps,
@@ -78,80 +79,106 @@ export function LinkFlytendeVerktøylinje({
     unlinkButtonProps,
   } = useFloatingLinkEdit(editState);
 
-  //const inputProps = useFormInputProps({
-  //  preventDefaultOnEnterKeydown: true,
-  //});
+  const editor = useEditorRef();
+
+  // Submit endringer og feilhåndtering
+  const [harUrlError, settHarUrlError] = useState(false);
+  const attemptSubmit = () => {
+    if (submitFloatingLink(editor)) {
+      settHarUrlError(false);
+    } else {
+      settHarUrlError(true);
+    }
+  };
+
+  // Overstyr lagringsforsøk til å bruke vår funksjon slik at vi får feilhåndtering
+  const onKeyDownCapture = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      attemptSubmit();
+    }
+  };
 
   if (hidden) return null;
 
-  /*const input = (
-    <div className="flex w-[330px] flex-col" {...inputProps}>
-      <div className="flex items-center">
-        <div className="flex items-center pr-1 pl-2 text-muted-foreground">
-          <Link className="size-4" />}
-        </div>
-
-        <FloatingLinkUrlInput
-          className={inputVariants()}
-          placeholder="Paste link"
-          data-plate-focus
-        />
-      </div>
-      <Separator className="my-1" />
-      <div className="flex items-center">
-        <div className="flex items-center pr-1 pl-2 text-muted-foreground">
-          <Text className="size-4" />
-        </div>
-        <input
-          className={inputVariants()}
-          placeholder="Text to display"
-          data-plate-focus
-          {...textInputProps}
-        />
-      </div>
-    </div>
-  );*/
+  const inputContent = (
+    <VStack gap="4" padding="space-8" onKeyDownCapture={onKeyDownCapture}>
+      <TextField
+        label="Link adresse"
+        size="small"
+        error={harUrlError ? "Ugyldig adresse" : undefined}
+        ref={linkRef}
+        {...linkProps}
+      />
+      <TextField
+        label="Visningsnavn"
+        size="small"
+        style={{}}
+        data-plate-focus
+        {...textInputProps}
+      />
+      <Button
+        icon={<FloppydiskIcon />}
+        variant="tertiary"
+        size="small"
+        onClick={attemptSubmit}
+      >
+        Lagre
+      </Button>
+    </VStack>
+  );
 
   const editContent = editState.isEditing ? (
-    <></> // input
+    inputContent
   ) : (
     <div className="box-content flex items-center">
-      <button
-        className={buttonVariants({ size: "sm", variant: "ghost" })}
-        type="button"
-        {...editButtonProps}
-      >
-        Edit link
-      </button>
-
-      {/*<Separator orientation="vertical" />*/}
-
-      <LinkOpenButton />
-
-      {/*<Separator orientation="vertical" />*/}
-
-      <button
-        className={buttonVariants({
-          size: "sm",
-          variant: "ghost",
-        })}
-        type="button"
-        {...unlinkButtonProps}
-      >
-        {/*<Unlink width={18} />*/}
-      </button>
+      <HStack gap="1">
+        <Button
+          icon={<DocPencilIcon />}
+          variant="tertiary"
+          size="small"
+          {...editButtonProps}
+        >
+          Endre link
+        </Button>
+        <LinkOpenButton />
+        <Button
+          icon={<LinkBrokenIcon />}
+          variant="tertiary"
+          size="small"
+          {...unlinkButtonProps}
+        />
+      </HStack>
     </div>
   );
 
   return (
     <>
-      {/*<div ref={insertRef} className={popoverVariants()} {...insertProps}>
-        {input}
-      </div>*/}
+      <Box
+        background="surface-default"
+        padding="space-8"
+        borderRadius="xlarge"
+        borderColor="border-subtle"
+        borderWidth="1"
+        shadow="small"
+        ref={insertRef}
+        {...insertProps}
+      >
+        {inputContent}
+      </Box>
 
-      <div ref={editRef} className={popoverVariants()} {...editProps}>
+      <Box
+        background="surface-default"
+        padding="space-8"
+        borderRadius="xlarge"
+        borderColor="border-subtle"
+        borderWidth="1"
+        shadow="small"
+        ref={editRef}
+        {...editProps}
+      >
         {editContent}
-      </div>
+      </Box>
     </>
   );
 }
@@ -175,22 +202,19 @@ function LinkOpenButton() {
     [editor, selection],
   );
 
+  // TODO: Vurder å bruk next/link til å wrappe Button i stedenfor onClick, ala. forslag i Aksel. NPM var nede når jeg
+  // skrev denne koden, så bruker onClick nå!
   return (
-    <a
-      {...attributes}
-      className={buttonVariants({
-        size: "sm",
-        variant: "ghost",
-      })}
+    <Button
+      icon={<ExternalLinkIcon />}
+      variant="tertiary"
+      size="small"
       onMouseOver={(e) => {
         e.stopPropagation();
       }}
-      style={{ background: "red", padding: "1rem" }}
-      aria-label="Open link in a new tab"
-      target="_blank"
-    >
-      HELLO
-      {/*<ExternalLink width={18} />*/}
-    </a>
+      onClick={() => {
+        window.open(attributes.href, "_blank");
+      }}
+    />
   );
 }

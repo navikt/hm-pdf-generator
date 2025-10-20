@@ -9,6 +9,7 @@ import PunktlisteKnapp from "./PunktlisteKnapp.tsx";
 import NummerertListeKnapp from "./NummerertListeKnapp.tsx";
 import SvitsjMargerKnapp from "./SvitsjMargerKnapp.tsx";
 import { useBreveditorContext } from "../Breveditor.tsx";
+import LinkKnapp from "./LinkKnapp.tsx";
 
 const Verktøylinje = ({}: {}) => {
   const breveditor = useBreveditorContext();
@@ -36,6 +37,7 @@ const Verktøylinje = ({}: {}) => {
         <UnderlinjeKnapp />
         <PunktlisteKnapp />
         <NummerertListeKnapp />
+        <LinkKnapp />
         <BlokktypeMeny />
       </div>
       <div className="right-items">

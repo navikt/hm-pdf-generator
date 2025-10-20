@@ -86,6 +86,13 @@ const Breveditor = ({
               node: LinkElement,
               afterEditable: () => <LinkFlytendeVerktøylinje />,
             },
+            options: {
+              allowedSchemes: ["http", "https"],
+              transformInput: (url) => {
+                if (!/^(http|https):\/\//.test(url)) return `http://${url}`;
+                return url;
+              },
+            },
           }),
           ListPlugin.configure({
             inject: {
@@ -199,11 +206,9 @@ const Breveditor = ({
                 className={
                   !visMarger ? "editor-content zoomed" : "editor-content"
                 }
-                style={
-                  {
-                    //scale: editorContentScale,
-                  }
-                }
+                style={{
+                  scale: editorContentScale,
+                }}
               >
                 <div className="page">
                   <div className="header">
