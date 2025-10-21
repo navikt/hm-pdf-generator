@@ -8,7 +8,7 @@ import {
   useFloatingLinkUrlInput,
   useFloatingLinkUrlInputState,
 } from "@platejs/link/react";
-import { Box, Button, HStack } from "@navikt/ds-react";
+import { Box, Button, HStack, type BoxProps } from "@navikt/ds-react";
 import { DocPencilIcon, LinkBrokenIcon } from "@navikt/aksel-icons";
 import { EndreLink } from "./EndreLink.tsx";
 import { OpenLinkButton } from "./OpenLinkButton.tsx";
@@ -58,6 +58,15 @@ export function FlytendeLinkVerktøylinje() {
     useFloatingLinkUrlInputState(),
   );
 
+  const flytendeBoxProps: BoxProps = {
+    background: "surface-default",
+    padding: "space-8",
+    borderRadius: "xlarge",
+    borderColor: "border-subtle",
+    borderWidth: "1",
+    shadow: "small",
+  };
+
   if (floatingLinkInsert.hidden) return null;
 
   return (
@@ -69,48 +78,36 @@ export function FlytendeLinkVerktøylinje() {
       }}
     >
       <Box
-        background="surface-default"
-        padding="space-8"
-        borderRadius="xlarge"
-        borderColor="border-subtle"
-        borderWidth="1"
-        shadow="small"
         ref={floatingLinkInsert.ref}
         {...floatingLinkInsert.props}
+        {...flytendeBoxProps}
       >
         <EndreLink />
       </Box>
       <Box
-        background="surface-default"
-        padding="space-8"
-        borderRadius="xlarge"
-        borderColor="border-subtle"
-        borderWidth="1"
-        shadow="small"
         ref={floatingLinkEdit.ref}
         {...floatingLinkEdit.props}
+        {...flytendeBoxProps}
       >
         {floatingLinkEditState.isEditing && <EndreLink />}
         {!floatingLinkEditState.isEditing && (
-          <div className="box-content flex items-center">
-            <HStack gap="1">
-              <Button
-                icon={<DocPencilIcon />}
-                variant="tertiary"
-                size="small"
-                {...floatingLinkEdit.editButtonProps}
-              >
-                Endre link
-              </Button>
-              <OpenLinkButton />
-              <Button
-                icon={<LinkBrokenIcon />}
-                variant="tertiary"
-                size="small"
-                {...floatingLinkEdit.unlinkButtonProps}
-              />
-            </HStack>
-          </div>
+          <HStack gap="1">
+            <Button
+              icon={<DocPencilIcon />}
+              variant="tertiary"
+              size="small"
+              {...floatingLinkEdit.editButtonProps}
+            >
+              Endre link
+            </Button>
+            <OpenLinkButton />
+            <Button
+              icon={<LinkBrokenIcon />}
+              variant="tertiary"
+              size="small"
+              {...floatingLinkEdit.unlinkButtonProps}
+            />
+          </HStack>
         )}
       </Box>
     </FlytendeLinkVerktøylinjeContext>
