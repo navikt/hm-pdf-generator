@@ -12,6 +12,26 @@ import { Box, Button, HStack } from "@navikt/ds-react";
 import { DocPencilIcon, LinkBrokenIcon } from "@navikt/aksel-icons";
 import { EndreLink } from "./EndreLink.tsx";
 import { OpenLinkButton } from "./OpenLinkButton.tsx";
+import { createContext, useContext } from "react";
+
+export interface FlytendeLinkVerktøylinjeContextType {
+  floatingLinkInsert: ReturnType<typeof useFloatingLinkInsert>;
+  floatingLinkEdit: ReturnType<typeof useFloatingLinkEdit>;
+  floatingLinkUrlInput: ReturnType<typeof useFloatingLinkUrlInput>;
+}
+
+export const FlytendeLinkVerktøylinjeContext = createContext<
+  FlytendeLinkVerktøylinjeContextType | undefined
+>(undefined);
+
+export const useFlytendeLinkVerktøylinjeContext = () => {
+  const ctx = useContext(FlytendeLinkVerktøylinjeContext);
+  if (!ctx)
+    console.error(
+      "FlytendeLinkVerktøylinjeContext må eksistere utenfor alle andre flytendelink-verktøylinje komponenter!",
+    );
+  return ctx!!;
+};
 
 export function FlytendeLinkVerktøylinje() {
   const state: LinkFloatingToolbarState = {
@@ -27,29 +47,27 @@ export function FlytendeLinkVerktøylinje() {
     },
   };
 
-  const {
-    hidden,
-    props: insertProps,
-    ref: insertRef,
-    textInputProps,
-  } = useFloatingLinkInsert(useFloatingLinkInsertState(state));
+  const floatingLinkInsert = useFloatingLinkInsert(
+    useFloatingLinkInsertState(state),
+  );
 
-  const editState = useFloatingLinkEditState(state);
-  const {
-    props: editProps,
-    ref: editRef,
-    editButtonProps,
-    unlinkButtonProps,
-  } = useFloatingLinkEdit(editState);
+  const floatingLinkEditState = useFloatingLinkEditState(state);
+  const floatingLinkEdit = useFloatingLinkEdit(floatingLinkEditState);
 
-  const { props: linkProps, ref: linkRef } = useFloatingLinkUrlInput(
+  const floatingLinkUrlInput = useFloatingLinkUrlInput(
     useFloatingLinkUrlInputState(),
   );
 
-  if (hidden) return null;
+  if (floatingLinkInsert.hidden) return null;
 
   return (
-    <>
+    <FlytendeLinkVerktøylinjeContext
+      value={{
+        floatingLinkInsert,
+        floatingLinkEdit,
+        floatingLinkUrlInput,
+      }}
+    >
       <Box
         background="surface-default"
         padding="space-8"
@@ -57,15 +75,10 @@ export function FlytendeLinkVerktøylinje() {
         borderColor="border-subtle"
         borderWidth="1"
         shadow="small"
-        ref={insertRef}
-        {...insertProps}
+        ref={floatingLinkInsert.ref}
+        {...floatingLinkInsert.props}
       >
-        <EndreLink
-          textInputProps={textInputProps}
-          unlinkButtonProps={unlinkButtonProps}
-          linkProps={linkProps}
-          linkRef={linkRef}
-        />
+        <EndreLink />
       </Box>
       <Box
         background="surface-default"
@@ -74,25 +87,18 @@ export function FlytendeLinkVerktøylinje() {
         borderColor="border-subtle"
         borderWidth="1"
         shadow="small"
-        ref={editRef}
-        {...editProps}
+        ref={floatingLinkEdit.ref}
+        {...floatingLinkEdit.props}
       >
-        {editState.isEditing && (
-          <EndreLink
-            textInputProps={textInputProps}
-            unlinkButtonProps={unlinkButtonProps}
-            linkProps={linkProps}
-            linkRef={linkRef}
-          />
-        )}
-        {!editState.isEditing && (
+        {floatingLinkEditState.isEditing && <EndreLink />}
+        {!floatingLinkEditState.isEditing && (
           <div className="box-content flex items-center">
             <HStack gap="1">
               <Button
                 icon={<DocPencilIcon />}
                 variant="tertiary"
                 size="small"
-                {...editButtonProps}
+                {...floatingLinkEdit.editButtonProps}
               >
                 Endre link
               </Button>
@@ -101,12 +107,12 @@ export function FlytendeLinkVerktøylinje() {
                 icon={<LinkBrokenIcon />}
                 variant="tertiary"
                 size="small"
-                {...unlinkButtonProps}
+                {...floatingLinkEdit.unlinkButtonProps}
               />
             </HStack>
           </div>
         )}
       </Box>
-    </>
+    </FlytendeLinkVerktøylinjeContext>
   );
 }

@@ -1,39 +1,18 @@
 import { Button, TextField, VStack } from "@navikt/ds-react";
 import { FloppydiskIcon, LinkBrokenIcon } from "@navikt/aksel-icons";
 import { useEditorRef } from "platejs/react";
-import React__default, { type KeyboardEvent, useState } from "react";
+import { type KeyboardEvent, useState } from "react";
 import { submitFloatingLink } from "@platejs/link/react";
 import { useBreveditorContext } from "../../Breveditor.tsx";
+import { useFlytendeLinkVerktøylinjeContext } from "./FlytendeLinkVerktøylinje.tsx";
 
-export function EndreLink({
-  textInputProps,
-  unlinkButtonProps,
-  linkProps,
-  linkRef,
-}: {
-  /*
-      onUrlChange: ChangeEventHandler<HTMLInputElement>;
-      onTitleChange: ChangeEventHandler<HTMLInputElement>;
-      defaultValueUrl?: string;
-      defaultValueTitle?: string;
-   */
-  textInputProps: {
-    defaultValue: string;
-    ref: (el: HTMLInputElement) => void;
-    onChange: React__default.ChangeEventHandler<HTMLInputElement>;
-  };
-  unlinkButtonProps: {
-    onClick: () => void;
-    onMouseDown: (e: React__default.MouseEvent<HTMLButtonElement>) => void;
-  };
-  linkProps: {
-    defaultValue: string;
-    onChange: React__default.ChangeEventHandler<HTMLInputElement>;
-  };
-  linkRef: React__default.RefObject<HTMLInputElement | null>;
-}) {
+export function EndreLink() {
+  const ctx = useFlytendeLinkVerktøylinjeContext();
   const breveditor = useBreveditorContext();
+
   const editor = useEditorRef();
+
+  const { defaultValue: displayText } = ctx.floatingLinkInsert.textInputProps;
 
   // Submit endringer og feilhåndtering
   const [harUrlError, settHarUrlError] = useState(false);
@@ -57,17 +36,23 @@ export function EndreLink({
     <VStack gap="4" padding="space-8" onKeyDownCapture={onKeyDownCapture}>
       <TextField
         label="Link adresse"
+        placeholder="https://"
         size="small"
         error={harUrlError ? "Ugyldig adresse" : undefined}
-        ref={linkRef}
-        {...linkProps}
+        ref={ctx.floatingLinkUrlInput.ref}
+        defaultValue={
+          ctx.floatingLinkUrlInput.props.defaultValue.toString().trim()
+            .length == 0
+            ? displayText
+            : ctx.floatingLinkUrlInput.props.defaultValue.toString().trim()
+        }
+        onChange={ctx.floatingLinkUrlInput.props.onChange}
       />
       <TextField
         label="Visningsnavn"
         size="small"
-        style={{}}
         data-plate-focus
-        {...textInputProps}
+        {...ctx.floatingLinkInsert.textInputProps}
       />
       <Button
         icon={<FloppydiskIcon />}
@@ -82,7 +67,7 @@ export function EndreLink({
         variant="tertiary-neutral"
         size="small"
         onClick={() => {
-          unlinkButtonProps.onClick();
+          ctx.floatingLinkEdit.unlinkButtonProps.onClick();
           breveditor.fokuserPlateContent();
         }}
       >
