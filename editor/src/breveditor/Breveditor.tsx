@@ -27,7 +27,7 @@ import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { LinkPlugin } from "@platejs/link/react";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
 import { LinkElement } from "./hjelpere/flytende-link-verktøylinje/LinkElement.tsx";
-import { FlytendeLinkVerktYlinje } from "./hjelpere/flytende-link-verktøylinje/FlytendeLinkVerktøylinje.tsx";
+import { FlytendeLinkVerktøylinje } from "./hjelpere/flytende-link-verktøylinje/FlytendeLinkVerktøylinje.tsx";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
@@ -84,7 +84,7 @@ const Breveditor = ({
           LinkPlugin.configure({
             render: {
               node: LinkElement,
-              afterEditable: () => <FlytendeLinkVerktYlinje />,
+              afterEditable: () => <FlytendeLinkVerktøylinje />,
             },
             options: {
               allowedSchemes: ["http", "https"],

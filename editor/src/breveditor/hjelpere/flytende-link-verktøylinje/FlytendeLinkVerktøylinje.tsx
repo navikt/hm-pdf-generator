@@ -1,16 +1,6 @@
-import * as React from "react";
-import { type KeyboardEvent, useState } from "react";
-import type { TLinkElement } from "platejs";
-import { KEYS } from "platejs";
-import {
-  flip,
-  offset,
-  type UseVirtualFloatingOptions,
-} from "@platejs/floating";
-import { getLinkAttributes } from "@platejs/link";
+import { flip, offset } from "@platejs/floating";
 import {
   type LinkFloatingToolbarState,
-  submitFloatingLink,
   useFloatingLinkEdit,
   useFloatingLinkEditState,
   useFloatingLinkInsert,
@@ -18,26 +8,14 @@ import {
   useFloatingLinkUrlInput,
   useFloatingLinkUrlInputState,
 } from "@platejs/link/react";
+import { Box, Button, HStack } from "@navikt/ds-react";
+import { DocPencilIcon, LinkBrokenIcon } from "@navikt/aksel-icons";
+import { EndreLink } from "./EndreLink.tsx";
+import { OpenLinkButton } from "./OpenLinkButton.tsx";
 
-import { useEditorRef, useEditorSelection } from "platejs/react";
-import { Box, Button, HStack, TextField, VStack } from "@navikt/ds-react";
-import {
-  DocPencilIcon,
-  ExternalLinkIcon,
-  FloppydiskIcon,
-  LinkBrokenIcon,
-} from "@navikt/aksel-icons";
-import { useBreveditorContext } from "../../Breveditor.tsx";
-
-export function FlytendeLinkVerktYlinje({
-  state,
-}: {
-  state?: LinkFloatingToolbarState;
-}) {
-  const breveditor = useBreveditorContext();
-
-  const floatingOptions: UseVirtualFloatingOptions = React.useMemo(() => {
-    return {
+export function FlytendeLinkVerktøylinje() {
+  const state: LinkFloatingToolbarState = {
+    floatingOptions: {
       middleware: [
         offset(8),
         flip({
@@ -46,125 +24,29 @@ export function FlytendeLinkVerktYlinje({
         }),
       ],
       placement: "bottom-start",
-    };
-  }, []);
-
-  const insertState = useFloatingLinkInsertState({
-    ...state,
-    floatingOptions: {
-      ...floatingOptions,
-      ...state?.floatingOptions,
     },
-  });
+  };
 
   const {
     hidden,
     props: insertProps,
     ref: insertRef,
     textInputProps,
-  } = useFloatingLinkInsert(insertState);
-  const editState = useFloatingLinkEditState({
-    ...state,
-    floatingOptions: {
-      ...floatingOptions,
-      ...state?.floatingOptions,
-    },
-  });
+  } = useFloatingLinkInsert(useFloatingLinkInsertState(state));
+
+  const editState = useFloatingLinkEditState(state);
+  const {
+    props: editProps,
+    ref: editRef,
+    editButtonProps,
+    unlinkButtonProps,
+  } = useFloatingLinkEdit(editState);
 
   const { props: linkProps, ref: linkRef } = useFloatingLinkUrlInput(
     useFloatingLinkUrlInputState(),
   );
 
-  const {
-    editButtonProps,
-    props: editProps,
-    ref: editRef,
-    unlinkButtonProps,
-  } = useFloatingLinkEdit(editState);
-
-  const editor = useEditorRef();
-
-  // Submit endringer og feilhåndtering
-  const [harUrlError, settHarUrlError] = useState(false);
-  const attemptSubmit = () => {
-    if (submitFloatingLink(editor)) {
-      settHarUrlError(false);
-    } else {
-      settHarUrlError(true);
-    }
-  };
-
-  // Overstyr lagringsforsøk til å bruke vår funksjon slik at vi får feilhåndtering
-  const onKeyDownCapture = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      attemptSubmit();
-    }
-  };
-
   if (hidden) return null;
-
-  const inputContent = (
-    <VStack gap="4" padding="space-8" onKeyDownCapture={onKeyDownCapture}>
-      <TextField
-        label="Link adresse"
-        size="small"
-        error={harUrlError ? "Ugyldig adresse" : undefined}
-        ref={linkRef}
-        {...linkProps}
-      />
-      <TextField
-        label="Visningsnavn"
-        size="small"
-        style={{}}
-        data-plate-focus
-        {...textInputProps}
-      />
-      <Button
-        icon={<FloppydiskIcon />}
-        variant="tertiary"
-        size="small"
-        onClick={attemptSubmit}
-      >
-        Lagre
-      </Button>
-      <Button
-        icon={<LinkBrokenIcon />}
-        variant="tertiary-neutral"
-        size="small"
-        onClick={() => {
-          unlinkButtonProps.onClick();
-          breveditor.fokuserPlateContent();
-        }}
-      >
-        Fjern link
-      </Button>
-    </VStack>
-  );
-
-  const editContent = editState.isEditing ? (
-    inputContent
-  ) : (
-    <div className="box-content flex items-center">
-      <HStack gap="1">
-        <Button
-          icon={<DocPencilIcon />}
-          variant="tertiary"
-          size="small"
-          {...editButtonProps}
-        >
-          Endre link
-        </Button>
-        <LinkOpenButton />
-        <Button
-          icon={<LinkBrokenIcon />}
-          variant="tertiary"
-          size="small"
-          {...unlinkButtonProps}
-        />
-      </HStack>
-    </div>
-  );
 
   return (
     <>
@@ -178,9 +60,13 @@ export function FlytendeLinkVerktYlinje({
         ref={insertRef}
         {...insertProps}
       >
-        {inputContent}
+        <EndreLink
+          textInputProps={textInputProps}
+          unlinkButtonProps={unlinkButtonProps}
+          linkProps={linkProps}
+          linkRef={linkRef}
+        />
       </Box>
-
       <Box
         background="surface-default"
         padding="space-8"
@@ -191,44 +77,36 @@ export function FlytendeLinkVerktYlinje({
         ref={editRef}
         {...editProps}
       >
-        {editContent}
+        {editState.isEditing && (
+          <EndreLink
+            textInputProps={textInputProps}
+            unlinkButtonProps={unlinkButtonProps}
+            linkProps={linkProps}
+            linkRef={linkRef}
+          />
+        )}
+        {!editState.isEditing && (
+          <div className="box-content flex items-center">
+            <HStack gap="1">
+              <Button
+                icon={<DocPencilIcon />}
+                variant="tertiary"
+                size="small"
+                {...editButtonProps}
+              >
+                Endre link
+              </Button>
+              <OpenLinkButton />
+              <Button
+                icon={<LinkBrokenIcon />}
+                variant="tertiary"
+                size="small"
+                {...unlinkButtonProps}
+              />
+            </HStack>
+          </div>
+        )}
       </Box>
     </>
-  );
-}
-
-function LinkOpenButton() {
-  const editor = useEditorRef();
-  const selection = useEditorSelection();
-
-  const attributes = React.useMemo(
-    () => {
-      const entry = editor.api.node<TLinkElement>({
-        match: { type: editor.getType(KEYS.link) },
-      });
-      if (!entry) {
-        return {};
-      }
-      const [element] = entry;
-      return getLinkAttributes(editor, element);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [editor, selection],
-  );
-
-  // TODO: Vurder å bruk next/link til å wrappe Button i stedenfor onClick, ala. forslag i Aksel. NPM var nede når jeg
-  // skrev denne koden, så bruker onClick nå!
-  return (
-    <Button
-      icon={<ExternalLinkIcon />}
-      variant="tertiary"
-      size="small"
-      onMouseOver={(e) => {
-        e.stopPropagation();
-      }}
-      onClick={() => {
-        window.open(attributes.href, "_blank");
-      }}
-    />
   );
 }
