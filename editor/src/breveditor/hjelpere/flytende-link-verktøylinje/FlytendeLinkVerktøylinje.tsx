@@ -8,9 +8,9 @@ import {
   useFloatingLinkUrlInput,
   useFloatingLinkUrlInputState,
 } from "@platejs/link/react";
-import { Box, Button, HStack, type BoxProps } from "@navikt/ds-react";
+import { Box, type BoxProps, Button, HStack } from "@navikt/ds-react";
 import { DocPencilIcon, LinkBrokenIcon } from "@navikt/aksel-icons";
-import { EndreLink } from "./EndreLink.tsx";
+import { OpprettEndreLinkPanel } from "./OpprettEndreLinkPanel.tsx";
 import { OpenLinkButton } from "./OpenLinkButton.tsx";
 import { createContext, useContext } from "react";
 
@@ -82,14 +82,14 @@ export function FlytendeLinkVerktøylinje() {
         {...floatingLinkInsert.props}
         {...flytendeBoxProps}
       >
-        <EndreLink />
+        <OpprettEndreLinkPanel />
       </Box>
       <Box
         ref={floatingLinkEdit.ref}
         {...floatingLinkEdit.props}
         {...flytendeBoxProps}
       >
-        {floatingLinkEditState.isEditing && <EndreLink />}
+        {floatingLinkEditState.isEditing && <OpprettEndreLinkPanel />}
         {!floatingLinkEditState.isEditing && (
           <HStack gap="1">
             <Button

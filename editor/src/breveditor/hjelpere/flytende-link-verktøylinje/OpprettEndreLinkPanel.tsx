@@ -1,22 +1,35 @@
-import { Button, TextField, VStack } from "@navikt/ds-react";
+import { Button, omit, TextField, VStack } from "@navikt/ds-react";
 import { FloppydiskIcon, LinkBrokenIcon } from "@navikt/aksel-icons";
-import { useEditorRef } from "platejs/react";
-import { type KeyboardEvent, useState } from "react";
-import { submitFloatingLink } from "@platejs/link/react";
+import { useEditorPlugin, useEditorRef } from "platejs/react";
+import { type KeyboardEvent, useEffect, useState } from "react";
+import { LinkPlugin, submitFloatingLink } from "@platejs/link/react";
 import { useBreveditorContext } from "../../Breveditor.tsx";
 import { useFlytendeLinkVerktøylinjeContext } from "./FlytendeLinkVerktøylinje.tsx";
+import { urlTransform } from "../../utils/urlTransform.ts";
 
-export function EndreLink() {
+export function OpprettEndreLinkPanel() {
   const ctx = useFlytendeLinkVerktøylinjeContext();
   const breveditor = useBreveditorContext();
 
   const editor = useEditorRef();
+  const { getOptions, setOptions } = useEditorPlugin(LinkPlugin);
 
-  const { defaultValue: displayText } = ctx.floatingLinkInsert.textInputProps;
+  // Sett url lik displayname som utgangspunkt (slik at man får denne foreslått hvis man merker en link og klikker på knappen)
+  useEffect(() => {
+    const opts = getOptions();
+    if (opts.url == "")
+      setOptions({
+        url: urlTransform(opts.text.trim()),
+      });
+  }, []);
 
   // Submit endringer og feilhåndtering
   const [harUrlError, settHarUrlError] = useState(false);
   const attemptSubmit = () => {
+    // Sett displayname lik url (minus schema)
+    setOptions({
+      text: getOptions().url.replace(/^http(s)?:\/\//, ""),
+    });
     if (submitFloatingLink(editor)) {
       settHarUrlError(false);
     } else {
@@ -40,19 +53,9 @@ export function EndreLink() {
         size="small"
         error={harUrlError ? "Ugyldig adresse" : undefined}
         ref={ctx.floatingLinkUrlInput.ref}
-        defaultValue={
-          ctx.floatingLinkUrlInput.props.defaultValue.toString().trim()
-            .length == 0
-            ? displayText
-            : ctx.floatingLinkUrlInput.props.defaultValue.toString().trim()
-        }
-        onChange={ctx.floatingLinkUrlInput.props.onChange}
-      />
-      <TextField
-        label="Visningsnavn"
-        size="small"
+        defaultValue={getOptions().url}
+        {...omit(ctx.floatingLinkUrlInput.props, ["defaultValue"])}
         data-plate-focus
-        {...ctx.floatingLinkInsert.textInputProps}
       />
       <Button
         icon={<FloppydiskIcon />}

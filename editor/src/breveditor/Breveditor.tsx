@@ -28,6 +28,7 @@ import { LinkPlugin } from "@platejs/link/react";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
 import { LinkElement } from "./hjelpere/flytende-link-verktøylinje/LinkElement.tsx";
 import { FlytendeLinkVerktøylinje } from "./hjelpere/flytende-link-verktøylinje/FlytendeLinkVerktøylinje.tsx";
+import { urlTransform } from "./utils/urlTransform.ts";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
@@ -88,10 +89,7 @@ const Breveditor = ({
             },
             options: {
               allowedSchemes: ["http", "https"],
-              transformInput: (url) => {
-                if (!/^[^:]+:\/\//.test(url)) return `http://${url}`;
-                return url;
-              },
+              transformInput: urlTransform,
             },
           }),
           ListPlugin.configure({
