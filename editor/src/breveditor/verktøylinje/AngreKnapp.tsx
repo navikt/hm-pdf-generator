@@ -14,13 +14,7 @@ const AngreKnapp = ({}: {}) => {
         }}
         variant="tertiary-neutral"
         size="small"
-        icon={
-          <ArrowUndoIcon
-            className="menyKnappParent"
-            title="Angre"
-            fontSize="1rem"
-          />
-        }
+        icon={<ArrowUndoIcon fontSize="1rem" />}
       />
     </Tooltip>
   );

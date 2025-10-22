@@ -19,9 +19,7 @@ const LinkKnapp = ({}: {}) => {
         disabled={!breveditor.erPlateContentFokusert}
         variant={active ? "primary-neutral" : "tertiary-neutral"}
         size="small"
-        icon={
-          <LinkIcon className="menyKnappParent" title="Link" fontSize="1rem" />
-        }
+        icon={<LinkIcon fontSize="1rem" />}
         onClick={onClick}
         onMouseDown={onMouseDown}
       />

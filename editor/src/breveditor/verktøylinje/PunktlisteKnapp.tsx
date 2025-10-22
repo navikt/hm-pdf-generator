@@ -7,7 +7,7 @@ const PunktlisteKnapp = ({}: {}) => {
     <ListeKnapp
       tittel="Punktliste"
       listeStilType={ListStyleType.Circle}
-      ikon={<BulletListIcon title="Punktliste" fontSize="1rem" />}
+      ikon={<BulletListIcon fontSize="1rem" />}
     />
   );
 };

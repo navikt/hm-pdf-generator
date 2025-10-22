@@ -19,8 +19,6 @@
     "@platejs/markdown": "^50.2.0",
     "@platejs/selection": "^50.3.4",
     "@styled-icons/bootstrap": "^10.47.0",
-    "@udecode/plate": "^47.1.1",
-    "@udecode/plate-common": "^41.0.13",
     "platejs": "^49.2.21",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

@@ -29,6 +29,7 @@ import { BoldPlugin } from "@platejs/basic-nodes/react";
 import { LinkElement } from "./hjelpere/flytende-link-verktøylinje/LinkElement.tsx";
 import { FlytendeLinkVerktøylinje } from "./hjelpere/flytende-link-verktøylinje/FlytendeLinkVerktøylinje.tsx";
 import { urlTransform } from "./utils/urlTransform.ts";
+import { BrevHeaderPlugin } from "./plugins/brev-header/BrevHeaderPlugin.tsx";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
@@ -56,7 +57,7 @@ export const useBreveditorContext = () => {
 
 const Breveditor = ({
   templateMarkdown: markdown,
-  onChange,
+  //onChange,
 }: {
   templateMarkdown: string;
   onChange?: (markdown: string) => void;
@@ -97,6 +98,7 @@ const Breveditor = ({
               targetPlugins: [...KEYS.heading, KEYS.p],
             },
           }),
+          BrevHeaderPlugin,
         ],
       ],
       value: (editor) =>
@@ -176,13 +178,14 @@ const Breveditor = ({
     >
       <Plate
         editor={editor}
-        onValueChange={(_) =>
-          onChange &&
-          onChange(
-            editor.getApi(MarkdownPlugin).markdown.serialize({
-              remarkPlugins: [remarkMdx],
-            }),
-          )
+        onValueChange={
+          (_) => {}
+          //onChange &&
+          //onChange(
+          //  editor.getApi(MarkdownPlugin).markdown.serialize({
+          //    remarkPlugins: [remarkMdx],
+          //  }),
+          //)
         }
       >
         <div className="breveditor-container">

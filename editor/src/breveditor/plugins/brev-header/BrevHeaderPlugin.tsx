@@ -1,27 +1,28 @@
-import { createPlatePlugin } from "@udecode/plate/react";
-import { PlateLeaf, type PlateLeafProps } from "@udecode/plate-common/react";
+import {
+  PlateElement,
+  type PlateElementProps,
+  createPlatePlugin,
+} from "platejs/react";
 
-export const BrevHeader = () => {
-  return <div style={{ background: "red", padding: "10px" }}>testitest</div>;
-};
-
-export function BrevHeader2({ className, children, ...props }: PlateLeafProps) {
+export function BrevHeader({ children, ...props }: PlateElementProps) {
   return (
-    <PlateLeaf asChild className={className} {...props}>
-      <div style={{ background: "red", padding: "10px" }}>
-        testitest{children}
+    <PlateElement {...props}>
+      <div
+        contentEditable={false}
+        style={{ background: "red", padding: "10px" }}
+      >
+        testitest {children}
       </div>
-      ;
-    </PlateLeaf>
+    </PlateElement>
   );
 }
 
 export const BrevHeaderPlugin = createPlatePlugin({
   key: "brevHeader",
   node: {
-    //isElement: true,
-    isLeaf: true,
+    isElement: true,
+    isVoid: true,
     type: "brevHeader",
-    component: BrevHeader2,
+    component: BrevHeader,
   },
 });

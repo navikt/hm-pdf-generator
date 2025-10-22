@@ -12,9 +12,9 @@ const SvitsjMargerKnapp = ({}: {}) => {
       <Button
         icon={
           !breveditor.visMarger ? (
-            <ShrinkIcon title="Vis marger" fontSize="1rem" />
+            <ShrinkIcon fontSize="1rem" />
           ) : (
-            <ExpandIcon title="Skjul marger" fontSize="1rem" />
+            <ExpandIcon fontSize="1rem" />
           )
         }
         onClick={() => breveditor.settVisMarger(!breveditor.visMarger)}

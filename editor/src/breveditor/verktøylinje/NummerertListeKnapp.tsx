@@ -7,7 +7,7 @@ const NummerertListeKnapp = ({}: {}) => {
     <ListeKnapp
       tittel="Nummerert liste"
       listeStilType={ListStyleType.Decimal}
-      ikon={<BulletListIcon title="Nummerert liste" fontSize="1rem" />}
+      ikon={<BulletListIcon fontSize="1rem" />}
     />
   );
 };

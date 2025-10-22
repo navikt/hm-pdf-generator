@@ -90,7 +90,7 @@ const BlokktypeMeny = ({}: {}) => {
       <ActionMenu.Content>
         <ActionMenu.Group label="Grunnleggende stiler">
           <ActionMenu.Item
-            icon={<Density3Icon title="Brødtekst" fontSize="1rem" />}
+            icon={<Density3Icon fontSize="1rem" />}
             onSelect={(_) => turnInto(KEYS.p)}
           >
             Brødtekst
@@ -98,19 +98,13 @@ const BlokktypeMeny = ({}: {}) => {
         </ActionMenu.Group>
         <ActionMenu.Group label="Overskrifter">
           <ActionMenu.Item
-            icon={<PencilWritingFillIcon title="Tittel" fontSize="1rem" />}
+            icon={<PencilWritingFillIcon fontSize="1rem" />}
             onSelect={(_) => turnInto(KEYS.h1)}
           >
             Tittel
           </ActionMenu.Item>
           <ActionMenu.Item
-            icon={
-              <TypeH1
-                title="Overskrift 1"
-                fontSize="1rem"
-                style={{ scale: "0.7" }}
-              />
-            }
+            icon={<TypeH1 fontSize="1rem" style={{ scale: "0.7" }} />}
             onSelect={(_) => turnInto(KEYS.h2)}
           >
             Overskrift 1
@@ -142,7 +136,7 @@ const BlokktypeMeny = ({}: {}) => {
         </ActionMenu.Group>
         <ActionMenu.Group label="Lister">
           <ActionMenu.Item
-            icon={<BulletListIcon title="Punktliste" fontSize="1rem" />}
+            icon={<BulletListIcon fontSize="1rem" />}
             onSelect={(_) =>
               !punktlistePressed &&
               toggleList(editor, {
@@ -153,7 +147,7 @@ const BlokktypeMeny = ({}: {}) => {
             Punktliste
           </ActionMenu.Item>
           <ActionMenu.Item
-            icon={<NumberListIcon title="Nummerert liste" fontSize="1rem" />}
+            icon={<NumberListIcon fontSize="1rem" />}
             onSelect={(_) =>
               !nummerertListePressed &&
               toggleList(editor, {

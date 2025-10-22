@@ -14,13 +14,7 @@ const GjentaKnapp = ({}: {}) => {
         }}
         variant="tertiary-neutral"
         size="small"
-        icon={
-          <ArrowRedoIcon
-            className="menyKnappParent"
-            title="Gjenta"
-            fontSize="1rem"
-          />
-        }
+        icon={<ArrowRedoIcon fontSize="1rem" />}
       />
     </Tooltip>
   );
