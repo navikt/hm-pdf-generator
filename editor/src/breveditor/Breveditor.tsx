@@ -1,5 +1,5 @@
-import "./Breveditor.css";
-import "./NavBrevstandard.css";
+import "./Breveditor.less";
+import "./versjonerte-stilark/VersjonerteStilark.less";
 import { Plate, PlateContent, usePlateEditor } from "platejs/react";
 import { MarkdownPlugin, remarkMdx } from "@platejs/markdown";
 import { BaseParagraphPlugin, KEYS } from "platejs";
@@ -185,49 +185,43 @@ const Breveditor = ({
           )
         }
       >
-        <div className="editor-container-container">
+        <div className="breveditor-container">
           <Verktøylinje />
-          <div
-            style={{
-              padding: "10px",
-              overflowY: "auto",
-              height: "100%",
-            }}
-          >
+          <div className="scrollable-pit">
             <div
               ref={editorContainerRef}
               className={
-                !visMarger ? "editor-container zoomed" : "editor-container"
+                !visMarger ? "scrollable-content zoomed" : "scrollable-content"
               }
             >
               <div
-                className={
-                  !visMarger ? "editor-content zoomed" : "editor-content"
-                }
+                className={!visMarger ? "content zoomed" : "content"}
                 style={{
                   scale: editorContentScale,
                 }}
               >
                 <div className="page">
-                  <div className="header">
-                    <NavLogo />
-                    <dl>
-                      <dt>Navn:</dt>
-                      <dd>Ola Nordmann</dd>
-                      <dt>Fødselsnummer:</dt>
-                      <dd>26848497710</dd>
-                      <dt>Saksnummer:</dt>
-                      <dd>1000</dd>
-                    </dl>
-                    <span>22. Januar 2025</span>
+                  <div className="brev-stilark-v1">
+                    <div className="header">
+                      <NavLogo />
+                      <dl>
+                        <dt>Navn:</dt>
+                        <dd>Ola Nordmann</dd>
+                        <dt>Fødselsnummer:</dt>
+                        <dd>26848497710</dd>
+                        <dt>Saksnummer:</dt>
+                        <dd>1000</dd>
+                      </dl>
+                      <span>22. Januar 2025</span>
+                    </div>
+                    <PlateContent
+                      ref={plateContentRef}
+                      onBlur={() => settPlateContentFokusertWrapped(false)}
+                      onFocus={() => settPlateContentFokusertWrapped(true)}
+                      placeholder="Skriv et fantastisk brev her..."
+                      className="contentEditable"
+                    />
                   </div>
-                  <PlateContent
-                    ref={plateContentRef}
-                    onBlur={() => settPlateContentFokusertWrapped(false)}
-                    onFocus={() => settPlateContentFokusertWrapped(true)}
-                    placeholder="Skriv et fantastisk brev her..."
-                    className="contentEditable"
-                  />
                 </div>
               </div>
             </div>

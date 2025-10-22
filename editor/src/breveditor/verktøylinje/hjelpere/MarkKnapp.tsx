@@ -27,9 +27,6 @@ const MarkKnapp = ({
         variant={active ? "primary-neutral" : "tertiary-neutral"}
         size="small"
         icon={ikon}
-        className={
-          active ? "toolbar-button toolbar-button-active" : "toolbar-button"
-        }
       />
     </Tooltip>
   );

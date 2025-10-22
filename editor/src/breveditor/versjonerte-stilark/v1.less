@@ -1,4 +1,4 @@
-.editor-content .page h1 {
+h1 {
   font-size: 16pt;
   font-weight: bold;
   letter-spacing: 0.03em;
@@ -7,7 +7,7 @@
   page-break-after: avoid;
 }
 
-.editor-content .page h2 {
+h2 {
   font-size: 13pt;
   font-weight: bold;
   letter-spacing: 0.025em;
@@ -15,7 +15,7 @@
   page-break-after: avoid;
 }
 
-.editor-content .page h3 {
+h3 {
   font-size: 12pt;
   font-weight: bold;
   letter-spacing: 0.02em;
@@ -23,7 +23,7 @@
   page-break-after: avoid;
 }
 
-.editor-content .page h4 {
+h4 {
   font-size: 11pt;
   font-weight: bold;
   letter-spacing: 0.01em;
@@ -31,86 +31,88 @@
   page-break-after: avoid;
 }
 
-.editor-content .page p, .editor-content .page div.slate-p {
+p, div.slate-p {
   display: block;
   margin: 0 0 16pt 0;
 }
 
-.editor-content .page section {
+section {
   margin: 0 0 26pt 0;
 }
 
 /* Fikser noen rare greier med at marginer stackes på toppen av hverandre ved page-breaks */
-.editor-content .page section p:last-child {
+section p:last-child {
   margin-bottom: 0;
 }
 
-.editor-content .page .header {
+.header {
   position: relative;
   margin-bottom: 48pt;
+
+  svg {
+    height: 16pt;
+    margin-bottom: 48pt;
+  }
+
+  dl {
+    dd {
+      display: inline;
+      margin: 0;
+
+      &:after {
+        display: block;
+        content: '';
+      }
+    }
+
+    dt {
+      display: inline-block;
+      min-width: 160px;
+    }
+  }
+
+  span {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
 }
 
-.editor-content .page .header svg {
-  height: 16pt;
-  margin-bottom: 48pt;
-}
-
-.editor-content .page .header dl dd {
-  display: inline;
-  margin: 0;
-}
-
-.editor-content .page .header dl dd:after {
-  display: block;
-  content: '';
-}
-
-.editor-content .page .header dl dt {
-  display: inline-block;
-  min-width: 160px;
-}
-
-.editor-content .page .header span {
-  display: block;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-}
-
-.editor-content .page section.signatur {
+section.signatur {
   margin-top: 32pt;
   page-break-inside: avoid;
 }
 
-.editor-content .page ul, ol {
+ul, ol {
   /*margin: -16pt 0 16pt 0;*/
   margin: -16pt 0 16pt 15pt !important;
   padding-left: 2em;
 }
 
-.editor-content .page a, .editor-content .page div.slate-a {
+a, div.slate-a {
   color: #000000;
   white-space: nowrap;
   display: inline-block;
   text-decoration: underline;
 }
 
-.editor-content .page .no-wrap {
+.no-wrap {
   white-space: nowrap;
   page-break-inside: avoid;
   display: inline-block;
 }
 
-.editor-content .page .merkepenn {
+.merkepenn {
   background: yellowgreen;
 }
 
-.editor-content .page .variabel {
+.variabel {
   background: #ccc;
   border-radius: 5px;
   padding: 0.3em;
-}
 
-.editor-content .page .variabel:active, .editor-content .page .variabel:focus {
-  background: #000;
+  &:active, &:focus {
+    background: #000;
+  }
 }
