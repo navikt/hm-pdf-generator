@@ -2,7 +2,7 @@ import "./Breveditor.less";
 import "./versjonerte-stilark/VersjonerteStilark.less";
 import { Plate, PlateContent, usePlateEditor } from "platejs/react";
 import { MarkdownPlugin, remarkMdx } from "@platejs/markdown";
-import { BaseParagraphPlugin, KEYS } from "platejs";
+import { BaseParagraphPlugin, KEYS, type Value } from "platejs";
 import { ListPlugin } from "@platejs/list/react";
 import {
   BaseH1Plugin,
@@ -56,11 +56,13 @@ export const useBreveditorContext = () => {
 };
 
 const Breveditor = ({
-  templateMarkdown: markdown,
-  //onChange,
+  templateMarkdown,
+  templateJson,
+  onChange,
 }: {
-  templateMarkdown: string;
-  onChange?: (markdown: string) => void;
+  templateMarkdown?: string;
+  templateJson?: Value;
+  onChange?: (newValue: Value) => void;
 }) => {
   let editor = usePlateEditor(
     {
@@ -101,10 +103,19 @@ const Breveditor = ({
           BrevHeaderPlugin,
         ],
       ],
-      value: (editor) =>
-        editor.getApi(MarkdownPlugin).markdown.deserialize(markdown, {
-          remarkPlugins: [remarkMdx],
-        }),
+      value: (editor) => {
+        if (templateMarkdown) {
+          return editor
+            .getApi(MarkdownPlugin)
+            .markdown.deserialize(templateMarkdown, {
+              remarkPlugins: [remarkMdx],
+            });
+        } else if (templateJson) {
+          return templateJson;
+        } else {
+          return [{ type: "p", children: [{ text: "" }] }] as Value;
+        }
+      },
     },
     [],
   );
@@ -178,15 +189,9 @@ const Breveditor = ({
     >
       <Plate
         editor={editor}
-        onValueChange={
-          (_) => {}
-          //onChange &&
-          //onChange(
-          //  editor.getApi(MarkdownPlugin).markdown.serialize({
-          //    remarkPlugins: [remarkMdx],
-          //  }),
-          //)
-        }
+        onValueChange={async ({ value: newValue }) => {
+          onChange && onChange(newValue);
+        }}
       >
         <div className="breveditor-container">
           <Verktøylinje />
