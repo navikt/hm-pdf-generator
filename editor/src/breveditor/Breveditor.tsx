@@ -17,6 +17,7 @@ import {
   type RefObject,
   useCallback,
   useContext,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -26,6 +27,8 @@ import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
 import { BrevHeaderPlugin } from "./plugins/brev-header/BrevHeaderPlugin.tsx";
 import { FlytendeLinkVerktøylinjeKit } from "./plugins/flytende-link-verktøylinje/FlytendeLinkVerktøylinjeKit.tsx";
+import type { EditorSelection, History } from "@platejs/slate";
+import { v4 as uuidv4 } from "uuid";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
@@ -51,22 +54,39 @@ export const useBreveditorContext = () => {
   return ctx!!;
 };
 
+export interface StateMangement {
+  stateRevision: string;
+  state?: {
+    value: Value;
+    history: History;
+    selection: EditorSelection;
+  };
+}
+
 const Breveditor = ({
-  templateMarkdown,
-  templateJson,
-  onChange,
+  defaultValue,
+  defaultMarkdown,
+  onValueChange,
+  state: externalStateManager,
+  onStateChange,
 }: {
-  templateMarkdown?: string;
-  templateJson?: Value;
-  onChange?: (newValue: Value) => void;
+  defaultValue?: Value;
+  defaultMarkdown?: string;
+  onValueChange?: (newValue: Value) => void;
+  state?: StateMangement;
+  onStateChange?: (newState: StateMangement) => void;
 }) => {
+  const state = useRef<StateMangement>(
+    externalStateManager || { stateRevision: uuidv4() },
+  );
+  const lock = useRef(false);
+
   let editor = usePlateEditor(
     {
       plugins: [
         ...[
           MarkdownPlugin.configure({
             options: {
-              plainMarks: [KEYS.suggestion, KEYS.comment],
               remarkPlugins: [remarkMdx],
             },
           }),
@@ -91,14 +111,12 @@ const Breveditor = ({
         ],
       ],
       value: (editor) => {
-        if (templateMarkdown) {
+        if (defaultValue) {
+          return defaultValue;
+        } else if (defaultMarkdown) {
           return editor
             .getApi(MarkdownPlugin)
-            .markdown.deserialize(templateMarkdown, {
-              remarkPlugins: [remarkMdx],
-            });
-        } else if (templateJson) {
-          return templateJson;
+            .markdown.deserialize(defaultMarkdown);
         } else {
           return [{ type: "p", children: [{ text: "" }] }] as Value;
         }
@@ -106,6 +124,27 @@ const Breveditor = ({
     },
     [],
   );
+
+  // Overskriv state fra external state manager når den endrer seg
+  useEffect(() => {
+    if (
+      externalStateManager &&
+      externalStateManager.stateRevision != state.current.stateRevision &&
+      externalStateManager.state
+    ) {
+      // Midlertidig slå av onStateChange for å unngå en loop ved endring av intern state
+      lock.current = true;
+      setTimeout(() => {
+        lock.current = false;
+      }, 10);
+
+      // Gjør endringer til lokal state
+      state.current = externalStateManager;
+      editor.tf.setValue(externalStateManager.state.value);
+      editor.history = externalStateManager.state.history;
+      editor.selection = externalStateManager.state.selection;
+    }
+  }, [externalStateManager]);
 
   // Sett opp breveditor-context state
   const [erPlateContentFokusert, settPlateContentFokusert] = useState(false);
@@ -177,7 +216,28 @@ const Breveditor = ({
       <Plate
         editor={editor}
         onValueChange={async ({ value: newValue }) => {
-          onChange && onChange(newValue);
+          onValueChange && onValueChange(newValue);
+        }}
+        onChange={({ editor: changedEditor, value: newValue }) => {
+          if (onStateChange != undefined && !lock.current) {
+            const constructedState: StateMangement = {
+              stateRevision: uuidv4(),
+              state: {
+                value: newValue,
+                history: changedEditor.history,
+                selection: changedEditor.selection,
+              },
+            };
+            if (
+              !state.current.state ||
+              JSON.stringify(state.current.state) !=
+                JSON.stringify(constructedState.state)
+            ) {
+              // On state-change
+              state.current = constructedState;
+              onStateChange && onStateChange(constructedState);
+            }
+          }
         }}
       >
         <div className="breveditor-container">
