@@ -3,7 +3,6 @@ import hotsakImg from "./assets/hotsak.png";
 import "./App.css";
 import { Button } from "@navikt/ds-react";
 import { TabSynkronisertBreveditor } from "./breveditor/TabSynkronisertBreveditor.tsx";
-import { deserializeMd } from "@platejs/markdown";
 
 function App() {
   // @ts-ignore
