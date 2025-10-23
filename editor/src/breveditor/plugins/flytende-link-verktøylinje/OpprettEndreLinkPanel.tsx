@@ -5,7 +5,7 @@ import { type KeyboardEvent, useEffect, useState } from "react";
 import { LinkPlugin, submitFloatingLink } from "@platejs/link/react";
 import { useBreveditorContext } from "../../Breveditor.tsx";
 import { useFlytendeLinkVerktøylinjeContext } from "./FlytendeLinkVerktøylinje.tsx";
-import { urlTransform } from "../../utils/urlTransform.ts";
+import { urlTransform } from "./urlTransform.ts";
 
 export function OpprettEndreLinkPanel() {
   const ctx = useFlytendeLinkVerktøylinjeContext();

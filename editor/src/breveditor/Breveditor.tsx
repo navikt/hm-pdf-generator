@@ -24,12 +24,9 @@ import {
 } from "react";
 import NavLogo from "./../assets/nav-logo.svg?react";
 import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
-import { LinkPlugin } from "@platejs/link/react";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
-import { LinkElement } from "./hjelpere/flytende-link-verktøylinje/LinkElement.tsx";
-import { FlytendeLinkVerktøylinje } from "./hjelpere/flytende-link-verktøylinje/FlytendeLinkVerktøylinje.tsx";
-import { urlTransform } from "./utils/urlTransform.ts";
 import { BrevHeaderPlugin } from "./plugins/brev-header/BrevHeaderPlugin.tsx";
+import { FlytendeLinkVerktøylinjeKit } from "./plugins/flytende-link-verktøylinje/FlytendeLinkVerktøylinjeKit.tsx";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
@@ -85,22 +82,13 @@ const Breveditor = ({
           BaseItalicPlugin,
           BaseUnderlinePlugin,
           BoldPlugin,
-          LinkPlugin.configure({
-            render: {
-              node: LinkElement,
-              afterEditable: () => <FlytendeLinkVerktøylinje />,
-            },
-            options: {
-              allowedSchemes: ["http", "https"],
-              transformInput: urlTransform,
-            },
-          }),
           ListPlugin.configure({
             inject: {
               targetPlugins: [...KEYS.heading, KEYS.p],
             },
           }),
-          BrevHeaderPlugin,
+          // Våre egne breveditor plugins
+          ...[...FlytendeLinkVerktøylinjeKit, BrevHeaderPlugin],
         ],
       ],
       value: (editor) => {
