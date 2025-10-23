@@ -1,5 +1,4 @@
 import "./Breveditor.less";
-import "./versjonerte-stilark/VersjonerteStilark.less";
 import { Plate, PlateContent, usePlateEditor } from "platejs/react";
 import { MarkdownPlugin, remarkMdx } from "@platejs/markdown";
 import { BaseParagraphPlugin, KEYS, type Value } from "platejs";
