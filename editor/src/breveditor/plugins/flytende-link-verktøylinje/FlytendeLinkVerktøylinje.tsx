@@ -91,12 +91,13 @@ export function FlytendeLinkVerktøylinje() {
       >
         {floatingLinkEditState.isEditing && <OpprettEndreLinkPanel />}
         {!floatingLinkEditState.isEditing && (
-          <HStack gap="1">
+          <HStack gap="1" wrap={false}>
             <Button
               icon={<DocPencilIcon />}
               variant="tertiary"
               size="small"
               {...floatingLinkEdit.editButtonProps}
+              style={{ textWrap: "nowrap" }}
             >
               Endre link
             </Button>
