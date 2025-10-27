@@ -101,12 +101,14 @@ function App() {
       >
         <TabSynkronisertBreveditor
           defaultMarkdown={template}
-          onValueChange={(newValue) => {
-            console.log(
-              "App.tsx: onValueChange",
-              JSON.stringify(newValue),
-              newValue,
-            );
+          onValueChange={(newValue, history, html) => {
+            console.log("App.tsx: onValueChange", {
+              value: newValue,
+              history: history,
+              html,
+              stylesheet_version: "v1",
+              brevutkast_id: 1000,
+            });
           }}
         />
       </div>

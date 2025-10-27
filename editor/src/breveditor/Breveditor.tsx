@@ -1,7 +1,7 @@
 import "./Breveditor.less";
 import { Plate, PlateContent, usePlateEditor } from "platejs/react";
 import { MarkdownPlugin, remarkMdx } from "@platejs/markdown";
-import { BaseParagraphPlugin, KEYS, type Value } from "platejs";
+import { BaseParagraphPlugin, KEYS, serializeHtml, type Value } from "platejs";
 import { ListPlugin } from "@platejs/list/react";
 import {
   BaseH1Plugin,
@@ -72,7 +72,7 @@ const Breveditor = ({
 }: {
   defaultValue?: Value;
   defaultMarkdown?: string;
-  onValueChange?: (newValue: Value) => void;
+  onValueChange?: (newValue: Value, newHistory: History, html: string) => void;
   state?: StateMangement;
   onStateChange?: (newState: StateMangement) => void;
 }) => {
@@ -215,8 +215,13 @@ const Breveditor = ({
     >
       <Plate
         editor={editor}
-        onValueChange={async ({ value: newValue }) => {
-          onValueChange && onValueChange(newValue);
+        onValueChange={async ({ value: newValue, editor }) => {
+          onValueChange &&
+            onValueChange(
+              newValue,
+              editor.history,
+              await serializeHtml(editor),
+            );
         }}
         onChange={({ editor: changedEditor, value: newValue }) => {
           if (onStateChange != undefined && !lock.current) {
