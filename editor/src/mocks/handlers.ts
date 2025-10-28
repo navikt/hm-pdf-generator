@@ -1,21 +1,17 @@
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
-  http.get<
-    { sakId: string; brevtype: string },
-    {
-      brevtype: string;
-      målform: string;
-      data: any;
-    }
-  >("/api/sak/{sakId}/brevutkast/{brevtype}", ({ params }) => {
-    let data: any = JSON.parse(
-      localStorage.getItem(`${params.sakId}-${params.brevtype}`) || "{}",
-    );
-    return HttpResponse.json({
-      data,
-    });
-  }),
+  http.get<{ sakId: string; brevtype: string }>(
+    "/api/sak/:sakId/brevutkast/:brevtype",
+    ({ params }) => {
+      let data: any = JSON.parse(
+        localStorage.getItem(`${params.sakId}-${params.brevtype}`) || "{}",
+      );
+      return HttpResponse.json({
+        data,
+      });
+    },
+  ),
   http.post<
     { sakId: string },
     {
@@ -23,7 +19,7 @@ export const handlers = [
       målform: string;
       data: any;
     }
-  >("/api/sak/{sakId}/brevutkast", async ({ params, request }) => {
+  >("/api/sak/:sakId/brevutkast", async ({ params, request }) => {
     let json = await request.json();
     localStorage.setItem(
       `${params.sakId}-${json.brevtype}`,
@@ -34,7 +30,7 @@ export const handlers = [
     });
   }),
   http.delete<{ sakId: string; brevtype: string }>(
-    "/api/sak/{sakId}/brevutkast/{brevtype}",
+    "/api/sak/:sakId/brevutkast/:brevtype",
     () => {
       return HttpResponse.json({
         id: "abc-123",
@@ -50,7 +46,7 @@ export const handlers = [
       målform: string;
       data: any;
     }
-  >("/api/sak/{sakId}/brevsending", async ({ params, request }) => {
+  >("/api/sak/:sakId/brevsending", async ({ params, request }) => {
     let json = await request.json();
     let data: any = JSON.parse(
       localStorage.getItem(`${params.sakId}-${json.brevtype}`) || "{}",

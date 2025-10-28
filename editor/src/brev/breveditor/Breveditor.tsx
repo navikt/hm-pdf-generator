@@ -22,7 +22,7 @@ import {
   useRef,
   useState,
 } from "react";
-import NavLogo from "./../assets/nav-logo.svg?react";
+import NavLogo from "../../assets/nav-logo.svg?react";
 import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
 import { BrevHeaderPlugin } from "./plugins/brev-header/BrevHeaderPlugin.tsx";
