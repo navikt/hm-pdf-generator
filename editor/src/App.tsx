@@ -67,10 +67,6 @@ function App() {
     På [nav.no/kontakt](https://nav.no/kontakt) kan du chatte eller skrive til oss.
     
     Hvis du ikke finner svar på [nav.no](https://nav.no), kan du ringe oss på telefon 55 55 11 11 hverdager 09.00-15.00.
-    
-    Med vennlig hilsen
-    Jon Åsen, Kari Hansen
-    Nav hjelpemiddelsentral Agder
   `
     .trim()
     .replace(
@@ -100,6 +96,15 @@ function App() {
         }}
       >
         <TabSynkronisertBreveditor
+          metadata={{
+            brukersNavn: "Ola Nordmann",
+            brukersFødselsnummer: "26848497710",
+            saksnummer: 1000,
+            brevOpprettet: "1. Januar 2025",
+            saksbehandlerNavn: "Jon Åsen",
+            // attestantsNavn: "Kari Hansen",
+            hjelpemiddelsentral: "Nav hjelpemiddelsentral Agder",
+          }}
           defaultMarkdown={template}
           onValueChange={(newValue, history, html) => {
             console.log("App.tsx: onValueChange", {

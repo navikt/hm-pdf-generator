@@ -63,13 +63,25 @@ export interface StateMangement {
   };
 }
 
+export interface Metadata {
+  brukersNavn: string;
+  brukersFødselsnummer: string;
+  saksnummer: number;
+  brevOpprettet: string;
+  saksbehandlerNavn: string;
+  attestantsNavn?: string;
+  hjelpemiddelsentral: string;
+}
+
 const Breveditor = ({
+  metadata,
   defaultValue,
   defaultMarkdown,
   onValueChange,
   state: externalStateManager,
   onStateChange,
 }: {
+  metadata: Metadata;
   defaultValue?: Value;
   defaultMarkdown?: string;
   onValueChange?: (newValue: Value, newHistory: History, html: string) => void;
@@ -266,13 +278,13 @@ const Breveditor = ({
                       <NavLogo />
                       <dl>
                         <dt>Navn:</dt>
-                        <dd>Ola Nordmann</dd>
+                        <dd>{metadata.brukersNavn}</dd>
                         <dt>Fødselsnummer:</dt>
-                        <dd>26848497710</dd>
+                        <dd>{metadata.brukersFødselsnummer}</dd>
                         <dt>Saksnummer:</dt>
-                        <dd>1000</dd>
+                        <dd>{metadata.saksnummer}</dd>
                       </dl>
-                      <span>22. Januar 2025</span>
+                      <span>{metadata.brevOpprettet}</span>
                     </div>
                     <PlateContent
                       ref={plateContentRef}
@@ -281,6 +293,15 @@ const Breveditor = ({
                       placeholder="Skriv et fantastisk brev her..."
                       className="contentEditable"
                     />
+                    <p>
+                      Med vennlig hilsen <br />
+                      {metadata.saksbehandlerNavn}
+                      {metadata.attestantsNavn
+                        ? `, ${metadata.attestantsNavn}`
+                        : ""}{" "}
+                      <br />
+                      {metadata.hjelpemiddelsentral}
+                    </p>
                   </div>
                 </div>
               </div>
