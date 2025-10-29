@@ -1,4 +1,4 @@
-# Du får tilskudd til briller - Avslag
+# Du får tilskudd til briller - Delvis innvilgelse
 
 Hei,
 

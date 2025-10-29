@@ -4,14 +4,22 @@ export const handlers = [
   http.get<{ sakId: string; brevtype: string }>(
     "/api/sak/:sakId/brevutkast/:brevtype",
     ({ params }) => {
-      let data: any = JSON.parse(
-        localStorage.getItem(`${params.sakId}-${params.brevtype}`) || "{}",
-      );
-      return HttpResponse.json({
-        data,
-      });
+      let key = `${params.sakId}-${params.brevtype}`;
+      let data = localStorage.getItem(key)
+        ? JSON.parse(localStorage.getItem(key) || "{}")
+        : null;
+      return !!data
+        ? HttpResponse.json({
+            data,
+            brevtype: params.brevtype,
+            opprettet: "2025-10-28T13:35:00",
+          })
+        : HttpResponse.json({
+            error: "brev-ikke-funnet",
+          });
     },
   ),
+
   http.post<
     { sakId: string },
     {
@@ -25,20 +33,17 @@ export const handlers = [
       `${params.sakId}-${json.brevtype}`,
       JSON.stringify(json.data),
     );
-    return HttpResponse.json({
-      data: json.data,
-    });
+    return new HttpResponse(null, { status: 201 });
   }),
+
   http.delete<{ sakId: string; brevtype: string }>(
     "/api/sak/:sakId/brevutkast/:brevtype",
-    () => {
-      return HttpResponse.json({
-        id: "abc-123",
-        firstName: "John",
-        lastName: "Maverick",
-      });
+    ({ params }) => {
+      localStorage.removeItem(`${params.sakId}-${params.brevtype}`);
+      return new HttpResponse(null, { status: 201 });
     },
   ),
+
   http.post<
     { sakId: string },
     {
@@ -46,13 +51,8 @@ export const handlers = [
       målform: string;
       data: any;
     }
-  >("/api/sak/:sakId/brevsending", async ({ params, request }) => {
-    let json = await request.json();
-    let data: any = JSON.parse(
-      localStorage.getItem(`${params.sakId}-${json.brevtype}`) || "{}",
-    );
-    return HttpResponse.json({
-      data,
-    });
+  >("/api/sak/:sakId/brevsending", async () => {
+    // TODO
+    return new HttpResponse(null, { status: 201 });
   }),
 ];

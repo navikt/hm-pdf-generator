@@ -21,7 +21,6 @@ function App() {
           top: "152px",
           width: "710px",
           bottom: "0px",
-          background: "#242424",
         }}
       >
         <Brev sakId={1000} />

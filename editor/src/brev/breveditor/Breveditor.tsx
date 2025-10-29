@@ -27,7 +27,7 @@ import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
 import { BrevHeaderPlugin } from "./plugins/brev-header/BrevHeaderPlugin.tsx";
 import { FlytendeLinkVerktøylinjeKit } from "./plugins/flytende-link-verktøylinje/FlytendeLinkVerktøylinjeKit.tsx";
-import type { EditorSelection, History } from "@platejs/slate";
+import type { History } from "@platejs/slate";
 import { v4 as uuidv4 } from "uuid";
 
 export interface BreveditorContextType {
@@ -39,6 +39,7 @@ export interface BreveditorContextType {
   settBreveditorEllerVerktoylinjeFokusert: (fokus: boolean) => void;
   visMarger: boolean;
   settVisMarger: (visMarger: boolean) => void;
+  onSlettBrev?: () => void;
 }
 
 export const BreveditorContext = createContext<
@@ -59,7 +60,7 @@ export interface StateMangement {
   state?: {
     value: Value;
     history: History;
-    selection: EditorSelection;
+    // selection: EditorSelection;
   };
 }
 
@@ -80,6 +81,7 @@ const Breveditor = ({
   onValueChange,
   state: externalStateManager,
   onStateChange,
+  onSlettBrev,
 }: {
   metadata: Metadata;
   defaultValue?: Value;
@@ -87,6 +89,7 @@ const Breveditor = ({
   onValueChange?: (newValue: Value, newHistory: History, html: string) => void;
   state?: StateMangement;
   onStateChange?: (newState: StateMangement) => void;
+  onSlettBrev?: () => void;
 }) => {
   const state = useRef<StateMangement>(
     externalStateManager || { stateRevision: uuidv4() },
@@ -154,7 +157,7 @@ const Breveditor = ({
       state.current = externalStateManager;
       editor.tf.setValue(externalStateManager.state.value);
       editor.history = externalStateManager.state.history;
-      editor.selection = externalStateManager.state.selection;
+      // editor.selection = externalStateManager.state.selection;
     }
   }, [externalStateManager]);
 
@@ -223,6 +226,7 @@ const Breveditor = ({
           settBreveditorEllerVerktoylinjeFokusert,
         visMarger: visMarger,
         settVisMarger: settVisMarger,
+        onSlettBrev: onSlettBrev,
       }}
     >
       <Plate
@@ -242,7 +246,7 @@ const Breveditor = ({
               state: {
                 value: newValue,
                 history: changedEditor.history,
-                selection: changedEditor.selection,
+                // selection: changedEditor.selection,
               },
             };
             if (
