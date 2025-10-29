@@ -6,7 +6,7 @@ Vi har innvilget søknaden din om \[navn på konkret hjelpemiddel\] fordi \[frit
 
 Vi har avslått søknaden din om [navn på hjelpemidler] fordi [fritekstfelt].
 
-Vedtaket er gjort etter folketrygdloven § [10-5] [10-6].
+Vedtaket er gjort etter folketrygdloven § \[10-5\] \[10-6\].
 
 ## Praktiske opplysninger
 
