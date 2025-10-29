@@ -33,14 +33,14 @@ export const handlers = [
       `${params.sakId}-${json.brevtype}`,
       JSON.stringify(json.data),
     );
-    return new HttpResponse(null, { status: 201 });
+    return new HttpResponse(null, { status: 204 });
   }),
 
   http.delete<{ sakId: string; brevtype: string }>(
     "/api/sak/:sakId/brevutkast/:brevtype",
     ({ params }) => {
       localStorage.removeItem(`${params.sakId}-${params.brevtype}`);
-      return new HttpResponse(null, { status: 201 });
+      return new HttpResponse(null, { status: 204 });
     },
   ),
 

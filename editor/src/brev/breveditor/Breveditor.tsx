@@ -92,7 +92,7 @@ const Breveditor = ({
   onSlettBrev?: () => void;
 }) => {
   const state = useRef<StateMangement>(
-    externalStateManager || { stateRevision: uuidv4() },
+    /*externalStateManager ||*/ { stateRevision: uuidv4() },
   );
   const lock = useRef(false);
 

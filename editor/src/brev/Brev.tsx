@@ -5,7 +5,7 @@ import { BrevmalVelger } from "./brevmaler/Brevmaler.tsx";
 import { useMemo, useState } from "react";
 
 export const Brev = ({ sakId }: { sakId: number }) => {
-  const { isLoading, error, data, mutate } = useSWR<
+  const brevutkast = useSWR<
     {
       error?: string;
       data?: any;
@@ -14,30 +14,25 @@ export const Brev = ({ sakId }: { sakId: number }) => {
   >(
     `/api/sak/${sakId}/brevutkast/BREVEDITOR_VEDTAKSBREV`,
     async (key: string) =>
-      fetch(key, { method: "get" }).then((res) => {
-        if (res.status >= 200 && res.status < 300) {
-          return res.json();
-        } else {
-          throw Error(`status-code=${res.status.toString()}`);
-        }
-      }),
+      fetch(key, { method: "get" }).then((res) => res.json()),
   );
 
   const [valgtMal, velgMal] = useState<string>();
-  const errorEr404 = useMemo(() => data?.error == "brev-ikke-funnet", [data]);
+  const errorEr404 = useMemo(
+    () => brevutkast.data?.error == "brev-ikke-funnet",
+    [brevutkast.data],
+  );
 
-  if (isLoading) {
+  if (brevutkast.isLoading) {
     return <Loader title="Laster inn brevutkast..." />;
-  } else if (error) {
+  } else if (brevutkast.error) {
     return <Alert variant="warning">Brev ikke tilgjengelig.</Alert>;
   }
-
-  console.log("here", errorEr404);
 
   return (
     <>
       {errorEr404 && !valgtMal && <BrevmalVelger velgMal={velgMal} />}
-      {(!errorEr404 || valgtMal) && data && (
+      {(!errorEr404 || valgtMal) && brevutkast.data && (
         <div
           style={{
             background: "#242424",
@@ -54,7 +49,7 @@ export const Brev = ({ sakId }: { sakId: number }) => {
               hjelpemiddelsentral: "Nav hjelpemiddelsentral Agder",
             }}
             defaultMarkdown={valgtMal}
-            state={data?.data}
+            state={brevutkast.data?.data}
             onStateChange={(state) => {
               let newState = {
                 brevtype: "BREVEDITOR_VEDTAKSBREV",
@@ -66,10 +61,11 @@ export const Brev = ({ sakId }: { sakId: number }) => {
                   method: "post",
                   body: JSON.stringify(newState),
                 });
-                await mutate(newState);
+                await brevutkast.mutate(newState);
               })();
             }}
             onSlettBrev={() => {
+              velgMal(undefined); // Unngå at forrige valgte mal trigger at breveditoren laster den på nytt
               (async () => {
                 await fetch(
                   `/api/sak/${sakId}/brevutkast/BREVEDITOR_VEDTAKSBREV`,
@@ -77,7 +73,7 @@ export const Brev = ({ sakId }: { sakId: number }) => {
                     method: "delete",
                   },
                 );
-                await mutate(); // Reload
+                await brevutkast.mutate(); // Reload
               })();
             }}
             // onValueChange={(newValue, history, html) => {
