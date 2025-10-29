@@ -38,6 +38,7 @@ export const Brev = ({ sakId }: { sakId: number }) => {
         <div
           style={{
             background: "#242424",
+            height: "100%",
           }}
         >
           <Breveditor
