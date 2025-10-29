@@ -31,8 +31,10 @@ export const Brev = ({ sakId }: { sakId: number }) => {
 
   return (
     <>
-      {errorEr404 && !valgtMal && <BrevmalVelger velgMal={velgMal} />}
-      {(!errorEr404 || valgtMal) && brevutkast.data && (
+      {errorEr404 && valgtMal === undefined && (
+        <BrevmalVelger velgMal={velgMal} />
+      )}
+      {(!errorEr404 || valgtMal !== undefined) && brevutkast.data && (
         <div
           style={{
             background: "#242424",

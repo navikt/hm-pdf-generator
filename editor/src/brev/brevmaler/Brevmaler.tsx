@@ -24,6 +24,7 @@ export const BrevmalVelger = ({
           <option value="Innvilgelse">Innvilgelse</option>
           <option value="Delvis innvilgelse">Delvis innvilgelse</option>
           <option value="Avslag">Avslag</option>
+          <option value="Tom brevmal">Tom brevmal</option>
         </Select>
         {hovedType === "Innvilgelse" && (
           <OpprettBrevKnapp
@@ -41,6 +42,16 @@ export const BrevmalVelger = ({
         )}
         {hovedType === "Avslag" && (
           <AvslagUndervalg velgMal={velgMal} hovedType={hovedType} />
+        )}
+        {hovedType === "Tom brevmal" && (
+          <Button
+            onClick={() => {
+              velgMal("# ");
+            }}
+            style={{ margin: "1em 0" }}
+          >
+            Opprett brev
+          </Button>
         )}
       </div>
     </div>
