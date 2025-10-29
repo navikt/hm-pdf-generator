@@ -9,6 +9,46 @@ export const BrevmalVelger = ({
 }) => {
   const [hovedType, setHovedType] = useState<string>();
 
+  const alternativer = [
+    {
+      title: "Innvilgelse",
+      component: (
+        <OpprettBrevKnapp
+          velgMal={velgMal}
+          unikNøkkel="Innvilgelse"
+          importer={import("./maler/innvilgelse.md?raw")}
+        />
+      ),
+    },
+    {
+      title: "Delvis innvilgelse",
+      component: (
+        <OpprettBrevKnapp
+          velgMal={velgMal}
+          unikNøkkel="Delvis innvilgelse"
+          importer={import("./maler/delvis-innvilgelse.md?raw")}
+        />
+      ),
+    },
+    {
+      title: "Avslag",
+      component: <AvslagUndervalg velgMal={velgMal} />,
+    },
+    {
+      title: "Tom brevmal",
+      component: (
+        <Button
+          onClick={() => {
+            velgMal("# ");
+          }}
+          style={{ margin: "1em 0" }}
+        >
+          Opprett brev
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <div style={{ padding: "1em", background: "white", height: "100%" }}>
       <div style={{ maxWidth: "300px" }}>
@@ -21,51 +61,52 @@ export const BrevmalVelger = ({
           }}
         >
           <option value="">- Velg brevmal -</option>
-          <option value="Innvilgelse">Innvilgelse</option>
-          <option value="Delvis innvilgelse">Delvis innvilgelse</option>
-          <option value="Avslag">Avslag</option>
-          <option value="Tom brevmal">Tom brevmal</option>
+          {alternativer.map((v) => (
+            <option value={v.title}>{v.title}</option>
+          ))}
         </Select>
-        {hovedType === "Innvilgelse" && (
-          <OpprettBrevKnapp
-            velgMal={velgMal}
-            unikNøkkel={hovedType}
-            importer={import("./maler/innvilgelse.md?raw")}
-          />
-        )}
-        {hovedType === "Delvis innvilgelse" && (
-          <OpprettBrevKnapp
-            velgMal={velgMal}
-            unikNøkkel={hovedType}
-            importer={import("./maler/delvis-innvilgelse.md?raw")}
-          />
-        )}
-        {hovedType === "Avslag" && (
-          <AvslagUndervalg velgMal={velgMal} hovedType={hovedType} />
-        )}
-        {hovedType === "Tom brevmal" && (
-          <Button
-            onClick={() => {
-              velgMal("# ");
-            }}
-            style={{ margin: "1em 0" }}
-          >
-            Opprett brev
-          </Button>
-        )}
+        {alternativer.map((v) => (
+          <>{hovedType == v.title && v.component}</>
+        ))}
       </div>
     </div>
   );
 };
 
-const AvslagUndervalg = ({
-  velgMal,
-  hovedType,
-}: {
-  velgMal: (mal: string) => void;
-  hovedType: string;
-}) => {
+const AvslagUndervalg = ({ velgMal }: { velgMal: (mal: string) => void }) => {
   const [underType, setUnderType] = useState<string>();
+  const alternativer = [
+    {
+      title: "Bruker har ikke rett til hjelpemidler",
+      component: (
+        <OpprettBrevKnapp
+          velgMal={velgMal}
+          unikNøkkel={`avslag-${underType}`}
+          importer={import("./maler/avslag-bruker-har-ikke-rett.md?raw")}
+        />
+      ),
+    },
+    {
+      title: "Hjelpemiddelet gis ikke fra Folketrygden",
+      component: (
+        <OpprettBrevKnapp
+          velgMal={velgMal}
+          unikNøkkel={`avslag-${underType}`}
+          importer={import("./maler/avslag-hjelpemiddelet-gis-ikke.md?raw")}
+        />
+      ),
+    },
+    {
+      title: "Andre enn Nav dekker hjelpemiddelet",
+      component: (
+        <OpprettBrevKnapp
+          velgMal={velgMal}
+          unikNøkkel={`avslag-${underType}`}
+          importer={import("./maler/avslag-andre-enn-nav-dekker.md?raw")}
+        />
+      ),
+    },
+  ];
   return (
     <>
       <div style={{ margin: "1em 0 0 0" }}>
@@ -78,16 +119,14 @@ const AvslagUndervalg = ({
           }}
         >
           <option value="">- Velg avslagstype -</option>
-          <option value="Avslag pga. a">Avslag pga. a</option>
+          {alternativer.map((v) => (
+            <option value={v.title}>{v.title}</option>
+          ))}
         </Select>
       </div>
-      {underType == "Avslag pga. a" && (
-        <OpprettBrevKnapp
-          velgMal={velgMal}
-          unikNøkkel={`${hovedType}-${underType}`}
-          importer={import("./maler/avslag.md?raw")}
-        />
-      )}
+      {alternativer.map((v) => (
+        <>{underType == v.title && v.component}</>
+      ))}
     </>
   );
 };
