@@ -64,7 +64,9 @@ export const BrevmalVelger = ({
                           velgMal={velgMal}
                           unikNøkkel="delvis-innvilgelse-andre-enn-nav-dekker"
                           importer={
-                            import("./maler/avslag-andre-enn-nav-dekker.md?raw")
+                            import(
+                              "./maler/delvis-innvilgelse-andre-enn-nav-dekker.md?raw"
+                            )
                           }
                         />
                       ),
