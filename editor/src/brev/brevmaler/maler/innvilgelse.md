@@ -1,22 +1,18 @@
-# Du får tilskudd til briller - Innvilgelse
+# Nav har behandlet og godkjent søknaden din om hjelpemidler
 
-Hei,
+## Praktiske opplysninger
 
-Vi har behandlet søknaden din om tilskudd til briller, som vi mottok {{mottaksDato}}. Du får {{beløp}} kroner fra oss for brillene som ble bestilt {{brilleBestillingsdato}}. Pengene vil bli utbetalt til kontonummeret Ola Nordmann har registrert hos Nav. Hvis du lurer på noe rundt kontonummer, se informasjon på [nav.no/kontonummer](https://nav.no/kontonummer).
+Kommunen vil som regel levere hjelpemidlene til den oppgitte adressen.  Dersom hjelpemidler må bestilles og tilpasses, får du kanskje ikke alle på samme tidspunkt.
 
-## Slik har vi kommet fram til hvor mye du får
+Har du spørsmål om utleveringen, må du henvende deg til den som har hjulpet deg med søknaden eller til hjelpemiddelsentralen.
 
-Det er brillestyrken din som bestemmer hvor mye du kan få i tilskudd. Ut ifra brillestyrken du har oppgitt kommer du inn under sats {{brilleSats}} (opptil {{brilleSatsBelop}} kroner). Du kan ikke få mer i tilskudd enn det brillene koster. Ifølge dokumentasjonen du har sendt oss, kostet brillene {{belopUtbetales}} kroner, og dette er beløpet du vil få utbetalt. Ifølge dokumentasjonen har ditt høyre øye sfærisk styrke {{brilleSfaeriskStyrkeHoyre}} og cylinderstyrke {{brilleCylinderStyrkeHoyre}}, og ditt venstre øye har sfærisk styrke {{brilleSfaeriskStyrkeVenstre}} og cylinderstyrke {{brilleCylinderStyrkeVenstre}}. Du kan lese mer om kravene og satsene på [nav.no/briller-til-barn](https://nav.no/briller-til-barn).
+Du er ansvarlig for å ta vare på og vedlikeholde de hjelpemidlene du har lånt av Nav. Ta kontakt med kommunen dersom hjelpemiddelet må repareres. Vi eier hjelpemidlene, og de skal ikke brukes av andre enn deg selv. Du har ikke lov til å selge eller pantsette hjelpemidlet.
 
-## Du kan få tilskudd til ett par briller hvert år
+Hvis du flytter utenlands eller får varig opphold i sykehjem eller institusjon må du gi oss beskjed i forkant.
 
-Neste gang du kan søke om tilskudd etter denne ordningen, er for briller som bestilles etter {{nesteKravdato}}.
+Dersom du ikke bruker hjelpemidlene må du kontakte kommunen, som skal ta i mot eller hente hjelpemidlene.  
 
-## Du har fått tilskudd etter et bestemt regelverk
-
-Vedtaket er gjort etter folketrygdloven § 10-7 a, jf. forskrift av 19. juli 2022 om stønad til briller til barn. Vi gjør oppmerksom på at hvis opplysningene du har gitt oss er mangelfulle eller feilaktige, kan det føre til krav om tilbakebetaling av feilutbetalt beløp.
-
-Dette er en av flere ordninger for barn som trenger briller. Ordningen dekker briller med glass, innfatning og brilletilpasning. Du kan ikke få tilskudd til synsundersøkelse eller kontaktlinser på denne ordningen. Merk at det finnes andre ordninger som kan gi rett til støtte hvis du har nedsatt syn, se [nav.no/syn](https://nav.no/syn).
+Du kan lese mer om vilkårene for å få hjelpemidler på [nav.no](https://nav.no).
 
 ## Du kan klage på vedtaket
 

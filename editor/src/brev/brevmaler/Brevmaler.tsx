@@ -1,124 +1,168 @@
 import useSWR from "swr";
 import { Button, Select } from "@navikt/ds-react";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 
 export const BrevmalVelger = ({
   velgMal,
 }: {
   velgMal: (mal: string) => void;
 }) => {
-  const [hovedType, setHovedType] = useState<string>();
-
-  const alternativer = [
-    {
-      title: "Innvilgelse",
-      component: (
-        <OpprettBrevKnapp
-          velgMal={velgMal}
-          unikNøkkel="Innvilgelse"
-          importer={import("./maler/innvilgelse.md?raw")}
-        />
-      ),
-    },
-    {
-      title: "Delvis innvilgelse",
-      component: (
-        <OpprettBrevKnapp
-          velgMal={velgMal}
-          unikNøkkel="Delvis innvilgelse"
-          importer={import("./maler/delvis-innvilgelse.md?raw")}
-        />
-      ),
-    },
-    {
-      title: "Avslag",
-      component: <AvslagUndervalg velgMal={velgMal} />,
-    },
-    {
-      title: "Tom brevmal",
-      component: (
-        <Button
-          onClick={() => {
-            velgMal("# ");
-          }}
-          style={{ margin: "1em 0" }}
-        >
-          Opprett brev
-        </Button>
-      ),
-    },
-  ];
-
   return (
     <div style={{ padding: "1em", background: "white", height: "100%" }}>
       <div style={{ maxWidth: "300px" }}>
-        <Select
-          label="Velg brevmal"
-          onChange={(e) => {
-            const v = e.target.value;
-            if (v != "") setHovedType(v);
-            else setHovedType(undefined);
-          }}
-        >
-          <option value="">- Velg brevmal -</option>
-          {alternativer.map((v) => (
-            <option value={v.title}>{v.title}</option>
-          ))}
-        </Select>
-        {alternativer.map((v) => (
-          <>{hovedType == v.title && v.component}</>
-        ))}
+        <Velger
+          tittel="Velg brevmal"
+          alternativer={[
+            {
+              title: "Innvilgelse",
+              component: (
+                <OpprettBrevKnapp
+                  velgMal={velgMal}
+                  unikNøkkel="Innvilgelse"
+                  importer={import("./maler/innvilgelse.md?raw")}
+                />
+              ),
+            },
+            {
+              title: "Delvis innvilgelse",
+              component: (
+                <Velger
+                  tittel="Velg begrunnelse"
+                  alternativer={[
+                    {
+                      title: "Bruker har ikke rett til hjelpemidler",
+                      component: (
+                        <OpprettBrevKnapp
+                          velgMal={velgMal}
+                          unikNøkkel="delvis-innvilgelse"
+                          importer={
+                            import(
+                              "./maler/delvis-innvilgelse-bruker-har-ikke-rett.md?raw"
+                            )
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      title: "Hjelpemiddelet gis ikke fra Folketrygden",
+                      component: (
+                        <OpprettBrevKnapp
+                          velgMal={velgMal}
+                          unikNøkkel="delvis-innvilgelse-hjelpemiddelet-gis-ikke"
+                          importer={
+                            import(
+                              "./maler/delvis-innvilgelse-hjelpemiddelet-gis-ikke.md?raw"
+                            )
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      title: "Andre enn Nav dekker hjelpemiddelet",
+                      component: (
+                        <OpprettBrevKnapp
+                          velgMal={velgMal}
+                          unikNøkkel="delvis-innvilgelse-andre-enn-nav-dekker"
+                          importer={
+                            import("./maler/avslag-andre-enn-nav-dekker.md?raw")
+                          }
+                        />
+                      ),
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
+              title: "Avslag",
+              component: (
+                <Velger
+                  tittel="Velg avslagstype"
+                  alternativer={[
+                    {
+                      title: "Bruker har ikke rett til hjelpemidler",
+                      component: (
+                        <OpprettBrevKnapp
+                          velgMal={velgMal}
+                          unikNøkkel="avslag-bruker-har-ikke-rett"
+                          importer={
+                            import("./maler/avslag-bruker-har-ikke-rett.md?raw")
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      title: "Hjelpemiddelet gis ikke fra Folketrygden",
+                      component: (
+                        <OpprettBrevKnapp
+                          velgMal={velgMal}
+                          unikNøkkel="avslag-hjelpemiddelet-gis-ikke"
+                          importer={
+                            import(
+                              "./maler/avslag-hjelpemiddelet-gis-ikke.md?raw"
+                            )
+                          }
+                        />
+                      ),
+                    },
+                    {
+                      title: "Andre enn Nav dekker hjelpemiddelet",
+                      component: (
+                        <OpprettBrevKnapp
+                          velgMal={velgMal}
+                          unikNøkkel="avslag-andre-enn-nav-dekker"
+                          importer={
+                            import("./maler/avslag-andre-enn-nav-dekker.md?raw")
+                          }
+                        />
+                      ),
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
+              title: "Tom brevmal",
+              component: (
+                <Button
+                  onClick={() => {
+                    velgMal("# ");
+                  }}
+                  style={{ margin: "1em 0" }}
+                >
+                  Opprett brev
+                </Button>
+              ),
+            },
+          ]}
+        />
       </div>
     </div>
   );
 };
 
-const AvslagUndervalg = ({ velgMal }: { velgMal: (mal: string) => void }) => {
+const Velger = ({
+  tittel,
+  alternativer,
+}: {
+  tittel: string;
+  alternativer: { title: string; component: ReactNode }[];
+}) => {
   const [underType, setUnderType] = useState<string>();
-  const alternativer = [
-    {
-      title: "Bruker har ikke rett til hjelpemidler",
-      component: (
-        <OpprettBrevKnapp
-          velgMal={velgMal}
-          unikNøkkel={`avslag-${underType}`}
-          importer={import("./maler/avslag-bruker-har-ikke-rett.md?raw")}
-        />
-      ),
-    },
-    {
-      title: "Hjelpemiddelet gis ikke fra Folketrygden",
-      component: (
-        <OpprettBrevKnapp
-          velgMal={velgMal}
-          unikNøkkel={`avslag-${underType}`}
-          importer={import("./maler/avslag-hjelpemiddelet-gis-ikke.md?raw")}
-        />
-      ),
-    },
-    {
-      title: "Andre enn Nav dekker hjelpemiddelet",
-      component: (
-        <OpprettBrevKnapp
-          velgMal={velgMal}
-          unikNøkkel={`avslag-${underType}`}
-          importer={import("./maler/avslag-andre-enn-nav-dekker.md?raw")}
-        />
-      ),
-    },
-  ];
   return (
     <>
       <div style={{ margin: "1em 0 0 0" }}>
         <Select
-          label="Velg avslagstype"
+          label={tittel}
           onChange={(e) => {
             const v = e.target.value;
             if (v != "") setUnderType(v);
             else setUnderType(undefined);
           }}
         >
-          <option value="">- Velg avslagstype -</option>
+          <option disabled={!!underType} value="">
+            -
+          </option>
           {alternativer.map((v) => (
             <option value={v.title}>{v.title}</option>
           ))}

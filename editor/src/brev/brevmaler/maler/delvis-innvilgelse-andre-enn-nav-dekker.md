@@ -1,10 +1,26 @@
-# Nav har avslått søknaden din om hjelpemidler
+# Nav har delvis innvilget søknaden din om hjelpemidler
 
-Hei,
+## Vedtak
 
-Vi har avslått søknaden din om  \[navn på hjelpemidler\]  fordi \[fritekstfelt\].
+Vi har innvilget søknaden din om \[navn på konkret hjelpemiddel\] fordi \[fritekstfelt\].
 
-Vedtaket er gjort etter folketrygdloven § 10-6.
+Vi har avslått søknaden om \[navn på konkret hjelpemiddel\] fordi \[fritekstfelt\].
+
+Vi har avslått søknaden din fordi hjelpemiddelet du har søkt om, ikke dekkes av NAV. Du kan kontakte \[aktuell aktør\].
+
+## Praktiske opplysninger
+
+Kommunen vil som regel levere hjelpemidlene til den oppgitte adressen. Dersom hjelpemidler må bestilles og tilpasses, får du kanskje ikke alle på samme tidspunkt.
+
+Har du spørsmål om utleveringen, må du henvende deg til den som har hjulpet deg med søknaden eller til hjelpemiddelsentralen.
+
+Du er ansvarlig for å ta vare på og vedlikeholde de hjelpemidlene du har lånt av Nav. Ta kontakt med kommunen dersom hjelpemiddelet må repareres. Vi eier hjelpemidlene, og de skal ikke brukes av andre enn deg selv. Du har ikke lov til å selge eller pantsette hjelpemidlet.
+
+Hvis du flytter utenlands eller får varig opphold i sykehjem eller institusjon må du gi oss beskjed i forkant.
+
+Dersom du ikke bruker hjelpemidlene må du kontakte kommunen, som skal ta i mot eller hente hjelpemidlene.  
+
+Du kan lese mer om vilkårene for å få hjelpemidler på [nav.no](https://nav.no).
 
 ## Du kan klage på vedtaket
 
