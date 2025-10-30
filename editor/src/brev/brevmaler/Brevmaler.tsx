@@ -34,7 +34,7 @@ export const BrevmalVelger = ({
                       component: (
                         <OpprettBrevKnapp
                           velgMal={velgMal}
-                          unikNøkkel="delvis-innvilgelse"
+                          unikNøkkel="delvis-innvilgelse-bruker-har-ikke-rett"
                           importer={
                             import(
                               "./maler/delvis-innvilgelse-bruker-har-ikke-rett.md?raw"
