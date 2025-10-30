@@ -56,16 +56,14 @@ export const Brev = ({ sakId }: { sakId: number }) => {
             defaultMarkdown={valgtMal}
             state={brevutkast.data?.data}
             onStateChange={async (state) => {
-              let newState = {
-                brevtype: "BREVEDITOR_VEDTAKSBREV",
-                målform: "NB",
-                data: state,
-              };
               await fetch(`/api/sak/${sakId}/brevutkast`, {
                 method: "post",
-                body: JSON.stringify(newState),
+                body: JSON.stringify({
+                  brevtype: "BREVEDITOR_VEDTAKSBREV",
+                  målform: "NB",
+                  data: state,
+                }),
               });
-              await brevutkast.mutate(newState);
             }}
             onSlettBrev={async () => {
               velgMal(undefined); // Unngå at forrige valgte mal trigger at breveditoren laster den på nytt

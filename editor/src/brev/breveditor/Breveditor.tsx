@@ -23,12 +23,12 @@ import {
   useState,
 } from "react";
 import NavLogo from "../../assets/nav-logo.svg?react";
-import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { BoldPlugin } from "@platejs/basic-nodes/react";
 import { BrevHeaderPlugin } from "./plugins/brev-header/BrevHeaderPlugin.tsx";
 import { FlytendeLinkVerktøylinjeKit } from "./plugins/flytende-link-verktøylinje/FlytendeLinkVerktøylinjeKit.tsx";
 import type { History } from "@platejs/slate";
 import { v4 as uuidv4 } from "uuid";
+import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
