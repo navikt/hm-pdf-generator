@@ -9,7 +9,7 @@ import {
   NumberListIcon,
   PencilWritingFillIcon,
 } from "@navikt/aksel-icons";
-import { ListStyleType, someList, toggleList } from "@platejs/list";
+import { someList, toggleList } from "@platejs/list-classic";
 import { TypeH1, TypeH2, TypeH3 } from "@styled-icons/bootstrap";
 import { useBreveditorContext } from "../Breveditor.tsx";
 
@@ -34,12 +34,12 @@ const BlokktypeMeny = ({}: {}) => {
   );
 
   const punktlistePressed = useEditorSelector(
-    (editor) => someList(editor, [ListStyleType.Circle]),
+    (editor) => someList(editor, "ul"),
     [],
   );
 
   const nummerertListePressed = useEditorSelector(
-    (editor) => someList(editor, [ListStyleType.Decimal]),
+    (editor) => someList(editor, "ol"),
     [],
   );
 
@@ -140,7 +140,7 @@ const BlokktypeMeny = ({}: {}) => {
             onSelect={(_) =>
               !punktlistePressed &&
               toggleList(editor, {
-                listStyleType: ListStyleType.Circle,
+                type: "ul",
               })
             }
           >
@@ -151,7 +151,7 @@ const BlokktypeMeny = ({}: {}) => {
             onSelect={(_) =>
               !nummerertListePressed &&
               toggleList(editor, {
-                listStyleType: ListStyleType.Decimal,
+                type: "ol",
               })
             }
           >

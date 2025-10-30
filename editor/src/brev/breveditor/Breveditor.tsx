@@ -1,17 +1,7 @@
 import "./Breveditor.less";
 import { Plate, PlateContent, usePlateEditor } from "platejs/react";
 import { MarkdownPlugin, remarkMdx } from "@platejs/markdown";
-import { BaseParagraphPlugin, KEYS, serializeHtml, type Value } from "platejs";
-import { ListPlugin } from "@platejs/list/react";
-import {
-  BaseH1Plugin,
-  BaseH2Plugin,
-  BaseH3Plugin,
-  BaseH4Plugin,
-  BaseHeadingPlugin,
-  BaseItalicPlugin,
-  BaseUnderlinePlugin,
-} from "@platejs/basic-nodes";
+import { KEYS, serializeHtml, type Value } from "platejs";
 import {
   createContext,
   type RefObject,
@@ -23,12 +13,21 @@ import {
   useState,
 } from "react";
 import NavLogo from "../../assets/nav-logo.svg?react";
-import { BoldPlugin } from "@platejs/basic-nodes/react";
+import {
+  BoldPlugin,
+  H1Plugin,
+  H2Plugin,
+  H3Plugin,
+  H4Plugin,
+  ItalicPlugin,
+  UnderlinePlugin,
+} from "@platejs/basic-nodes/react";
 import { BrevHeaderPlugin } from "./plugins/brev-header/BrevHeaderPlugin.tsx";
 import { FlytendeLinkVerktøylinjeKit } from "./plugins/flytende-link-verktøylinje/FlytendeLinkVerktøylinjeKit.tsx";
 import type { History } from "@platejs/slate";
 import { v4 as uuidv4 } from "uuid";
 import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
+import { ListPlugin } from "@platejs/list-classic/react";
 
 export interface BreveditorContextType {
   erPlateContentFokusert: boolean;
@@ -107,14 +106,12 @@ const Breveditor = ({
           }),
         ],
         ...[
-          BaseH1Plugin,
-          BaseH2Plugin,
-          BaseH3Plugin,
-          BaseH4Plugin,
-          BaseParagraphPlugin,
-          BaseHeadingPlugin,
-          BaseItalicPlugin,
-          BaseUnderlinePlugin,
+          H1Plugin,
+          H2Plugin,
+          H3Plugin,
+          H4Plugin,
+          ItalicPlugin,
+          UnderlinePlugin,
           BoldPlugin,
           ListPlugin.configure({
             inject: {

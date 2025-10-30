@@ -1,6 +1,6 @@
 import { Button, Tooltip } from "@navikt/ds-react";
 import { useEditorSelector, useEditorState } from "platejs/react";
-import { ListStyleType, someList, toggleList } from "@platejs/list";
+import { someList, toggleList } from "@platejs/list-classic";
 import type { ReactNode } from "react";
 import { useBreveditorContext } from "../../Breveditor.tsx";
 
@@ -10,13 +10,13 @@ const ListeKnapp = ({
   ikon,
 }: {
   tittel: string;
-  listeStilType: ListStyleType;
+  listeStilType: string;
   ikon: ReactNode;
 }) => {
   const breveditor = useBreveditorContext();
   const editor = useEditorState();
   const pressed = useEditorSelector(
-    (editor) => someList(editor, [listeStilType]),
+    (editor) => someList(editor, listeStilType),
     [],
   );
   const active = breveditor.erPlateContentFokusert && pressed;
@@ -29,7 +29,7 @@ const ListeKnapp = ({
         variant={active ? "primary-neutral" : "tertiary-neutral"}
         onClick={(_) => {
           toggleList(editor, {
-            listStyleType: listeStilType,
+            type: listeStilType,
           });
         }}
       />

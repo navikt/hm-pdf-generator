@@ -15,7 +15,7 @@
     "@navikt/ds-react": "^7.32.1",
     "@platejs/basic-nodes": "^49.0.0",
     "@platejs/link": "^50.3.2",
-    "@platejs/list": "^50.2.0",
+    "@platejs/list-classic": "^49.1.0",
     "@platejs/markdown": "^50.2.0",
     "@platejs/selection": "^50.3.4",
     "@styled-icons/bootstrap": "^10.47.0",
