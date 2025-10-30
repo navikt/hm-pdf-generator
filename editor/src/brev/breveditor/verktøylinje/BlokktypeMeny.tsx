@@ -20,15 +20,13 @@ const BlokktypeMeny = ({}: {}) => {
   const editor = useEditorState();
   const turnInto = React.useCallback(
     (type: string) => {
-      editor.api.blocks().forEach(([node, path]) => {
-        if (node[KEYS.listType]) {
-          editor.tf.unsetNodes([KEYS.listType, "indent"], {
-            at: path,
-          });
-        }
-        editor.tf.resetBlock({ at: path });
-        editor.tf.toggleBlock(type, { at: path });
-      });
+      editor.api
+        .blocks()
+        .filter((it) => it[1].length == 1)
+        .forEach(([_, path]) => {
+          editor.tf.resetBlock({ at: path });
+          editor.tf.toggleBlock(type, { at: path });
+        });
     },
     [editor],
   );
@@ -44,17 +42,18 @@ const BlokktypeMeny = ({}: {}) => {
   );
 
   const editorStateChange = useEditorState();
+  const topLevelBlocks = editorStateChange.api
+    .blocks()
+    .filter((it) => it[1].length == 1);
   const blockType = (() => {
-    if (punktlistePressed) return KEYS.ulClassic;
-    if (nummerertListePressed) return KEYS.olClassic;
-    let blocks = editorStateChange.api.blocks();
-    return blocks.length == 1 ? blocks[0]!![0]!!.type : undefined;
+    return topLevelBlocks.length == 1
+      ? topLevelBlocks[0]!![0]!!.type
+      : undefined;
   })();
-  const moreThanOneBlockSelected = (() =>
-    editorStateChange.api.blocks().length > 1)();
+  const moreThanOneBlockSelected = (() => topLevelBlocks.length > 1)();
   const noBlockSelected = (() =>
     !breveditor.erBreveditorEllerVerktoylinjeFokusert ||
-    editorStateChange.api.blocks().length == 0)();
+    topLevelBlocks.length == 0)();
 
   return (
     <ActionMenu

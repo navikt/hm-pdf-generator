@@ -115,7 +115,7 @@ const Breveditor = ({
           BoldPlugin,
           ListPlugin.configure({
             inject: {
-              targetPlugins: [...KEYS.heading, KEYS.p],
+              targetPlugins: [KEYS.p],
             },
           }),
           // Våre egne breveditor plugins
