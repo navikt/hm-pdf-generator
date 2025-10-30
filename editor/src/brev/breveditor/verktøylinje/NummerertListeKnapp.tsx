@@ -1,4 +1,4 @@
-import { BulletListIcon } from "@navikt/aksel-icons";
+import { NumberListIcon } from "@navikt/aksel-icons";
 import { ListStyleType } from "@platejs/list";
 import ListeKnapp from "./hjelpere/ListeKnapp.tsx";
 
@@ -7,7 +7,7 @@ const NummerertListeKnapp = ({}: {}) => {
     <ListeKnapp
       tittel="Nummerert liste"
       listeStilType={ListStyleType.Decimal}
-      ikon={<BulletListIcon fontSize="1rem" />}
+      ikon={<NumberListIcon fontSize="1rem" />}
     />
   );
 };
