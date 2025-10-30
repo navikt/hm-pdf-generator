@@ -55,6 +55,10 @@ export function OpprettEndreLinkPanel() {
         ref={ctx.floatingLinkUrlInput.ref}
         defaultValue={getOptions().url}
         {...omit(ctx.floatingLinkUrlInput.props, ["defaultValue"])}
+        style={{
+          /* Fikser bredden (100% på insiden av yttre padding) */ boxSizing:
+            "border-box",
+        }}
         data-plate-focus
       />
       <Button
