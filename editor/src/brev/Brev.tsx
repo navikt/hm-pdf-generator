@@ -55,31 +55,27 @@ export const Brev = ({ sakId }: { sakId: number }) => {
             }}
             defaultMarkdown={valgtMal}
             state={brevutkast.data?.data}
-            onStateChange={(state) => {
+            onStateChange={async (state) => {
               let newState = {
                 brevtype: "BREVEDITOR_VEDTAKSBREV",
                 målform: "NB",
                 data: state,
               };
-              (async () => {
-                await fetch(`/api/sak/${sakId}/brevutkast`, {
-                  method: "post",
-                  body: JSON.stringify(newState),
-                });
-                await brevutkast.mutate(newState);
-              })();
+              await fetch(`/api/sak/${sakId}/brevutkast`, {
+                method: "post",
+                body: JSON.stringify(newState),
+              });
+              await brevutkast.mutate(newState);
             }}
-            onSlettBrev={() => {
+            onSlettBrev={async () => {
               velgMal(undefined); // Unngå at forrige valgte mal trigger at breveditoren laster den på nytt
-              (async () => {
-                await fetch(
-                  `/api/sak/${sakId}/brevutkast/BREVEDITOR_VEDTAKSBREV`,
-                  {
-                    method: "delete",
-                  },
-                );
-                await brevutkast.mutate(); // Reload
-              })();
+              await fetch(
+                `/api/sak/${sakId}/brevutkast/BREVEDITOR_VEDTAKSBREV`,
+                {
+                  method: "delete",
+                },
+              );
+              await brevutkast.mutate(); // Reload
             }}
             // onValueChange={(newValue, history, html) => {
             //   console.log("App.tsx: onValueChange", {
