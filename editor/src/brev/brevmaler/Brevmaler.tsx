@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { Button, Select } from "@navikt/ds-react";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 export const BrevmalVelger = ({
   velgMal,
@@ -166,12 +166,14 @@ const Velger = ({
             -
           </option>
           {alternativer.map((v) => (
-            <option value={v.title}>{v.title}</option>
+            <option key={v.title} value={v.title}>
+              {v.title}
+            </option>
           ))}
         </Select>
       </div>
       {alternativer.map((v) => (
-        <>{underType == v.title && v.component}</>
+        <div key={v.title}>{underType == v.title && v.component}</div>
       ))}
     </>
   );
@@ -191,7 +193,9 @@ const OpprettBrevKnapp = ({
   const [key, setKey] = useState<string>();
   const { isLoading, data } = useImporterMal(key, importer);
 
-  if (data) velgMal(transformerMal ? transformerMal(data) : data);
+  useEffect(() => {
+    if (data) velgMal(transformerMal ? transformerMal(data) : data);
+  }, [data]);
 
   return (
     <Button

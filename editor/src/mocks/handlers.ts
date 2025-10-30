@@ -15,7 +15,13 @@ export const handlers = [
             opprettet: "2025-10-28T13:35:00",
           })
         : HttpResponse.json({
-            error: "brev-ikke-funnet",
+            sakId: params.sakId,
+            brevtype: params.brevtype,
+            data: {},
+            opprettet: "2025-10-28T13:35:00",
+            opprettetAv: "Ola Nordmann",
+            oppdatert: "2025-10-28T13:35:00",
+            oppdatertAv: "Ola Nordmann",
           });
     },
   ),
