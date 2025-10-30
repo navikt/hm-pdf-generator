@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { Button, Select } from "@navikt/ds-react";
+import { Button, Chips, Select } from "@navikt/ds-react";
 import { type ReactNode, useEffect, useState } from "react";
 
 export const BrevmalVelger = ({
@@ -124,6 +124,10 @@ export const BrevmalVelger = ({
               ),
             },
             {
+              title: "Svartidsbrev",
+              component: <Svartidsbrev velgMal={velgMal} />,
+            },
+            {
               title: "Tom brevmal",
               component: (
                 <Button
@@ -139,6 +143,35 @@ export const BrevmalVelger = ({
           ]}
         />
       </div>
+    </div>
+  );
+};
+
+const Svartidsbrev = ({ velgMal }: { velgMal: (mal: string) => void }) => {
+  const [selected, setSelected] = useState<string>("4 uker");
+  const alternativer = ["4 uker", "12 uker", "18 uker"];
+
+  return (
+    <div style={{ margin: "1em 0" }}>
+      <Chips>
+        {alternativer.map((option) => (
+          <Chips.Toggle
+            key={option}
+            selected={selected == option}
+            onClick={() => setSelected(option)}
+          >
+            {option}
+          </Chips.Toggle>
+        ))}
+      </Chips>
+      <OpprettBrevKnapp
+        velgMal={velgMal}
+        unikNøkkel="svartidsbrev"
+        importer={import("./maler/svartidsbrev.md?raw")}
+        transformerMal={(m) =>
+          m.replaceAll("{{ANTALL_UKER_SVARTID}}", selected)
+        }
+      />
     </div>
   );
 };
