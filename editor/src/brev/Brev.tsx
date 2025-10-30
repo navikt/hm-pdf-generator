@@ -18,12 +18,10 @@ export const Brev = ({ sakId }: { sakId: number }) => {
   );
 
   const [valgtMal, velgMal] = useState<string>();
-  console.log("a", brevutkast.data);
   const errorEr404 = useMemo(
     () => brevutkast.data?.data?.state == undefined,
     [brevutkast.data],
   );
-  console.log("b", errorEr404);
 
   if (brevutkast.isLoading) {
     return <Loader title="Laster inn brevutkast..." />;
@@ -60,7 +58,7 @@ export const Brev = ({ sakId }: { sakId: number }) => {
                 method: "post",
                 body: JSON.stringify({
                   brevtype: "BREVEDITOR_VEDTAKSBREV",
-                  målform: "NB",
+                  målform: "BOKMÅL",
                   data: state,
                 }),
               });
