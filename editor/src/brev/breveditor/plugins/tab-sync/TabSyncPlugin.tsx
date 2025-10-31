@@ -31,15 +31,11 @@ export const TabSyncPlugin = createPlatePlugin({
   const c = new BroadcastChannel("breveditor-tab-sync-plugin");
 
   c.onmessage = ({ data }: MessageEvent<TabSyncPluginMessage>) => {
-    console.log(
-      "tab-sync-plugin: onMessage",
-      data.brevId === plugin.options.brevId,
-    );
     if (data.brevId === plugin.options.brevId) {
-      console.log("tab-sync-plugin: onMessage: from another tab!");
       plugin.options.onChangeLocked = true;
       editor.tf.setValue(data.state.value);
       editor.history = data.state.history;
+
       // Ikke prosesser de første onChange eventene etter sync fra tab! Vent litt med å åpne igjen slik at denne kan
       // leses i Breveditor.tsx onChange også!
       setTimeout(() => {
@@ -74,6 +70,7 @@ export const TabSyncPlugin = createPlatePlugin({
     },
   };
 
+  // Unngå duplisering av eventer når man bruker dev-serveren til vitejs og den reloader moduler
   if (import.meta.hot) {
     import.meta.hot.dispose(() => {
       console.log(
