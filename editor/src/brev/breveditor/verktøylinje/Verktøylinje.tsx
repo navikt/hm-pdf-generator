@@ -34,11 +34,14 @@ const Verktøylinje = ({}: {}) => {
       <div className="left-items">
         <AngreKnapp />
         <GjentaKnapp />
+        <Skillelinje />
         <FetKnapp />
         <KursivKnapp />
         <UnderlinjeKnapp />
+        <Skillelinje />
         <PunktlisteKnapp />
         <NummerertListeKnapp />
+        <Skillelinje />
         <LinkKnapp />
         <LeggTilDelmalKnapp />
         <SvitsjMargerKnapp />
@@ -58,6 +61,10 @@ const Verktøylinje = ({}: {}) => {
       </div>
     </Box>
   );
+};
+
+const Skillelinje = () => {
+  return <div className="separator-line">&nbsp;</div>;
 };
 
 export default Verktøylinje;

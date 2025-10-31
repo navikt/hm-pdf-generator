@@ -56,109 +56,113 @@ const BlokktypeMeny = ({}: {}) => {
     topLevelBlocks.length == 0)();
 
   return (
-    <ActionMenu
-      onOpenChange={(open) => {
-        if (!open) breveditor.fokuserPlateContent();
-      }}
-    >
-      <ActionMenu.Trigger>
-        <Button
-          variant="secondary-neutral"
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition="right"
-          size="small"
-          disabled={!breveditor.erBreveditorEllerVerktoylinjeFokusert}
-        >
-          {noBlockSelected && (
-            <span style={{ minWidth: "50px", display: "inline-block" }}>-</span>
-          )}
-          {!noBlockSelected && moreThanOneBlockSelected && <>Flere</>}
-          {!noBlockSelected && blockType == KEYS.p && <>Brødtekst</>}
-          {!noBlockSelected && blockType == KEYS.h1 && <>Tittel</>}
-          {!noBlockSelected && blockType == KEYS.h2 && <>Overskrift 1</>}
-          {!noBlockSelected && blockType == KEYS.h3 && <>Overskrift 2</>}
-          {!noBlockSelected && blockType == KEYS.h4 && <>Overskrift 3</>}
-          {!noBlockSelected &&
-            !moreThanOneBlockSelected &&
-            blockType == KEYS.ulClassic && <>Punktliste</>}
-          {!noBlockSelected &&
-            !moreThanOneBlockSelected &&
-            blockType == KEYS.olClassic && <>Nummerert liste</>}
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Group label="Grunnleggende stiler">
-          <ActionMenu.Item
-            icon={<Density3Icon fontSize="1rem" />}
-            onSelect={(_) => turnInto(KEYS.p)}
+    <div style={{ margin: "0 0.5em" }}>
+      <ActionMenu
+        onOpenChange={(open) => {
+          if (!open) breveditor.fokuserPlateContent();
+        }}
+      >
+        <ActionMenu.Trigger>
+          <Button
+            variant="secondary-neutral"
+            icon={<ChevronDownIcon aria-hidden />}
+            iconPosition="right"
+            size="small"
+            disabled={!breveditor.erBreveditorEllerVerktoylinjeFokusert}
           >
-            Brødtekst
-          </ActionMenu.Item>
-        </ActionMenu.Group>
-        <ActionMenu.Group label="Overskrifter">
-          <ActionMenu.Item
-            icon={<PencilWritingFillIcon fontSize="1rem" />}
-            onSelect={(_) => turnInto(KEYS.h1)}
-          >
-            Tittel
-          </ActionMenu.Item>
-          <ActionMenu.Item
-            icon={<TypeH1 fontSize="1rem" style={{ scale: "0.7" }} />}
-            onSelect={(_) => turnInto(KEYS.h2)}
-          >
-            Overskrift 1
-          </ActionMenu.Item>
-          <ActionMenu.Item
-            icon={
-              <TypeH2
-                title="Overskrift 2"
-                fontSize="1rem"
-                style={{ scale: "0.7" }}
-              />
-            }
-            onSelect={(_) => turnInto(KEYS.h3)}
-          >
-            Overskrift 2
-          </ActionMenu.Item>
-          <ActionMenu.Item
-            icon={
-              <TypeH3
-                title="Overskrift 3"
-                fontSize="1rem"
-                style={{ scale: "0.7" }}
-              />
-            }
-            onSelect={(_) => turnInto(KEYS.h4)}
-          >
-            Overskrift 3
-          </ActionMenu.Item>
-        </ActionMenu.Group>
-        <ActionMenu.Group label="Lister">
-          <ActionMenu.Item
-            icon={<BulletListIcon fontSize="1rem" />}
-            onSelect={(_) =>
-              !punktlistePressed &&
-              toggleList(editor, {
-                type: "ul",
-              })
-            }
-          >
-            Punktliste
-          </ActionMenu.Item>
-          <ActionMenu.Item
-            icon={<NumberListIcon fontSize="1rem" />}
-            onSelect={(_) =>
-              !nummerertListePressed &&
-              toggleList(editor, {
-                type: "ol",
-              })
-            }
-          >
-            Nummerert liste
-          </ActionMenu.Item>
-        </ActionMenu.Group>
-      </ActionMenu.Content>
-    </ActionMenu>
+            {noBlockSelected && (
+              <span style={{ minWidth: "50px", display: "inline-block" }}>
+                -
+              </span>
+            )}
+            {!noBlockSelected && moreThanOneBlockSelected && <>Flere</>}
+            {!noBlockSelected && blockType == KEYS.p && <>Brødtekst</>}
+            {!noBlockSelected && blockType == KEYS.h1 && <>Tittel</>}
+            {!noBlockSelected && blockType == KEYS.h2 && <>Overskrift 1</>}
+            {!noBlockSelected && blockType == KEYS.h3 && <>Overskrift 2</>}
+            {!noBlockSelected && blockType == KEYS.h4 && <>Overskrift 3</>}
+            {!noBlockSelected &&
+              !moreThanOneBlockSelected &&
+              blockType == KEYS.ulClassic && <>Punktliste</>}
+            {!noBlockSelected &&
+              !moreThanOneBlockSelected &&
+              blockType == KEYS.olClassic && <>Nummerert liste</>}
+          </Button>
+        </ActionMenu.Trigger>
+        <ActionMenu.Content>
+          <ActionMenu.Group label="Grunnleggende stiler">
+            <ActionMenu.Item
+              icon={<Density3Icon fontSize="1rem" />}
+              onSelect={(_) => turnInto(KEYS.p)}
+            >
+              Brødtekst
+            </ActionMenu.Item>
+          </ActionMenu.Group>
+          <ActionMenu.Group label="Overskrifter">
+            <ActionMenu.Item
+              icon={<PencilWritingFillIcon fontSize="1rem" />}
+              onSelect={(_) => turnInto(KEYS.h1)}
+            >
+              Tittel
+            </ActionMenu.Item>
+            <ActionMenu.Item
+              icon={<TypeH1 fontSize="1rem" style={{ scale: "0.7" }} />}
+              onSelect={(_) => turnInto(KEYS.h2)}
+            >
+              Overskrift 1
+            </ActionMenu.Item>
+            <ActionMenu.Item
+              icon={
+                <TypeH2
+                  title="Overskrift 2"
+                  fontSize="1rem"
+                  style={{ scale: "0.7" }}
+                />
+              }
+              onSelect={(_) => turnInto(KEYS.h3)}
+            >
+              Overskrift 2
+            </ActionMenu.Item>
+            <ActionMenu.Item
+              icon={
+                <TypeH3
+                  title="Overskrift 3"
+                  fontSize="1rem"
+                  style={{ scale: "0.7" }}
+                />
+              }
+              onSelect={(_) => turnInto(KEYS.h4)}
+            >
+              Overskrift 3
+            </ActionMenu.Item>
+          </ActionMenu.Group>
+          <ActionMenu.Group label="Lister">
+            <ActionMenu.Item
+              icon={<BulletListIcon fontSize="1rem" />}
+              onSelect={(_) =>
+                !punktlistePressed &&
+                toggleList(editor, {
+                  type: "ul",
+                })
+              }
+            >
+              Punktliste
+            </ActionMenu.Item>
+            <ActionMenu.Item
+              icon={<NumberListIcon fontSize="1rem" />}
+              onSelect={(_) =>
+                !nummerertListePressed &&
+                toggleList(editor, {
+                  type: "ol",
+                })
+              }
+            >
+              Nummerert liste
+            </ActionMenu.Item>
+          </ActionMenu.Group>
+        </ActionMenu.Content>
+      </ActionMenu>
+    </div>
   );
 };
 
