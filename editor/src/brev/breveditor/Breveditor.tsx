@@ -22,7 +22,7 @@ import {
   ItalicPlugin,
   UnderlinePlugin,
 } from "@platejs/basic-nodes/react";
-import { BrevHeaderPlugin } from "./plugins/brev-header/BrevHeaderPlugin.tsx";
+import { TabSyncPlugin } from "./plugins/tab-sync/TabSyncPlugin.tsx";
 import { FlytendeLinkVerktøylinjeKit } from "./plugins/flytende-link-verktøylinje/FlytendeLinkVerktøylinjeKit.tsx";
 import type { History } from "@platejs/slate";
 import { v4 as uuidv4 } from "uuid";
@@ -59,7 +59,6 @@ export interface StateMangement {
   state?: {
     value: Value;
     history: History;
-    // selection: EditorSelection;
   };
 }
 
@@ -75,7 +74,7 @@ export interface Metadata {
 
 const Breveditor = ({
   metadata,
-  defaultValue,
+  brevId,
   defaultMarkdown,
   onValueChange,
   state: externalStateManager,
@@ -83,16 +82,14 @@ const Breveditor = ({
   onSlettBrev,
 }: {
   metadata: Metadata;
-  defaultValue?: Value;
+  brevId?: string;
   defaultMarkdown?: string;
   onValueChange?: (newValue: Value, newHistory: History, html: string) => void;
   state?: StateMangement;
   onStateChange?: (newState: StateMangement) => void;
   onSlettBrev?: () => void;
 }) => {
-  const state = useRef<StateMangement>(
-    /*externalStateManager ||*/ { stateRevision: uuidv4() },
-  );
+  const state = useRef<StateMangement>({ stateRevision: uuidv4() });
   const lock = useRef(false);
 
   let editor = usePlateEditor(
@@ -119,18 +116,23 @@ const Breveditor = ({
             },
           }),
           // Våre egne breveditor plugins
-          ...[...FlytendeLinkVerktøylinjeKit, BrevHeaderPlugin],
+          ...[
+            ...FlytendeLinkVerktøylinjeKit,
+            TabSyncPlugin.configure({
+              options: {
+                brevId,
+              },
+            }),
+          ],
         ],
       ],
       value: (editor) => {
-        if (defaultValue) {
-          return defaultValue;
-        } else if (defaultMarkdown) {
+        if (defaultMarkdown) {
           return editor
             .getApi(MarkdownPlugin)
             .markdown.deserialize(defaultMarkdown);
         } else {
-          return [{ type: "p", children: [{ text: "" }] }] as Value;
+          return [{ type: "h1", children: [{ text: "" }] }] as Value;
         }
       },
     },
@@ -154,7 +156,6 @@ const Breveditor = ({
       state.current = externalStateManager;
       editor.tf.setValue(externalStateManager.state.value);
       editor.history = externalStateManager.state.history;
-      // editor.selection = externalStateManager.state.selection;
     }
   }, [externalStateManager]);
 
@@ -237,13 +238,16 @@ const Breveditor = ({
             );
         }}
         onChange={({ editor: changedEditor, value: newValue }) => {
-          if (onStateChange != undefined && !lock.current) {
+          if (
+            onStateChange != undefined &&
+            !lock.current &&
+            !editor.getPlugin(TabSyncPlugin).options.onChangeLocked
+          ) {
             const constructedState: StateMangement = {
               stateRevision: uuidv4(),
               state: {
                 value: newValue,
                 history: changedEditor.history,
-                // selection: changedEditor.selection,
               },
             };
             if (

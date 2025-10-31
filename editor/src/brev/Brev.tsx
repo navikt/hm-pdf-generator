@@ -51,6 +51,7 @@ export const Brev = ({ sakId }: { sakId: number }) => {
               attestantsNavn: "Kari Hansen",
               hjelpemiddelsentral: "Nav hjelpemiddelsentral Agder",
             }}
+            brevId="1000"
             defaultMarkdown={valgtMal}
             state={brevutkast.data?.data}
             onStateChange={async (state) => {
