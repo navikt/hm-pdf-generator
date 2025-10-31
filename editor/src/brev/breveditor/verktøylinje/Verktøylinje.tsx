@@ -11,6 +11,7 @@ import SvitsjMargerKnapp from "./SvitsjMargerKnapp.tsx";
 import { useBreveditorContext } from "../Breveditor.tsx";
 import LinkKnapp from "./LinkKnapp.tsx";
 import SlettBrevutkastKnapp from "./SlettBrevutkastKnapp.tsx";
+import LeggTilDelmalKnapp from "./LeggTilDelmalKnapp.tsx";
 
 const Verktøylinje = ({}: {}) => {
   const breveditor = useBreveditorContext();
@@ -39,6 +40,7 @@ const Verktøylinje = ({}: {}) => {
         <PunktlisteKnapp />
         <NummerertListeKnapp />
         <LinkKnapp />
+        <LeggTilDelmalKnapp />
         <SvitsjMargerKnapp />
         <BlokktypeMeny />
       </div>
