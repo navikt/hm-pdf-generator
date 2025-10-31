@@ -39,10 +39,10 @@ const Verktøylinje = ({}: {}) => {
         <KursivKnapp />
         <UnderlinjeKnapp />
         <Skillelinje />
+        <LinkKnapp />
         <PunktlisteKnapp />
         <NummerertListeKnapp />
         <Skillelinje />
-        <LinkKnapp />
         <LeggTilDelmalKnapp />
         <SvitsjMargerKnapp />
         <BlokktypeMeny />
