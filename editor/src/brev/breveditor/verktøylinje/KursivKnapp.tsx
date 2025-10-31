@@ -14,6 +14,12 @@ const KursivKnapp = ({}: {}) => {
           K
         </span>
       }
+      shortcuts={
+        window.navigator.platform.startsWith("Mac") ||
+        window.navigator.platform === "iPhone"
+          ? ["⌘ + I"]
+          : ["Ctrl + I"]
+      }
     />
   );
 };

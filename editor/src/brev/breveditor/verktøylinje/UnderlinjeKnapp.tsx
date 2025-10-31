@@ -14,6 +14,12 @@ const UnderlinjeKnapp = ({}: {}) => {
           U
         </span>
       }
+      shortcuts={
+        window.navigator.platform.startsWith("Mac") ||
+        window.navigator.platform === "iPhone"
+          ? ["⌘ + U"]
+          : ["Ctrl + U"]
+      }
     />
   );
 };

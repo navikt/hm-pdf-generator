@@ -7,17 +7,19 @@ const MarkKnapp = ({
   tittel,
   markKey,
   ikon,
+  shortcuts,
 }: {
   tittel: string;
   markKey: string;
   ikon: ReactNode;
+  shortcuts?: string[];
 }) => {
   const breveditor = useBreveditorContext();
   const editor = useEditorState();
   const active =
     breveditor.erPlateContentFokusert && !!editor.api.mark(markKey);
   return (
-    <Tooltip content={tittel} keys={[]}>
+    <Tooltip content={tittel} keys={shortcuts}>
       <Button
         disabled={!breveditor.erPlateContentFokusert}
         onMouseDown={(event: { preventDefault: () => void }) => {

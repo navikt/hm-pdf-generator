@@ -5,7 +5,15 @@ import { ArrowUndoIcon } from "@navikt/aksel-icons";
 const AngreKnapp = ({}: {}) => {
   const editor = useEditorState();
   return (
-    <Tooltip content={"Angre"} keys={[]}>
+    <Tooltip
+      content={"Angre"}
+      keys={
+        window.navigator.platform.startsWith("Mac") ||
+        window.navigator.platform === "iPhone"
+          ? ["⌘ + Z"]
+          : ["Ctrl + Z"]
+      }
+    >
       <Button
         disabled={editor.history.undos.length == 0}
         onMouseDown={(event: { preventDefault: () => void }) => {

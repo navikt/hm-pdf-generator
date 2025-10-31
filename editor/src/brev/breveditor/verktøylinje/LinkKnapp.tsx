@@ -14,7 +14,15 @@ const LinkKnapp = ({}: {}) => {
   } = useLinkToolbarButton(state);
   const active = breveditor.erPlateContentFokusert && pressed;
   return (
-    <Tooltip content={"Link"} keys={[]}>
+    <Tooltip
+      content={"Link"}
+      keys={
+        window.navigator.platform.startsWith("Mac") ||
+        window.navigator.platform === "iPhone"
+          ? ["⌘ + K"]
+          : ["Ctrl + K"]
+      }
+    >
       <Button
         disabled={!breveditor.erPlateContentFokusert}
         variant={active ? "primary-neutral" : "tertiary-neutral"}
