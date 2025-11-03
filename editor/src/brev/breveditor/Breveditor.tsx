@@ -227,9 +227,9 @@ const Breveditor = ({
             ) {
               // On state-change
               state.current = constructedState;
+              onStateChange && onStateChange(constructedState);
               clearTimeout(debounceLagring.current);
               debounceLagring.current = setTimeout(async () => {
-                onStateChange && onStateChange(constructedState);
                 if (onLagreBrev) {
                   setLagrerEndringer(true);
                   await onLagreBrev(constructedState);
