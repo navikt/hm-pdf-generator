@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { Alert, Loader } from "@navikt/ds-react";
-import Breveditor from "./breveditor/Breveditor.tsx";
+import Breveditor, { type StateMangement } from "./breveditor/Breveditor.tsx";
 import { BrevmalVelger } from "./brevmaler/Brevmaler.tsx";
 import { useMemo, useState } from "react";
 
@@ -8,7 +8,7 @@ export const Brev = ({ sakId }: { sakId: number }) => {
   const brevutkast = useSWR<
     {
       error?: string;
-      data?: any;
+      data?: StateMangement;
     },
     Error
   >(
@@ -19,7 +19,7 @@ export const Brev = ({ sakId }: { sakId: number }) => {
 
   const [valgtMal, velgMal] = useState<string>();
   const errorEr404 = useMemo(
-    () => brevutkast.data?.data?.state == undefined,
+    () => brevutkast.data?.data?.value == undefined,
     [brevutkast.data],
   );
 
@@ -51,10 +51,10 @@ export const Brev = ({ sakId }: { sakId: number }) => {
               attestantsNavn: "Kari Hansen",
               hjelpemiddelsentral: "Nav hjelpemiddelsentral Agder",
             }}
-            brevId="1000"
-            defaultMarkdown={valgtMal}
-            state={brevutkast.data?.data}
-            onStateChange={async (state) => {
+            brevId={sakId.toString()}
+            templateMarkdown={valgtMal}
+            initialState={brevutkast.data?.data}
+            onLagreBrev={async (state) => {
               await fetch(`/api/sak/${sakId}/brevutkast`, {
                 method: "post",
                 body: JSON.stringify({
@@ -72,17 +72,8 @@ export const Brev = ({ sakId }: { sakId: number }) => {
                   method: "delete",
                 },
               );
-              await brevutkast.mutate(); // Reload
+              await brevutkast.mutate();
             }}
-            // onValueChange={(newValue, history, html) => {
-            //   console.log("App.tsx: onValueChange", {
-            //     value: newValue,
-            //     history: history,
-            //     html,
-            //     stylesheet_version: "v1",
-            //     brevutkast_id: 1000,
-            //   });
-            // }}
           />
         </div>
       )}

@@ -7,7 +7,6 @@ import {
   type RefObject,
   useCallback,
   useContext,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -25,7 +24,6 @@ import {
 import { TabSyncPlugin } from "./plugins/tab-sync/TabSyncPlugin.tsx";
 import { FlytendeLinkVerktøylinjeKit } from "./plugins/flytende-link-verktøylinje/FlytendeLinkVerktøylinjeKit.tsx";
 import type { History } from "@platejs/slate";
-import { v4 as uuidv4 } from "uuid";
 import Verktøylinje from "./verktøylinje/Verktøylinje.tsx";
 import { ListPlugin } from "@platejs/list-classic/react";
 
@@ -56,11 +54,9 @@ export const useBreveditorContext = () => {
 };
 
 export interface StateMangement {
-  stateRevision: string;
-  state?: {
-    value: Value;
-    history: History;
-  };
+  value: Value;
+  valueAsHtml: string;
+  history: History;
 }
 
 export interface Metadata {
@@ -74,27 +70,23 @@ export interface Metadata {
 }
 
 const Breveditor = ({
-  metadata,
   brevId,
-  defaultMarkdown,
-  onValueChange,
-  state: externalStateManager,
+  metadata,
+  templateMarkdown,
+  initialState,
   onStateChange,
   onSlettBrev,
-  onSaveChange,
+  onLagreBrev,
 }: {
-  metadata: Metadata;
   brevId?: string;
-  defaultMarkdown?: string;
-  onValueChange?: (newValue: Value, newHistory: History, html: string) => void;
-  state?: StateMangement;
+  metadata: Metadata;
+  templateMarkdown?: string;
+  initialState?: StateMangement;
   onStateChange?: (newState: StateMangement) => void;
   onSlettBrev?: () => void;
-  onSaveChange?: (newState: StateMangement) => Promise<void>;
+  onLagreBrev?: (newState: StateMangement) => Promise<void>;
 }) => {
-  const state = useRef<StateMangement>({ stateRevision: uuidv4() });
-  const lock = useRef(false);
-
+  const state = useRef<StateMangement | undefined>(undefined);
   let editor = usePlateEditor(
     {
       plugins: [
@@ -130,10 +122,13 @@ const Breveditor = ({
         ],
       ],
       value: (editor) => {
-        if (defaultMarkdown) {
+        if (templateMarkdown) {
           return editor
             .getApi(MarkdownPlugin)
-            .markdown.deserialize(defaultMarkdown);
+            .markdown.deserialize(templateMarkdown);
+        } else if (initialState?.value != undefined) {
+          editor.history = initialState.history;
+          return initialState.value;
         } else {
           return [{ type: "h1", children: [{ text: "" }] }] as Value;
         }
@@ -141,26 +136,6 @@ const Breveditor = ({
     },
     [],
   );
-
-  // Overskriv state fra external state manager når den endrer seg
-  useEffect(() => {
-    if (
-      externalStateManager &&
-      externalStateManager.stateRevision != state.current.stateRevision &&
-      externalStateManager.state
-    ) {
-      // Midlertidig slå av onStateChange for å unngå en loop ved endring av intern state
-      lock.current = true;
-      setTimeout(() => {
-        lock.current = false;
-      }, 10);
-
-      // Gjør endringer til lokal state
-      state.current = externalStateManager;
-      editor.tf.setValue(externalStateManager.state.value);
-      editor.history = externalStateManager.state.history;
-    }
-  }, [externalStateManager]);
 
   // Sett opp breveditor-context state
   const [erPlateContentFokusert, settPlateContentFokusert] = useState(false);
@@ -236,45 +211,33 @@ const Breveditor = ({
     >
       <Plate
         editor={editor}
-        onValueChange={async ({ value: newValue, editor }) => {
-          onValueChange &&
-            onValueChange(
-              newValue,
-              editor.history,
-              await serializeHtml(editor),
-            );
-        }}
-        onChange={({ editor: changedEditor, value: newValue }) => {
-          clearTimeout(debounceLagring.current);
-          debounceLagring.current = setTimeout(async () => {
+        onChange={async ({ editor: changedEditor, value: newValue }) => {
+          if (
+            (onStateChange != undefined || onLagreBrev) &&
+            !editor.getPlugin(TabSyncPlugin).options.onChangeLocked
+          ) {
+            const constructedState: StateMangement = {
+              value: newValue,
+              valueAsHtml: await serializeHtml(editor),
+              history: changedEditor.history,
+            };
             if (
-              onStateChange != undefined &&
-              !lock.current &&
-              !editor.getPlugin(TabSyncPlugin).options.onChangeLocked
+              !state.current ||
+              JSON.stringify(state.current) != JSON.stringify(constructedState)
             ) {
-              const constructedState: StateMangement = {
-                stateRevision: uuidv4(),
-                state: {
-                  value: newValue,
-                  history: changedEditor.history,
-                },
-              };
-              if (
-                !state.current.state ||
-                JSON.stringify(state.current.state) !=
-                  JSON.stringify(constructedState.state)
-              ) {
-                // On state-change
-                state.current = constructedState;
+              // On state-change
+              state.current = constructedState;
+              clearTimeout(debounceLagring.current);
+              debounceLagring.current = setTimeout(async () => {
                 onStateChange && onStateChange(constructedState);
-                if (onSaveChange) {
+                if (onLagreBrev) {
                   setLagrerEndringer(true);
-                  await onSaveChange(constructedState);
+                  await onLagreBrev(constructedState);
                   setLagrerEndringer(false);
                 }
-              }
+              }, 500);
             }
-          }, 500);
+          }
         }}
       >
         <div className="breveditor-container">
