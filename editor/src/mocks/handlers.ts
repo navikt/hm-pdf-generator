@@ -1,13 +1,14 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse, delay } from "msw";
 
 export const handlers = [
   http.get<{ sakId: string; brevtype: string }>(
     "/api/sak/:sakId/brevutkast/:brevtype",
-    ({ params }) => {
+    async ({ params }) => {
       let key = `${params.sakId}-${params.brevtype}`;
       let data = localStorage.getItem(key)
         ? JSON.parse(localStorage.getItem(key) || "{}")
         : null;
+      await delay(200);
       return !!data
         ? HttpResponse.json({
             data,
@@ -39,12 +40,14 @@ export const handlers = [
       `${params.sakId}-${json.brevtype}`,
       JSON.stringify(json.data),
     );
+    await delay(400);
     return new HttpResponse(null, { status: 204 });
   }),
 
   http.delete<{ sakId: string; brevtype: string }>(
     "/api/sak/:sakId/brevutkast/:brevtype",
-    ({ params }) => {
+    async ({ params }) => {
+      await delay(200);
       localStorage.removeItem(`${params.sakId}-${params.brevtype}`);
       return new HttpResponse(null, { status: 204 });
     },

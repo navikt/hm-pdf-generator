@@ -39,6 +39,7 @@ export interface BreveditorContextType {
   visMarger: boolean;
   settVisMarger: (visMarger: boolean) => void;
   onSlettBrev?: () => void;
+  lagrerEndringer: boolean;
 }
 
 export const BreveditorContext = createContext<
@@ -80,6 +81,7 @@ const Breveditor = ({
   state: externalStateManager,
   onStateChange,
   onSlettBrev,
+  onSaveChange,
 }: {
   metadata: Metadata;
   brevId?: string;
@@ -88,6 +90,7 @@ const Breveditor = ({
   state?: StateMangement;
   onStateChange?: (newState: StateMangement) => void;
   onSlettBrev?: () => void;
+  onSaveChange?: (newState: StateMangement) => Promise<void>;
 }) => {
   const state = useRef<StateMangement>({ stateRevision: uuidv4() });
   const lock = useRef(false);
@@ -211,6 +214,9 @@ const Breveditor = ({
     }
   }, [visMarger]);
 
+  const [lagrerEndringer, setLagrerEndringer] = useState(false);
+  const debounceLagring = useRef<number | undefined>(undefined);
+
   return (
     <BreveditorContext
       value={{
@@ -225,6 +231,7 @@ const Breveditor = ({
         visMarger: visMarger,
         settVisMarger: settVisMarger,
         onSlettBrev: onSlettBrev,
+        lagrerEndringer,
       }}
     >
       <Plate
@@ -238,28 +245,36 @@ const Breveditor = ({
             );
         }}
         onChange={({ editor: changedEditor, value: newValue }) => {
-          if (
-            onStateChange != undefined &&
-            !lock.current &&
-            !editor.getPlugin(TabSyncPlugin).options.onChangeLocked
-          ) {
-            const constructedState: StateMangement = {
-              stateRevision: uuidv4(),
-              state: {
-                value: newValue,
-                history: changedEditor.history,
-              },
-            };
+          clearTimeout(debounceLagring.current);
+          debounceLagring.current = setTimeout(async () => {
             if (
-              !state.current.state ||
-              JSON.stringify(state.current.state) !=
-                JSON.stringify(constructedState.state)
+              onStateChange != undefined &&
+              !lock.current &&
+              !editor.getPlugin(TabSyncPlugin).options.onChangeLocked
             ) {
-              // On state-change
-              state.current = constructedState;
-              onStateChange && onStateChange(constructedState);
+              const constructedState: StateMangement = {
+                stateRevision: uuidv4(),
+                state: {
+                  value: newValue,
+                  history: changedEditor.history,
+                },
+              };
+              if (
+                !state.current.state ||
+                JSON.stringify(state.current.state) !=
+                  JSON.stringify(constructedState.state)
+              ) {
+                // On state-change
+                state.current = constructedState;
+                onStateChange && onStateChange(constructedState);
+                if (onSaveChange) {
+                  setLagrerEndringer(true);
+                  await onSaveChange(constructedState);
+                  setLagrerEndringer(false);
+                }
+              }
             }
-          }
+          }, 500);
         }}
       >
         <div className="breveditor-container">
