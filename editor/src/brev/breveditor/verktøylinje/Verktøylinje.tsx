@@ -55,7 +55,7 @@ const Verktøylinje = ({}: {}) => {
             alignContent: "center",
           }}
         >
-          Lagret
+          {breveditor.lagrerEndringer ? <>Lagrer...</> : <>Lagret</>}
         </div>
         <SlettBrevutkastKnapp />
       </div>
