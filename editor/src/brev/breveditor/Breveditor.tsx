@@ -75,16 +75,16 @@ const Breveditor = ({
   templateMarkdown,
   initialState,
   onStateChange,
-  onSlettBrev,
   onLagreBrev,
+  onSlettBrev,
 }: {
   brevId?: string;
   metadata: Metadata;
   templateMarkdown?: string;
   initialState?: StateMangement;
   onStateChange?: (newState: StateMangement) => void;
-  onSlettBrev?: () => void;
   onLagreBrev?: (newState: StateMangement) => Promise<void>;
+  onSlettBrev?: () => void;
 }) => {
   const state = useRef<StateMangement | undefined>(undefined);
   let editor = usePlateEditor(
