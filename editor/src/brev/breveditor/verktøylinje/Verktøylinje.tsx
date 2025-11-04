@@ -55,7 +55,14 @@ const Verktøylinje = ({}: {}) => {
             alignContent: "center",
           }}
         >
-          {breveditor.lagrerEndringer ? <>Lagrer...</> : <>Lagret</>}
+          {typeof breveditor.lagrerEndringer === "object" &&
+          breveditor.lagrerEndringer ? (
+            <span style={{ color: "rgb(226, 41, 72)" }}>Lagring feilet!</span>
+          ) : breveditor.lagrerEndringer ? (
+            <>Lagrer...</>
+          ) : (
+            <>Lagret</>
+          )}
         </div>
         <SlettBrevutkastKnapp />
       </div>

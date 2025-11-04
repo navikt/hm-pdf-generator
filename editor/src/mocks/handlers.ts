@@ -1,5 +1,7 @@
 import { http, HttpResponse, delay } from "msw";
 
+let lagreBrevTeller = 0;
+
 export const handlers = [
   http.get<{ sakId: string; brevtype: string }>(
     "/api/sak/:sakId/brevutkast/:brevtype",
@@ -41,6 +43,12 @@ export const handlers = [
       JSON.stringify(json.data),
     );
     await delay(400);
+
+    // Simuler feil fem på rad av alle ti kall
+    lagreBrevTeller = lagreBrevTeller + 1;
+    if (Math.floor(lagreBrevTeller / 5) % 2 == 1) {
+      return new HttpResponse(null, { status: 500 });
+    }
     return new HttpResponse(null, { status: 204 });
   }),
 

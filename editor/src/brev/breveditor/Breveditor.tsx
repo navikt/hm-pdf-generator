@@ -7,6 +7,7 @@ import {
   type RefObject,
   useCallback,
   useContext,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -37,7 +38,7 @@ export interface BreveditorContextType {
   visMarger: boolean;
   settVisMarger: (visMarger: boolean) => void;
   onSlettBrev?: () => void;
-  lagrerEndringer: boolean;
+  lagrerEndringer: boolean | { error: string };
 }
 
 export const BreveditorContext = createContext<
@@ -189,8 +190,62 @@ const Breveditor = ({
     }
   }, [visMarger]);
 
-  const [lagrerEndringer, setLagrerEndringer] = useState(false);
+  const [lagrerEndringer, setLagrerEndringer] = useState<
+    boolean | { error: string }
+  >(false);
   const debounceLagring = useRef<number | undefined>(undefined);
+
+  // Desperat forsøk på å lagre brev når nettleseren lukkes i tilfelle debounce ikke er over
+  // (vil ikke alltid funke, men kanskje bedre enn ingenting...)
+  const erAlleEndringerLagret = useRef(true);
+  useEffect(() => {
+    const listener = async (ev: BeforeUnloadEvent) => {
+      if (onLagreBrev && !erAlleEndringerLagret.current) {
+        ev.preventDefault();
+        return (ev.returnValue =
+          "Nå var du litt rask til å lukke fanen og alle endringene i brevet er ikke lagret enda. Er du sikker?");
+      }
+    };
+    window.addEventListener("beforeunload", listener);
+    return () => {
+      window.removeEventListener("beforeunload", listener);
+    };
+  }, []);
+
+  // Stopp debounce / retry etter dismount av brevkomponenten
+  useEffect(() => {
+    return () => {
+      clearTimeout(debounceLagring.current);
+    };
+  }, []);
+
+  const kallOnLagreBrevMedDebounceOgRetry = (
+    constructedState: StateMangement,
+  ) => {
+    if (onLagreBrev) {
+      erAlleEndringerLagret.current = false;
+      clearTimeout(debounceLagring.current); // Kanseller pågående timere, enten de var startet på enste linjer eller i retry nedenfor
+      debounceLagring.current = setTimeout(async () => {
+        setLagrerEndringer(true); // Vis at vi forsøker å lagre
+        await onLagreBrev(constructedState)
+          .catch((e) => {
+            setLagrerEndringer({ error: e.toString() }); // Vis at vi feilet
+            debounceLagring.current = setTimeout(
+              () => kallOnLagreBrevMedDebounceOgRetry(constructedState), // Try, try again...
+              2000,
+            );
+            throw e; // Hopp over then blokken under
+          })
+          .then(() => {
+            setLagrerEndringer(false);
+            erAlleEndringerLagret.current = true;
+          })
+          .catch(() => {
+            /* Ignorer exception... */
+          });
+      }, 500);
+    }
+  };
 
   return (
     <BreveditorContext
@@ -228,14 +283,7 @@ const Breveditor = ({
               // On state-change
               state.current = constructedState;
               onStateChange && onStateChange(constructedState);
-              clearTimeout(debounceLagring.current);
-              debounceLagring.current = setTimeout(async () => {
-                if (onLagreBrev) {
-                  setLagrerEndringer(true);
-                  await onLagreBrev(constructedState);
-                  setLagrerEndringer(false);
-                }
-              }, 500);
+              kallOnLagreBrevMedDebounceOgRetry(constructedState);
             }
           }
         }}

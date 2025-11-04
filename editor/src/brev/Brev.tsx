@@ -62,6 +62,9 @@ export const Brev = ({ sakId }: { sakId: number }) => {
                   målform: "BOKMÅL",
                   data: state,
                 }),
+              }).then((res) => {
+                if (!res.ok)
+                  throw new Error(`Brev ikke lagret, statuskode ${res.status}`);
               });
             }}
             onSlettBrev={async () => {
@@ -71,7 +74,12 @@ export const Brev = ({ sakId }: { sakId: number }) => {
                 {
                   method: "delete",
                 },
-              );
+              ).then((res) => {
+                if (!res.ok)
+                  throw new Error(
+                    `Brev ikke slettet, statuskode ${res.status}`,
+                  );
+              });
               await brevutkast.mutate();
             }}
           />
