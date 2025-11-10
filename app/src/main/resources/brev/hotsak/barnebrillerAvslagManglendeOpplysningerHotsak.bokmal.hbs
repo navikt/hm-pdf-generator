@@ -10,7 +10,10 @@
     <section>
         <h1>Du får ikke tilskudd til briller</h1>
         <p>Hei,</p>
-        <p>Vi har avslått søknaden din om tilskudd til briller som vi mottok {{formaterDato mottattDato}}.</p>
+        <p>
+            Vi har avslått søknaden din om tilskudd til briller som vi mottok {{formaterDato mottattDato}}.
+            Vedtaket er gjort etter folketrygdloven § 21-3, jf. § 10-7 a, jf. forskrift om stønad til briller til barn.
+        </p>
     </section>
     <section>
         <h2>Begrunnelse for avslaget</h2>
@@ -23,11 +26,10 @@
         <p>
             Søknaden er vurdert og avgjort på grunnlag av opplysninger vi har mottatt
             i saken. Ut fra disse opplysningene, kan vi ikke se at du fyller vilkårene for tilskudd til briller til barn.
-            Vedtaket er gjort etter folketrygdloven § 21-3, jfr. § 10-7 a og forskrift om stønad til briller til barn.
         </p>
     </section>
     {{> barnebriller/du-kan-soke-panytt.bokmal}}
-    {{> barnebriller/klage.bokmal klageManglendeOpplysninger=true}}
+    {{> barnebriller/klage.bokmal}}
     {{> barnebriller/rett-til-innsyn.bokmal}}
     {{> barnebriller/har-du-sporsmaal.bokmal}}
     {{> barnebriller/kontakt-oss.bokmal}}
