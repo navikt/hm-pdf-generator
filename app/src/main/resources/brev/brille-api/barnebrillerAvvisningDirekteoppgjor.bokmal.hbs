@@ -12,9 +12,9 @@
         <p>Hei,</p>
         <p>
             Den {{formaterDato mottattDato}} ble en søknad om tilskudd til briller
-            behandlet i vår automatiske saksbehandlingsløsning via optikerbedriften {{optikerVirksomhetNavn}}
-            ({{optikerVirksomhetOrgnr}}), ref. folketrygdloven § 10-7 a, jf. forskrift av 19. juli 2022 om stønad til
-            briller til barn.
+            behandlet i vår automatiske saksbehandlingsløsning. Søknaden ble sendt fra optikerbedriften {{optikerVirksomhetNavn}}
+            ({{optikerVirksomhetOrgnr}}). Stønaden om tilskudd til briller er hjemlet i folketrygdloven § 10-7 a, jf.
+            forskrift om stønad til briller til barn.
         </p>
         <p>Søknaden din ble stanset fordi den automatiske behandlingen:</p>
         <ul>
@@ -28,7 +28,7 @@
             {{#if begrunnelser.stansetOver18}}
                 <li>
                     viser at du var over 18 år da brillene ble bestilt, {{formaterDato bestillingsDato}} (forskriften §
-                    2).
+                    2, 3. ledd).
                 </li>
             {{/if}}
             {{#if begrunnelser.stansetIkkeMedlem}}
@@ -40,7 +40,7 @@
             {{/if}}
             {{#if begrunnelser.stansetForLavBrillestyrke}}
                 <li>
-                    viser at du ikke oppfyller kravet til brillestyrke (forskriften § 2). Brillestyrken på
+                    viser at du ikke oppfyller kravet til brillestyrke (forskriften § 2, 1. ledd). Brillestyrken på
                     minst ett glass må være ≥ 1,00D og/eller cylinderstyrke på minst ett glass må være ≥ 1,00D.
                     Opplysningene som ble sendt til oss av din optiker viser at ditt høyre øye har sfærisk styrke
                     {{sfæriskStyrkeHøyre}} og cylinderstyrke {{cylinderstyrkeHøyre}}, og ditt venstre øye har sfærisk
@@ -50,7 +50,7 @@
             {{#if begrunnelser.stansetBestillingsdatoEldreEnn6Mnd}}
                 <li>
                     viser at det er over 6 måneder siden brillene ble bestilt, {{formaterDato bestillingsDato}}
-                    (forskriften § 6).
+                    (forskriften § 6, 2. ledd).
                 </li>
             {{/if}}
         </ul>
