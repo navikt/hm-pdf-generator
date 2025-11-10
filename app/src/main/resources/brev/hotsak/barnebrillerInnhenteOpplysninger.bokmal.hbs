@@ -2,13 +2,13 @@
 <html lang="nb">
 <head>
     <meta charSet="UTF-8"/>
-    <title>Du må sende oss opplysninger</title>
+    <title>Nav trenger flere opplysninger</title>
     {{> style bunntekst=(concat 'Saksnummer: ' sakId)}}
 </head>
 <body>
     {{> barnebriller/header.bokmal}}
     <section>
-        <h1>Du må sende oss opplysninger</h1>
+        <h1>Nav trenger flere opplysninger</h1>
         <p>Hei,</p>
         <p>
             Vi har mottatt henvendelsen din om tilskudd til briller {{formaterDato mottattDato}}. Saken mangler
@@ -20,7 +20,7 @@
         <h2>Slik sender du opplysningene</h2>
         <p>
             Vi ber deg sende oss opplysningene vi mangler sammen med førstesiden som er lagt ved dette brevet. Det er
-            viktig at du legger førstesiden øverst.
+            viktig at du legger førstesiden øverst i konvolutten.
         </p>
     </section>
     <section>
@@ -34,6 +34,7 @@
             går fram av folketrygdloven § 21-3.
         </p>
     </section>
+    {{> barnebriller/har-du-sporsmaal.bokmal}}
     {{> barnebriller/kontakt-oss.bokmal}}
 </body>
 </html>
