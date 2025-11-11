@@ -13,6 +13,8 @@ spec:
   readiness:
     path: /isready
   port: 8082
+  ingresses:
+    - https://hm-pdf-generator.intern.dev.nav.no
   prometheus:
     enabled: true
     path: /metrics
