@@ -43,8 +43,8 @@ class BrevTest {
             brevOpprettetDato = LocalDate.of(2025, 7, 28),
             bestillingsDato = LocalDate.of(2025, 7, 1),
             nesteKravdato = LocalDate.of(LocalDate.now().plusYears(1).year, 1, 1),
-            barnetsFulleNavn = "Berømt Aktivitet",
-            utbetalesTilNavn = "Berømt Aktivitet",
+            barnetsFulleNavn = "Barn Barnesen",
+            utbetalesTilNavn = "Forelder Foreldersen",
             barnetsFodselsnummer = "26848497710",
             belop = "1337,99",
             sats = 2,
@@ -53,8 +53,8 @@ class BrevTest {
             cylinderstyrkeHøyre = "-2,50",
             sfæriskStyrkeVenstre = "+4,50",
             cylinderstyrkeVenstre = "-2,50",
-            signaturTotrinnskontroll = "Ola Nordmann",
-            signaturSaksbehandler = "Kari Hansen",
+            signaturTotrinnskontroll = "Ola Totrinn",
+            signaturSaksbehandler = "Kari Saksbehandler",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnvilgetHotsak.nynorsk.hbs", data)
@@ -68,11 +68,11 @@ class BrevTest {
             mottattDato = LocalDate.of(2025, 7, 28),
             brevOpprettetDato = LocalDate.of(2025, 7, 28),
             etterspurteOpplysningerBrevDatertDato = LocalDate.of(2025, 4, 1),
-            barnetsFulleNavn = "Berømt Aktivitet",
+            barnetsFulleNavn = "Barn Barnesen",
             barnetsFodselsnummer = "26848497710",
-            fritekstSaksbehandler = "Veldig sen å svare, nå gidder jeg ikke mer!",
-            signaturTotrinnskontroll = "Ola Nordmann",
-            signaturSaksbehandler = "Kari Hansen",
+            fritekstSaksbehandler = "<Fritekst saksbehandler: forklaring av hvilke opplysninger som mangler>",
+            signaturTotrinnskontroll = "Ola Totrinn",
+            signaturSaksbehandler = "Kari Saksbehandler",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagManglendeOpplysningerHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagManglendeOpplysningerHotsak.nynorsk.hbs", data)
@@ -87,8 +87,8 @@ class BrevTest {
             brevOpprettetDato = LocalDate.of(2025, 7, 28),
             bestillingsDato = LocalDate.of(2025, 7, 1),
             forrigeBrilleDato = LocalDate.of(2025, 4, 1),
-            barnetsFornavn = "Berømt",
-            barnetsFulleNavn = "Berømt Aktivitet",
+            barnetsFornavn = "Barn",
+            barnetsFulleNavn = "Barn Barnesen",
             barnetsFodselsnummer = "26848497710",
             sfæriskStyrkeHøyre = "+4,50",
             cylinderstyrkeHøyre = "-2,50",
@@ -104,8 +104,8 @@ class BrevTest {
                 avslagBrilleglass = true,
                 avslagAbonnement = true,
             ),
-            signaturTotrinnskontroll = "Ola Nordmann",
-            signaturSaksbehandler = "Kari Hansen",
+            signaturTotrinnskontroll = "Ola Totrinn",
+            signaturSaksbehandler = "Kari Saksbehandler",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagHotsak.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerAvslagHotsak.nynorsk.hbs", data)
@@ -118,11 +118,11 @@ class BrevTest {
             viseNavAdresse = true,
             mottattDato = LocalDate.of(2025, 7, 28),
             brevOpprettetDato = LocalDate.of(2025, 7, 28),
-            barnetsFulleNavn = "Berømt Aktivitet",
+            barnetsFulleNavn = "Barn Barnesen",
             barnetsFodselsnummer = "26848497710",
             fritekstSaksbehandler = "Fortell meg mere!",
-            signaturTotrinnskontroll = "Ola Nordmann",
-            signaturSaksbehandler = "Kari Hansen",
+            signaturTotrinnskontroll = "Ola Totrinn",
+            signaturSaksbehandler = "Kari Saksbehandler",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnhenteOpplysninger.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnhenteOpplysninger.nynorsk.hbs", data)
@@ -189,7 +189,7 @@ class BrevTest {
             forrigeBrilleDato = LocalDate.of(2025, 4, 1),
             optikerVirksomhetNavn = "KURSIV MODIG APE",
             optikerVirksomhetOrgnr = "312787350",
-            barnetsFulleNavn = "Berømt Aktivitet",
+            barnetsFulleNavn = "Barn Barnesen",
             barnetsFodselsnummer = "26848497710",
             sfæriskStyrkeHøyre = "+4,50",
             cylinderstyrkeHøyre = "-2,50",
