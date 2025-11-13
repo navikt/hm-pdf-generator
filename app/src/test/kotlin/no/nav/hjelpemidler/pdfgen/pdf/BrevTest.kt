@@ -120,7 +120,7 @@ class BrevTest {
             brevOpprettetDato = LocalDate.of(2025, 7, 28),
             barnetsFulleNavn = "Barn Barnesen",
             barnetsFodselsnummer = "26848497710",
-            fritekstSaksbehandler = "Fortell meg mere!",
+            fritekstSaksbehandler = "<Fritekst saksbehandler: forklaring av hvilke opplysninger som mangler>",
             signaturTotrinnskontroll = "Ola Totrinn",
             signaturSaksbehandler = "Kari Saksbehandler",
         )
