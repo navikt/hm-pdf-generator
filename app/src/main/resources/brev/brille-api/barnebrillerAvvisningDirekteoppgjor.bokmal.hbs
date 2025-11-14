@@ -3,43 +3,44 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Din søknad om tilskudd til briller til barn er stanset</title>
-    {{> style }}
+    {{> style}}
 </head>
-<body class="body">
-<div>
-    {{> barnebriller/logo-og-bruker.bokmal tittel="Din søknad om tilskudd til briller til barn er stanset"}}
-    <div style="min-height:1rem" class="block">Hei, <br/><br/>Den {{formaterDato mottattDato}} ble en søknad om tilskudd til briller
-        behandlet i vår automatiske saksbehandlingsløsning via optikerbedriften {{optikerVirksomhetNavn}}
-        ({{optikerVirksomhetOrgnr}}), ref. folketrygdloven §10-7 a, jf. forskrift av 19. juli 2022 om stønad til
-        briller til barn.
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block">Søknaden din ble stanset fordi den automatiske behandlingen:</div>
-    <div class="delmal">
+<body>
+    {{> barnebriller/header.bokmal}}
+    <section>
+        <h1>Din søknad om tilskudd til briller til barn er stanset</h1>
+        <p>Hei,</p>
+        <p>
+            Den {{formaterDato mottattDato}} ble en søknad om tilskudd til briller
+            behandlet i vår automatiske saksbehandlingsløsning. Søknaden ble sendt fra optikerbedriften {{optikerVirksomhetNavn}}
+            ({{optikerVirksomhetOrgnr}}). Stønaden om tilskudd til briller er hjemlet i folketrygdloven § 10-7 a, jf.
+            forskrift om stønad til briller til barn.
+        </p>
+        <p>Søknaden din ble stanset fordi den automatiske behandlingen:</p>
         <ul>
             {{#if begrunnelser.stansetEksisterendeVedtak}}
-                <li class="block">
+                <li>
                     viser at du har fått tilskudd fra denne ordningen tidligere i år, for en brille bestilt
                     {{formaterDato forrigeBrilleDato}}. Det er kun mulig å få tilskudd fra denne ordningen én gang hvert
                     kalenderår (forskriften § 3).
                 </li>
             {{/if}}
             {{#if begrunnelser.stansetOver18}}
-                <li class="block">
+                <li>
                     viser at du var over 18 år da brillene ble bestilt, {{formaterDato bestillingsDato}} (forskriften §
-                    2).
+                    2, 3. ledd).
                 </li>
             {{/if}}
             {{#if begrunnelser.stansetIkkeMedlem}}
-                <li class="block">
+                <li>
                     ikke kunne finne ut om du var medlem av folketrygden da brillene ble bestilt
                     {{formaterDato bestillingsDato}}. Dette er et vilkår for å ha rett til stønad (folketrygdloven §
                     10-7 a).
                 </li>
             {{/if}}
             {{#if begrunnelser.stansetForLavBrillestyrke}}
-                <li class="block">
-                    viser at du ikke oppfyller kravet til brillestyrke (forskriften § 2). Brillestyrken på
+                <li>
+                    viser at du ikke oppfyller kravet til brillestyrke (forskriften § 2, 1. ledd). Brillestyrken på
                     minst ett glass må være ≥ 1,00D og/eller cylinderstyrke på minst ett glass må være ≥ 1,00D.
                     Opplysningene som ble sendt til oss av din optiker viser at ditt høyre øye har sfærisk styrke
                     {{sfæriskStyrkeHøyre}} og cylinderstyrke {{cylinderstyrkeHøyre}}, og ditt venstre øye har sfærisk
@@ -47,25 +48,21 @@
                 </li>
             {{/if}}
             {{#if begrunnelser.stansetBestillingsdatoEldreEnn6Mnd}}
-                <li class="block">
+                <li>
                     viser at det er over 6 måneder siden brillene ble bestilt, {{formaterDato bestillingsDato}}
-                    (forskriften § 6).
+                    (forskriften § 6, 2. ledd).
                 </li>
             {{/if}}
         </ul>
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    <div class="delmal">
-        <div style="min-height:1rem" class="block"><strong>Du kan få søknaden vurdert av en saksbehandler</strong></div>
-        <div style="min-height:1rem" class="block">
+    </section>
+    <section>
+        <h2>Du kan få søknaden vurdert av en saksbehandler</h2>
+        <p>
             Dersom du ønsker å få kravet vurdert av en saksbehandler, kan du selv sende inn søknad. Søknadsskjema
-            finner du på nav.no/briller-til-barn.
-        </div>
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/har-du-sporsmaal.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/kontakt-oss.bokmal }}
-</div>
+            finner du på <a href="https://nav.no/briller-til-barn">nav.no/briller-til-barn</a>.
+        </p>
+    </section>
+    {{> barnebriller/har-du-sporsmaal.bokmal}}
+    {{> barnebriller/kontakt-oss.bokmal ingen-signatur-nodvendig=true}}
 </body>
 </html>

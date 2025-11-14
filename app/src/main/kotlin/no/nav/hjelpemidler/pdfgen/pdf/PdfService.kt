@@ -25,15 +25,13 @@ class PdfService {
 
         // openhtmltopdf interprets raw newlines as <br/>, lets strip them away to make it work as html was intended
         val sanitizedHtml = html
-            // Remove newlines, carriage returns, and tabs
-            .replace(Regex("[\\n\\r\\t]"), "")
-            // Remove leading/trailing whitespace inside tags (e.g. "<div>  text  </div>" -> "<div>text</div>")
-            .replace(Regex(">(\\s+)([^<])"), ">$2")   // Remove leading whitespace inside a tag
-            .replace(Regex("([^>])(\\s+)<"), "$1<")   // Remove trailing whitespace inside a tag
-            // Collapse multiple spaces between words (optional, safer)
-            .replace(Regex(" {2,}"), " ")
             // Fix from hm-brev included here
             .replace("&#x27;", "'")
+            // Avoid page-breaks between link and punctuation
+            .replace(Regex("""<a\b[^>]*?>[^<]*?</a>\.""", RegexOption.DOT_MATCHES_ALL)) {
+                val anchor = it.value
+                """<span class="no-wrap">$anchor</span>"""
+            }
             .trim()
 
         val document = parseHtml(sanitizedHtml)

@@ -3,78 +3,75 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får ikke tilskudd til briller</title>
-    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer: ' sakId)}}
 </head>
-<body class="body">
-<div>
-    {{> barnebriller/logo-og-bruker.bokmal tittel="Du får ikke tilskudd til briller"}}
-    <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har avslått søknaden din om tilskudd til briller, som
-        vi mottok {{formaterDato mottattDato}}. Vedtaket er gjort etter folketrygdloven §10-7 a, jf. forskrift av
-        19. juli 2022 om stønad til briller til barn.</div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"><strong>Bakgrunn for avslaget</strong></div>
-    <div style="min-height:1rem" class="block">Vi har avslått søknaden din fordi:</div>
-    <div class="delmal">
+<body>
+    {{> barnebriller/header.bokmal}}
+    <section>
+        <h1>Du får ikke tilskudd til briller</h1>
+        <p>Hei,</p>
+        <p>
+            Vi har avslått søknaden din om tilskudd til briller, som vi mottok {{formaterDato mottattDato}}.
+            Vedtaket er gjort etter folketrygdloven § 10-7 a, jf. forskrift om stønad til briller til barn.
+        </p>
+    </section>
+    <section>
+        <h2>Begrunnelse for avslaget</h2>
+        <p>Vi har avslått søknaden din fordi:</p>
         <ul>
-            {{#if begrunnelser.avslagEksisterendeVedtak }}
-                <li class="block">
+            {{#if begrunnelser.avslagEksisterendeVedtak}}
+                <li>
                     du fikk tilskudd fra oss til briller bestilt {{formaterDato forrigeBrilleDato}}. Det er kun mulig
-                    å få tilskudd fra denne ordningen én gang hvert kalenderår (§ 3).
+                    å få tilskudd fra denne ordningen én gang hvert kalenderår (forskriften § 3).
                 </li>
             {{/if}}
-            {{#if begrunnelser.avslagOver18 }}
-                <li class="block">du var over 18 år da brillene ble bestilt {{formaterDato bestillingsDato}} (§ 2).</li>
+            {{#if begrunnelser.avslagOver18}}
+                <li>du var over 18 år da brillene ble bestilt {{formaterDato bestillingsDato}} (forskriften § 2, 3. ledd).</li>
             {{/if}}
-            {{#if begrunnelser.avslagIkkeMedlem }}
-                <li class="block">
+            {{#if begrunnelser.avslagIkkeMedlem}}
+                <li>
                     du ikke var medlem av folketrygden da brillene ble bestilt {{formaterDato bestillingsDato}}
                     (folketrygdloven § 10-7 a).
                 </li>
             {{/if}}
-            {{#if begrunnelser.avslagForLavBrillestyrke }}
-                <li class="block">
-                    brillestyrken din er lavere enn minstekravene for ordningen (§ 2). Brillestyrken på minst
+            {{#if begrunnelser.avslagForLavBrillestyrke}}
+                <li>
+                    brillestyrken din er lavere enn minstekravene for ordningen (forskriften § 2, 1. ledd). Brillestyrken på minst
                     ett glass må være ≥ 1,00D og/eller cylinderstyrke på minst ett glass må være ≥ 1,00D.
                     Dokumentasjonen du har sendt oss viser at ditt høyre øye har sfærisk styrke {{sfæriskStyrkeHøyre}}
                     og cylinderstyrke {{cylinderstyrkeHøyre}}, og ditt venstre øye har sfærisk styrke
                     {{sfæriskStyrkeVenstre}} og cylinderstyrke {{cylinderstyrkeVenstre}}. Du kan lese mer om kravene
-                    på nav.no/briller-til-barn
+                    på <a href="https://nav.no/briller-til-barn">nav.no/briller-til-barn</a>.
                 </li>
             {{/if}}
-            {{#if begrunnelser.avslagBestillingsdatoEldreEnn6Mnd }}
-                <li class="block">det er over 6 måneder siden brillene ble bestilt {{formaterDato bestillingsDato}} (§ 6).</li>
+            {{#if begrunnelser.avslagBestillingsdatoEldreEnn6Mnd}}
+                <li>det er over 6 måneder siden brillene ble bestilt {{formaterDato bestillingsDato}} (forskriften § 6, 2. ledd).</li>
             {{/if}}
-            {{#if begrunnelser.avslagIkkeBestiltHosOptiker }}
-                <li class="block">
+            {{#if begrunnelser.avslagIkkeBestiltHosOptiker}}
+                <li>
                     vi ikke kan se ut fra dokumentasjonen du har sendt oss at brillene er bestilt hos en optiker. Dette
-                    er et krav for å få støtte (§ 2).
+                    er et krav for å få støtte (forskriften § 2, 2. ledd).
                 </li>
             {{/if}}
-            {{#if begrunnelser.avslagBrilleglass }}
-                <li class="block">
+            {{#if begrunnelser.avslagBrilleglass}}
+                <li>
                     vi ikke kan se ut fra dokumentasjonen du har sendt oss at du har kjøpt brilleglass. Dette
-                    er et krav for å få støtte (§ 2). Vi kan ikke gi støtte i tilfeller hvor det f. eks. er bestilt
+                    er et krav for å få støtte (forskriften § 2, 1. ledd). Vi kan ikke gi støtte i tilfeller hvor det f.eks. er bestilt
                     kontaktlinser, eller innfatning uten brilleglass med styrke.
                 </li>
             {{/if}}
-            {{#if begrunnelser.avslagAbonnement }}
-                <li class="block">
+            {{#if begrunnelser.avslagAbonnement}}
+                <li>
                     dokumentasjonen viser at brillen inngår i et abonnement. Regelverket gir ikke rett til tilskudd til
-                    briller som inngår i en slik avtale (§ 2). Dette er fordi et abonnement ikke regnes som kjøp av
+                    briller som inngår i en slik avtale (forskriften § 2, 1. ledd). Dette er fordi et abonnement ikke regnes som kjøp av
                     brille, men en form for leieavtale.
                 </li>
             {{/if}}
         </ul>
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/klage.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/rett-til-innsyn.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/har-du-sporsmaal.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/kontakt-oss.bokmal }}
-</div>
+    </section>
+    {{> barnebriller/klage.bokmal}}
+    {{> barnebriller/rett-til-innsyn.bokmal}}
+    {{> barnebriller/har-du-sporsmaal.bokmal}}
+    {{> barnebriller/kontakt-oss.bokmal}}
 </body>
 </html>

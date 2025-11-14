@@ -3,46 +3,55 @@
 <head>
     <meta charSet="UTF-8"/>
     <title>Du får tilskudd til briller</title>
-    {{> style bunntekst=(concat 'Saksnummer ' sakId) }}
+    {{> style bunntekst=(concat 'Saksnummer: ' sakId)}}
 </head>
-<body class="body">
-<div>
-    {{> barnebriller/logo-og-bruker.bokmal tittel="Du får tilskudd til briller"}}
-    <div style="min-height:1rem" class="block">Hei, <br/><br/>Vi har behandlet søknaden din om tilskudd til briller, som
-        vi mottok {{formaterDato mottattDato}}. Du får {{belop}} kroner fra oss for brillene som ble bestilt {{formaterDato bestillingsDato}}.
-        Pengene vil bli utbetalt til kontonummeret {{utbetalesTilNavn}} har registrert hos Nav. Hvis du lurer på noe
-        rundt kontonummer, se informasjon på nav.no/kontonummer
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"><br/><strong>Slik har vi kommet fram til hvor mye du får</strong></div>
-    <div style="min-height:1rem" class="block">Det er brillestyrken din som bestemmer hvor mye du kan få i tilskudd. Ut
-        ifra brillestyrken du har oppgitt kommer du inn under sats {{sats}} (opptil {{satsBelop}} kroner).
-        {{#if belopMindreEnnSats}}Du kan ikke få mer i tilskudd enn det brillene koster. Ifølge dokumentasjonen
-        du har sendt oss, kostet brillene {{belop}} kroner, og dette er beløpet du vil få utbetalt.{{/if}}
-        Ifølge dokumentasjonen har ditt høyre øye sfærisk styrke {{sfæriskStyrkeHøyre}} og cylinderstyrke
-        {{cylinderstyrkeHøyre}}, og ditt venstre øye har sfærisk styrke {{sfæriskStyrkeVenstre}} og cylinderstyrke
-        {{cylinderstyrkeVenstre}}. Du kan lese mer om kravene og satsene på nav.no/briller-til-barn<br/><br/><strong>Du
-            kan få tilskudd til ett par briller hvert år</strong></div>
-    <div style="min-height:1rem" class="block">Neste gang du kan søke om tilskudd etter denne ordningen, er for briller
-        som bestilles etter {{formaterDato nesteKravdato}}.
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    <div style="min-height:1rem" class="block"><strong>Du har fått tilskudd etter et bestemt regelverk</strong></div>
-    <div style="min-height:1rem" class="block">Vedtaket er gjort etter folketrygdloven §10-7 a, jf. forskrift av 19. juli
-        2022 om stønad til briller til barn. Vi gjør oppmerksom på at hvis opplysningene du har gitt oss er mangelfulle
-        eller feilaktige, kan det føre til krav om tilbakebetaling av feilutbetalt beløp.<br/><br/>Dette er en av flere
-        ordninger for barn som trenger briller. Ordningen dekker briller med glass, innfatning og brilletilpasning. Du
-        kan ikke få tilskudd til synsundersøkelse eller kontaktlinser på denne ordningen. Merk at det finnes andre
-        ordninger som kan gi rett til støtte hvis du har nedsatt syn, se nav.no/syn
-    </div>
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/klage.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/rett-til-innsyn.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/har-du-sporsmaal.bokmal }}
-    <div style="min-height:1rem" class="block"></div>
-    {{> barnebriller/kontakt-oss.bokmal }}
-</div>
+<body>
+    {{> barnebriller/header.bokmal}}
+    <section>
+        <h1>Du får tilskudd til briller</h1>
+        <p>Hei,</p>
+        <p>
+            Vi har behandlet søknaden din om tilskudd til briller, som vi mottok {{formaterDato mottattDato}}.
+            Du får {{belop}} kroner fra oss for brillene som ble bestilt {{formaterDato bestillingsDato}}.
+            Pengene vil bli utbetalt til kontonummeret {{utbetalesTilNavn}} har registrert hos Nav. Hvis du lurer på noe
+            om kontonummer, se informasjon på <a href="https://nav.no/kontonummer">nav.no/kontonummer</a>.
+            Vedtaket er gjort etter folketrygdloven § 10-7 a, jf. forskrift om stønad til briller til barn.
+        </p>
+    </section>
+    <section>
+        <h2>Begrunnelse for vedtaket</h2>
+        <p>
+            Det er brillestyrken din som bestemmer hvor mye du kan få i tilskudd.
+            Ifølge dokumentasjonen har ditt høyre øye sfærisk styrke {{sfæriskStyrkeHøyre}} og cylinderstyrke
+            {{cylinderstyrkeHøyre}}, og ditt venstre øye har sfærisk styrke {{sfæriskStyrkeVenstre}} og cylinderstyrke
+            {{cylinderstyrkeVenstre}}. Ut ifra brillestyrken du har oppgitt får du sats {{sats}} (opptil {{satsBelop}}
+            kroner).{{#if belopMindreEnnSats}} Du kan ikke få mer i tilskudd enn det brillene koster. Ifølge
+            dokumentasjonen du har sendt oss, kostet brillene {{belop}} kroner, og dette er beløpet du vil få
+            utbetalt.{{/if}}
+        </p>
+        <p>
+            Du kan lese mer om kravene og satsene på
+            <a href="https://nav.no/briller-til-barn">nav.no/briller-til-barn</a>.
+        </p>
+        <p>
+            Du får tilskudd til briller med glass, innfatning og brilletilpasning. Du kan ikke få tilskudd til
+            synsundersøkelse eller kontaktlinser på denne ordningen.
+        </p>
+        <p>
+            Vi gjør oppmerksom på at hvis opplysningene du har gitt oss er mangelfulle eller feilaktige, kan det føre
+            til krav om tilbakebetaling av feilutbetalt beløp.
+        </p>
+    </section>
+    <section>
+        <h2>Du kan få tilskudd til ett par briller hvert år</h2>
+        <p>
+            Neste gang du kan søke om tilskudd etter denne ordningen, er for briller som bestilles etter
+            {{formaterDato nesteKravdato}} (forskriften § 3).
+        </p>
+    </section>
+    {{> barnebriller/klage.bokmal}}
+    {{> barnebriller/rett-til-innsyn.bokmal}}
+    {{> barnebriller/har-du-sporsmaal.bokmal}}
+    {{> barnebriller/kontakt-oss.bokmal}}
 </body>
 </html>

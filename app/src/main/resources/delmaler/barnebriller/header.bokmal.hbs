@@ -1,0 +1,18 @@
+<div class="header">
+    {{> nav-logo }}
+    <dl>
+        <dt>Navn:</dt>
+        <dd>{{barnetsFulleNavn}}</dd>
+        <dt>Fødselsnummer:</dt>
+        <dd>{{barnetsFodselsnummer}}</dd>
+        {{#if sakId}}
+            <dt>Saksnummer:</dt>
+            <dd>{{sakId}}</dd>
+        {{/if}}
+        {{#if saksbehandlersEnhetsnavn}}
+            <dt>Enhet</dt>
+            <dd>{{saksbehandlersEnhetsnavn}}</dd>
+        {{/if}}
+    </dl>
+    <span>{{formaterDato brevOpprettetDato}}</span>
+</div>

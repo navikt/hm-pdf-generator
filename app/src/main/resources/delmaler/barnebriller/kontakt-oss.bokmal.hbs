@@ -1,7 +1,10 @@
-<div class="delmal">
-    <div style="min-height:1rem" class="block">
-        Med vennlig hilsen<br/>Nav
-        {{#if viseNavAdresse}} hjelpemiddelsentral Agder</br>55 55 11 11<br/>Skytterheia 1, 4790 LILLESAND{{/if}}
+<section class="signatur">
+    <p>
+        Med vennlig hilsen <br />
+        {{#if signaturSaksbehandler}}{{#if signaturTotrinnskontroll}}{{signaturTotrinnskontroll}}, {{/if}}{{signaturSaksbehandler}} <br />{{/if}}
+        Nav
+        {{#if viseNavAdresse}} hjelpemiddelsentral Agder{{/if}}
         {{#if viseNavAdresseHoT}} hjelpemidler og tilrettelegging{{/if}}
-    </div>
-</div>
+    </p>
+    {{#if ingen-signatur-nodvendig}}<p>Brevet er produsert automatisk og derfor ikke underskrevet av en saksbehandler.</p>{{/if}}
+</section>
