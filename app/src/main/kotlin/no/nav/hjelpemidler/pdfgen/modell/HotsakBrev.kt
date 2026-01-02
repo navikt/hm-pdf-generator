@@ -75,7 +75,6 @@ data class BarnebrillerInnhenteOpplysninger(
     val barnetsFulleNavn: String,
     val barnetsFodselsnummer: String,
     val fritekstSaksbehandler: String,
-    val signaturTotrinnskontroll: String?,
     val signaturSaksbehandler: String?,
 )
 

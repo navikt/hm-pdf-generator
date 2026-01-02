@@ -121,7 +121,6 @@ class BrevTest {
             barnetsFulleNavn = "Barn Barnesen",
             barnetsFodselsnummer = "26848497710",
             fritekstSaksbehandler = "<Fritekst saksbehandler: forklaring av hvilke opplysninger som mangler>",
-            signaturTotrinnskontroll = "Ola Totrinn",
             signaturSaksbehandler = "Kari Saksbehandler",
         )
         genererPdfFraTemplateResource("/brev/hotsak/barnebrillerInnhenteOpplysninger.bokmal.hbs", data)
