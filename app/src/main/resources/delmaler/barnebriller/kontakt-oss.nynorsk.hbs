@@ -1,7 +1,14 @@
 <section class="signatur">
     <p>
         Med vennleg helsing <br />
-        {{#if signaturSaksbehandler}}{{#if signaturTotrinnskontroll}}{{signaturTotrinnskontroll}}, {{/if}}{{signaturSaksbehandler}} <br />{{/if}}
+        {{#if signaturSaksbehandler}}
+            {{#if signaturTotrinnskontroll}}
+                {{signaturTotrinnskontroll}}<span style="float: right;">{{signaturSaksbehandler}}</span>
+            {{else}}
+                {{signaturSaksbehandler}}
+            {{/if}}
+            <br /><br />
+        {{/if}}
         Nav
         {{#if viseNavAdresse}} hjelpemiddelsentral Agder{{/if}}
         {{#if viseNavAdresseHoT}} hjelpemiddel og tilrettelegging{{/if}}
