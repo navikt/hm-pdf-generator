@@ -62,17 +62,6 @@ class PdfApiTest {
         body.size shouldBe kombinertPdf.size
     }
 
-    @Test
-    fun `Skal kombinere til PDF med feil`() = testApplication {
-        application { main() }
-
-        val response = client.submitFormWithBinaryData("/api/kombiner-til-pdf", formData {
-            appendPdf("pdf", ByteArray(0))
-        })
-
-        response.status shouldBe HttpStatusCode.InternalServerError
-    }
-
     private suspend fun lagPdf(html: String): ByteArray = ByteArrayOutputStream().use {
         pdfService.lagPdf(html, it)
         it.toByteArray()

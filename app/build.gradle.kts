@@ -26,11 +26,11 @@ dependencies {
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.server.metrics.micrometer)
     implementation(libs.ktor.server.netty)
-    implementation(libs.ktor.serialization.jackson)
+    implementation(libs.ktor.serialization.jackson3)
 
     implementation(libs.micrometer.registry.prometheus)
 
-    runtimeOnly(libs.jclOverSlf4j)
+    runtimeOnly(libs.slf4j.jcl.over.slf4j)
 }
 
 java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }

@@ -20,7 +20,7 @@ import io.ktor.utils.io.toByteArray
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import no.nav.hjelpemidler.logging.secureError
+import no.nav.hjelpemidler.logging.teamError
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvvisningDirekteoppgjor
@@ -28,6 +28,7 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
+import org.apache.commons.io.IOUtils.byteArray
 import java.io.StringWriter
 
 private val log = KotlinLogging.logger { }
@@ -42,7 +43,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
         } catch (e: Exception) {
             val message = "Feil under generering av PDF"
             log.error(e) { message }
-            withLoggingContextAsync("html" to html) { log.secureError(e) { message } }
+            withLoggingContextAsync("html" to html) { log.teamError(e) { message } }
             call.respond(HttpStatusCode.InternalServerError, message)
         }
     }

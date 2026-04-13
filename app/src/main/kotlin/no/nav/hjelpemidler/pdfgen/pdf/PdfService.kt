@@ -6,7 +6,7 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder.PdfAConformance
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.withLoggingContext
-import no.nav.hjelpemidler.logging.secureDebug
+import no.nav.hjelpemidler.logging.teamDebug
 import org.apache.pdfbox.io.RandomAccessReadBuffer
 import org.apache.pdfbox.multipdf.PDFMergerUtility
 import org.jsoup.Jsoup
@@ -21,7 +21,7 @@ private val log = KotlinLogging.logger {}
 class PdfService {
     fun lagPdf(html: String, outputStream: OutputStream) {
         log.debug { "Lager PDF" }
-        withLoggingContext("html" to html) { log.secureDebug { "Lager PDF" } }
+        withLoggingContext("html" to html) { log.teamDebug { "Lager PDF" } }
 
         // openhtmltopdf interprets raw newlines as <br/>, lets strip them away to make it work as html was intended
         val sanitizedHtml = html
@@ -36,7 +36,6 @@ class PdfService {
 
         val document = parseHtml(sanitizedHtml)
         PdfRendererBuilder()
-            .useFastMode()
             .useColorProfile(colorProfile)
             .useFontFamily(sourceSans3)
             .useFontFamily(sourceSansPro)
