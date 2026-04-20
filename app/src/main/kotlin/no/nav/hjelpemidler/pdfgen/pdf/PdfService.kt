@@ -27,6 +27,7 @@ class PdfService {
         val sanitizedHtml = html
             // Fix from hm-brev included here
             .replace("&#x27;", "'")
+            .replace("&nbsp;", "&#160;")
             // Avoid page-breaks between link and punctuation
             .replace(Regex("""<a\b[^>]*?>[^<]*?</a>\.""", RegexOption.DOT_MATCHES_ALL)) {
                 val anchor = it.value
@@ -36,6 +37,7 @@ class PdfService {
 
         val document = parseHtml(sanitizedHtml)
         PdfRendererBuilder()
+            .useFastMode()
             .useColorProfile(colorProfile)
             .useFontFamily(sourceSans3)
             .useFontFamily(sourceSansPro)
@@ -43,7 +45,7 @@ class PdfService {
             .usePdfAConformance(PdfAConformance.PDFA_2_A)
             .usePdfUaAccessibility(true)
             .useSVGDrawer(BatikSVGDrawer())
-            .withW3cDocument(document, null)
+            .withHtmlContent(sanitizedHtml, null)
             .toStream(outputStream)
             .run()
     }
