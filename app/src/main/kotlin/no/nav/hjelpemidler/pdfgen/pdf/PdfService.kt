@@ -24,7 +24,7 @@ class PdfService {
         withLoggingContext("html" to html) { log.teamDebug { "Lager PDF" } }
 
         // openhtmltopdf interprets raw newlines as <br/>, lets strip them away to make it work as html was intended
-        val sanitizedHtml = html
+        val sanitizedHtml = toXhtml(html)
             // Fix from hm-brev included here
             .replace("&#x27;", "'")
             .replace("&nbsp;", "&#160;")
@@ -58,6 +58,11 @@ class PdfService {
             mergeDocuments(null)
         }
     }
+
+    fun toXhtml(html: String): String =
+        Jsoup.parse(html).outputSettings(
+            org.jsoup.nodes.Document.OutputSettings().syntax(org.jsoup.nodes.Document.OutputSettings.Syntax.xml)
+        ).html()
 
     private fun parseHtml(html: String): Document = W3CDom().fromJsoup(Jsoup.parse(html))
 
