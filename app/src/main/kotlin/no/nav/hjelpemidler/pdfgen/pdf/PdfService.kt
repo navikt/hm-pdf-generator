@@ -2,7 +2,6 @@ package no.nav.hjelpemidler.pdfgen.pdf
 
 import com.openhtmltopdf.extend.impl.FSDefaultCacheStore
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
-import com.openhtmltopdf.pdfboxout.PdfRendererBuilder.PdfAConformance
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.withLoggingContext
@@ -14,7 +13,6 @@ import org.jsoup.helper.W3CDom
 import org.w3c.dom.Document
 import java.io.InputStream
 import java.io.OutputStream
-import kotlin.text.replace
 
 private val log = KotlinLogging.logger {}
 
@@ -24,10 +22,9 @@ class PdfService {
         withLoggingContext("html" to html) { log.teamDebug { "Lager PDF" } }
 
         // openhtmltopdf interprets raw newlines as <br/>, lets strip them away to make it work as html was intended
-        val sanitizedHtml = toXhtml(html)
+        val sanitizedHtml = html
             // Fix from hm-brev included here
             .replace("&#x27;", "'")
-            .replace("&nbsp;", "&#160;")
             // Avoid page-breaks between link and punctuation
             .replace(Regex("""<a\b[^>]*?>[^<]*?</a>\.""", RegexOption.DOT_MATCHES_ALL)) {
                 val anchor = it.value
@@ -37,15 +34,12 @@ class PdfService {
 
         val document = parseHtml(sanitizedHtml)
         PdfRendererBuilder()
-            .useFastMode()
             .useColorProfile(colorProfile)
             .useFontFamily(sourceSans3)
             .useFontFamily(sourceSansPro)
             .useCacheStore(PdfRendererBuilder.CacheStore.PDF_FONT_METRICS, cacheStore)
-            .usePdfAConformance(PdfAConformance.PDFA_2_A)
-            .usePdfUaAccessibility(true)
             .useSVGDrawer(BatikSVGDrawer())
-            .withHtmlContent(sanitizedHtml, null)
+            .withW3cDocument(document, null)
             .toStream(outputStream)
             .run()
     }
