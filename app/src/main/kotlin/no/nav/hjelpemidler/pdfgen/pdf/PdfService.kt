@@ -107,7 +107,12 @@ class PdfService {
                 page.setContents(PDStream(doc, ByteArrayInputStream(contentBytes)))
                 resources.cosObject.removeItem(COSName.getPDFName("Properties"))
             }
-            doc.save(outputStream)
+            // Save to an intermediate buffer — PDFBox flushes/closes internal streams
+            // when the document is closed, which must happen before we write to the
+            // Ktor response stream to avoid ClosedWriteChannelException.
+            val buf = ByteArrayOutputStream()
+            doc.save(buf)
+            buf.writeTo(outputStream)
         }
     }
 
