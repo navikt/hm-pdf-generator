@@ -13,21 +13,23 @@ class FontFamily(
     private val fallback: Boolean = false,
     private val fonts: MutableList<Font> = mutableListOf(),
 ) : Iterable<Font> by fonts {
-    private fun add(style: FontStyle, fileName: String) {
+    private fun add(style: FontStyle, weight: Int, fileName: String) {
         fonts.add(
             Font(
                 path = "$location/$fileName",
                 family = name,
-                weight = style.weight,
+                weight = weight,
                 style = style,
                 fallback = fallback,
             )
         )
     }
 
-    fun normal(fileName: String) = add(FontStyle.NORMAL, fileName)
-    fun italic(fileName: String) = add(FontStyle.ITALIC, fileName)
-    fun oblique(fileName: String) = add(FontStyle.OBLIQUE, fileName)
+    fun normal(fileName: String) = add(FontStyle.NORMAL, 400, fileName)
+    fun bold(fileName: String) = add(FontStyle.NORMAL, 700, fileName)
+    fun italic(fileName: String) = add(FontStyle.ITALIC, 400, fileName)
+    fun boldItalic(fileName: String) = add(FontStyle.ITALIC, 700, fileName)
+    fun oblique(fileName: String) = add(FontStyle.OBLIQUE, 700, fileName)
 }
 
 fun fontFamily(
@@ -49,13 +51,6 @@ class Font(
 }
 
 fun Class<*>.inputStream(name: String): InputStream = getResourceAsStream(name) ?: error("Fant ikke: '$name'")
-
-private val FontStyle.weight: Int
-    get() = when (this) {
-        FontStyle.NORMAL -> 400
-        FontStyle.ITALIC -> 400
-        FontStyle.OBLIQUE -> 700
-    }
 
 private fun PdfRendererBuilder.useFont(font: Font): PdfRendererBuilder =
     useFont(
