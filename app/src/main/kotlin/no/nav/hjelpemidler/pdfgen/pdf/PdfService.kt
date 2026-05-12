@@ -70,11 +70,11 @@ class PdfService {
         }
     }
 
-    fun toXhtml(html: String): String =
-        Jsoup.parse(html).outputSettings(
-            org.jsoup.nodes.Document.OutputSettings().syntax(org.jsoup.nodes.Document.OutputSettings.Syntax.xml)
-        ).html()
-
+    // openhtmltopdf skriver BDC-operatører med navngitte Properties-referanser
+    // (/Span /Prop0 BDC). Apple PDFKit støtter bare inline MCID-formen
+    // (/Span <</MCID N>> BDC), og viser blankt innhold uten denne omskrivingen.
+    // Funksjonen erstatter alle navngitte referanser med inline MCID-dicts
+    // og fjerner Properties-ressursen fra hver side siden den ikke lenger trengs.
     private fun rewriteBdcToInlineMcid(inputBytes: ByteArray, outputStream: OutputStream) {
         Loader.loadPDF(inputBytes).use { doc ->
             for (page in doc.pages) {
