@@ -9,7 +9,7 @@ on:
       - "CODEOWNERS"
     branches:
       - main
-      - ny-brevstandard
+      - accessibility-testing
 
 jobs:
   build:
