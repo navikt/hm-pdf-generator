@@ -84,6 +84,7 @@ class PdfService {
 
                 val tokens = PDFStreamParser(page).parse()
                 val newTokens = ArrayList<Any>(tokens.size)
+                val rewrittenProps = mutableSetOf<COSName>()
 
                 for ((idx, token) in tokens.withIndex()) {
                     if (token is Operator && token.name == "BDC" && idx >= 2) {
@@ -95,6 +96,7 @@ class PdfService {
                                 // Replace named property reference with inline MCID dict
                                 newTokens.removeAt(newTokens.size - 1)
                                 newTokens.add(COSDictionary().also { it.setInt(COSName.getPDFName("MCID"), mcid) })
+                                rewrittenProps.add(prop)
                             }
                         }
                     }
@@ -105,7 +107,11 @@ class PdfService {
                     ContentStreamWriter(it).writeTokens(newTokens)
                 }.toByteArray()
                 page.setContents(PDStream(doc, ByteArrayInputStream(contentBytes)))
-                resources.cosObject.removeItem(COSName.getPDFName("Properties"))
+                // Only remove entries that were actually rewritten to avoid dangling references
+                rewrittenProps.forEach { propertiesDict.removeItem(it) }
+                if (propertiesDict.size() == 0) {
+                    resources.cosObject.removeItem(COSName.getPDFName("Properties"))
+                }
             }
             // Save to an intermediate buffer — PDFBox flushes/closes internal streams
             // when the document is closed, which must happen before we write to the
