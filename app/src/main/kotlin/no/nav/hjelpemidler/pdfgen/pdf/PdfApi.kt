@@ -129,10 +129,8 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
     }
 
     post("/api/delbestilling") {
+        val data = call.receive<Delbestilling>()
         try {
-
-            val data = call.receive<Delbestilling>()
-
             val template = fromResource("/delbestilling/delbestilling.hbs")
             val htmlWriter = StringWriter()
             templateService.compile(template, data, htmlWriter)
