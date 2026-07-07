@@ -13,8 +13,8 @@ data class Delbestilling(
     val hjelpemiddelserienr: String? = null,
     val navnTekniker: String,
     val beskjed517: String? = null,
-    val leveringsadresse : String,
-    val deler : List<Del>,
+    val leveringsadresse: String,
+    val deler: List<Del>,
     val ukjenteDeler: List<UkjentDel>,
     val totalAntallDeler: Int,
 )
