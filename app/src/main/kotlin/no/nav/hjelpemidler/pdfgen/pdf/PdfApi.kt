@@ -26,14 +26,15 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvvisningDirekteoppgjor
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
+import no.nav.hjelpemidler.pdfgen.modell.Delbestilling
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
-import org.apache.commons.io.IOUtils.byteArray
 import java.io.StringWriter
 
 private val log = KotlinLogging.logger { }
 
 fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
+
     post("/api/html-til-pdf") {
         val html = call.receiveText()
         try {
@@ -115,7 +116,24 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
                     return@post
                 }
             }
-            val template = fromResrouce("/brev/$mappe/$brevId.${målform.toString().lowercase().replace("å", "a")}.hbs")
+            val template = fromResource("/brev/$mappe/$brevId.${målform.toString().lowercase().replace("å", "a")}.hbs")
+            val htmlWriter = StringWriter()
+            templateService.compile(template, data, htmlWriter)
+            call.respondOutputStream(ContentType.Application.Pdf) {
+                pdfService.lagPdf(htmlWriter.toString(), this)
+            }
+        } catch (e: Exception) {
+            log.error(e) { e.message }
+            call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
+        }
+    }
+
+    post("/api/delbestilling") {
+        try {
+
+            val data = call.receive<Delbestilling>()
+
+            val template = fromResource("/delbestilling/delbestilling.hbs")
             val htmlWriter = StringWriter()
             templateService.compile(template, data, htmlWriter)
             call.respondOutputStream(ContentType.Application.Pdf) {
@@ -128,7 +146,8 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
     }
 }
 
-private fun fromResrouce(resource: String) =
+
+private fun fromResource(resource: String) =
     object {}
         .javaClass
         .inputStream(resource)
