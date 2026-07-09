@@ -33,3 +33,4 @@ spec:
       rules:
         - application: hm-saksbehandling
         - application: hm-joark-sink
+        - application: hm-delbestilling-api
