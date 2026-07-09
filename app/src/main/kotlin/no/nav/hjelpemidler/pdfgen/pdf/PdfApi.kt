@@ -20,6 +20,7 @@ import io.ktor.utils.io.toByteArray
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import no.nav.hjelpemidler.configuration.Environment
 import no.nav.hjelpemidler.logging.teamError
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagHotsak
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvslagManglendeOpplysningerHotsak
@@ -129,9 +130,12 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
     }
 
     post("/api/delbestilling") {
-        //val data = call.receive<Delbestilling>()
-        val data = call.receive<String>()
-        log.info { "Delbestilling: $data" }
+        val data = call.receive<Delbestilling>()
+
+        if(Environment.current.tier.isDev) {
+            log.info { "Delbestilling: $data" }
+        }
+
         try {
             val template = fromResource("/delbestilling/delbestilling.hbs")
             val htmlWriter = StringWriter()
