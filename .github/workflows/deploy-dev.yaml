@@ -9,7 +9,7 @@ on:
       - "CODEOWNERS"
     branches:
       - main
-      - accessibility-testing
+      - pdfGeneringForSoknadsApi
 
 jobs:
   build:

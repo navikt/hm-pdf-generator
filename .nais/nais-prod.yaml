@@ -35,3 +35,4 @@ spec:
         - application: hm-saksbehandling
         - application: hm-joark-sink
         - application: hm-delbestilling-api
+        - application: hm-soknad-api

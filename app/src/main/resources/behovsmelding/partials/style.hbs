@@ -1,0 +1,350 @@
+<style>
+
+    @page {
+        size: A4 portrait;
+        margin: 1cm 0.3cm 0.5cm;
+        padding-bottom: 1cm;
+
+        @bottom-left {
+            content: element(footer);
+        }
+    }
+
+    @page:first {
+        margin-top: 0;
+        @top-left {
+            content: element(header);
+        }
+    }
+
+    #footer {
+        position: running(footer);
+        font-size: 12px;
+        margin-top: -25px;
+        padding-left: 0.6cm;
+    }
+
+    .sidetall {
+        float: right;
+    }
+
+    #pagenumber:before {
+        content: counter(page);
+    }
+    #pagecount:before {
+        content: counter(pages)
+    }
+
+    #header {
+        background: #DADE99;
+        padding: 0cm 0.7cm;
+        margin-bottom: 0.5cm;
+    }
+
+    * {
+        font-family: "Source Sans Pro";
+    }
+
+    html {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    ul.listevisning {
+        margin: 0;
+        padding: 0.5em 2em;
+    }
+
+
+    .title {
+        display: inline-block;
+        position: absolute;
+        top: 12px;
+        left: 100px;
+        font-weight: 700;
+        font-style: normal;
+        font-size: 20px;
+        font-family: "Source Sans Pro";
+    }
+
+    .navlogo {
+        display: inline-block;
+        padding-top: 15px;
+        padding-bottom: 12px;
+        margin-left: 3px;
+        width: 48px;
+    }
+
+    .container {
+        margin: 0cm 1.5cm;
+        height: 850px;
+    }
+
+      .contentBlock {
+        margin-bottom: 1.5em;
+        page-break-inside: avoid;
+      }
+
+      .fixedWidthLabel {
+        width: 12em;
+      }
+
+      .innerContentBlock {
+        max-width: 600px;
+      }
+
+      .smallerInnerContentBlock {
+        padding-right: 100px;
+      }
+
+      .field-group {
+        margin-bottom: 1.5em;
+      }
+
+      table {
+        border-collapse: collapse;
+        border: 0;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+
+      tr {
+        border: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      td {
+        vertical-align: top;
+        border: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      td.alignRight {
+        text-align: right;
+      }
+
+    .typo-innholdstittel {
+        margin: 0;
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-size: 2em;
+        line-height: 2.25em;
+        font-weight: 600;
+    }
+
+    .typo-systemtittel {
+        margin: 0;
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-size: 1.5em;
+        line-height: 1.75em;
+        font-weight: 600;
+    }
+
+    .typo-undertittel {
+        margin: 0;
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-size: 1.25em;
+        line-height: 1.5625em;
+        font-weight: 600;
+    }
+
+    .typo-element {
+        margin: 0;
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-size: 1em;
+        line-height: 1.375em;
+        font-weight: 600;
+    }
+
+    .typo-normal {
+        margin: 0;
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-size: 1em;
+        line-height: 1.375em;
+        font-weight: 400;
+    }
+
+    .typo-etikett-liten {
+        margin: 0;
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-size: 0.875em;
+        line-height: 1.25em;
+        font-weight: 400;
+        text-transform: uppercase;
+    }
+
+    .typo-etikett-liten-no-text-transform {
+        margin: 0;
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-size: 0.875em;
+        line-height: 1.25em;
+        font-weight: 400;
+    }
+
+    .tlbhr-antall {
+        white-space: nowrap;
+    }
+
+     .pdlOppslag {
+        background: #ecefcc;
+        padding: 1em;
+        margin-left: -1em;
+        margin-bottom: 1em;
+     }
+
+    .pdlOppslagInfo {
+        display: inline-block;
+        text-align: right;
+        float: right;
+    }
+
+    .pdlOppslagInfo > p {
+        margin-left: 32px;
+    }
+
+    .pdlOppslagInfo > img {
+        float: left;
+        width: 22px;
+        height: 22px;
+    }
+
+    .chip > p {
+        display: inline;
+    }
+
+    .chip > p.typo-normal {
+        min-width: 24px;
+        min-height: 24px;
+        text-align: center;
+        padding: 1px;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: #c6c2bf;
+    }
+
+    .rank1 > p.typo-normal {
+        background-color: #9bd0b0;
+        font-weight: bold;
+    }
+
+    .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .info {
+        margin-bottom: 15px;
+    }
+
+    .info > div {
+        float: right;
+    }
+
+    .info > div h2 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .section {
+        margin-bottom: 15px;
+    }
+
+    .section-header {
+        background: #DADE99;
+    }
+
+    .section-inner {
+        padding: 10px;
+        padding-bottom: 5px;
+    }
+
+    .section-content {
+        margin-bottom: 6px;
+    }
+
+    .section-header h2 {
+        margin: 0;
+        padding: 8px;
+        font-size: 18px;
+    }
+
+    .section-content h3,
+    .section-content p {
+        padding: 0;
+        margin: 0 0 5px 0;
+    }
+
+    table.fixed-table {
+        table-layout: fixed
+    }
+
+    .alert {
+        padding: 12px 0;
+    }
+
+    .alert img.info-circle {
+        width: 20px;
+        height: 20px;
+        float: left;
+    }
+
+    .alert img.info-icon-small {
+        width: 18px;
+        height: 18px;
+        float: left;
+    }
+
+    .alert img.warning-icon {
+        width: 24px;
+        height: 24px;
+        float: left;
+    }
+
+    .alert .info-tekst {
+        display: inline-block;
+        overflow: hidden;
+        margin-left: 10px;
+    }
+
+    .alert .info-tekst-small {
+        display: inline-block;
+        margin-left: 4px;
+        vertical-align: middle;
+    }
+
+    .alert.info {
+        background-color: rgb(216 249 255);
+        border-color: rgb(54 141 168);
+        border: 1px solid;
+        border-radius: 4px;
+        margin-left: -1em;
+        margin-bottom: 1em;
+        padding: 1em;
+    }
+
+    .alert.warning {
+        background-color: #ffeccc;
+        border-color: #c77300;
+        border: 1px solid;
+        border-radius: 4px;
+        margin-left: -1em;
+        margin-bottom: 1em;
+        padding: 1em;
+    }
+
+    .alert.in-bounds {
+        margin-left: 0;
+    }
+</style>

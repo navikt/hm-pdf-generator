@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    {{#eq type "BYTTE"}}
+        <title>Bytte av hjelpemidler</title>
+        <meta name="description" content="Bytte av hjelpemidler" />
+    {{/eq}}
+    {{#eq type "BESTILLING"}}
+        <title>Bestilling av hjelpemidler</title>
+        <meta name="description" content="Bestilling av hjelpemidler" />
+    {{/eq}}
+    {{#eq type "SØKNAD"}}
+        <title>Søknad om hjelpemidler</title>
+        <meta name="description" content="Søknad om hjelpemidler" />
+    {{/eq}}
+    {{#block 'behovsmelding/partials/style' }}
+    {{/block}}
+</head>
+
+<body>
+    <div id="header">
+        <img class="navlogo" src="{{ image "images/Navlogo.png" }}" alt="" />
+        {{#eq type "BYTTE"}}
+        <h1 class="title">Bytte av hjelpemidler</h1>
+        {{/eq}}
+        {{#eq type "BESTILLING"}}
+        <h1 class="title">Bestilling av hjelpemidler</h1>
+        {{/eq}}
+        {{#eq type "SØKNAD"}}
+        <h1 class="title">Søknad om hjelpemidler</h1>
+        {{/eq}}
+    </div>
+    <div class="container">
+
+        <div>
+            {{#if saksbehandlingvarsel}}
+                {{#gt saksbehandlingvarsel.length 0 }}
+                    <div class="contentBlock">
+                        {{#each saksbehandlingvarsel as |varsel|}}
+                            {{#block 'behovsmelding/partials/varsel'}}{{/block}}
+                        {{/each}}
+                    </div>
+                {{/gt}}
+            {{/if}}
+
+            <div class="contentBlock">
+                {{#eq prioritet "HAST"}}
+                <div class="contentBlock">
+                    <div class="alert warning in-bounds">
+                        <img src="{{ image "images/warning-icon.svg" }}" class="info-circle" alt="" />
+                        <p class="typo-normal info-tekst">
+                            Hast: formidler har markert saken som hast.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="contentBlock">
+                    <table>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Årsak til at det haster</p>
+                            </td>
+                            <td>
+                                {{#block 'behovsmelding/partials/hasteArsaker'}}{{/block}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                {{/eq}}
+
+                <div class="contentBlock">
+                    <table>
+                        <tr>
+                            <td style="vertical-align: baseline">
+                                <h2 class="typo-systemtittel">Hjelpemiddelbruker</h2>
+                            </td>
+                            <td style="vertical-align: baseline" class="alignRight fixedWidthLabel">
+                                <p class="typo-normal">Mottatt dato: {{iso_to_date innsendingsdato}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="contentBlock">
+                    <table>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Navn</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{bruker.navn.fornavn}} {{bruker.navn.etternavn}}</p>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Fødselsnummer</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{bruker.fnr}}</p>
+                            </td>
+                        </tr>
+
+                        {{#eq bruker.kilde "PDL"}}
+                        <tr>
+                            <td colspan="2">
+                                <div class="alert" style="padding: 6px 0px 12px 0px">
+                                    <img src="{{ image "images/info-icon-nofill.svg" }}" class="info-icon-small" alt="" />
+                                    <p class="typo-etikett-liten-no-text-transform info-tekst-small">Navn er hentet fra Folkeregisteret</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/eq}}
+
+                        {{#if bruker.brukernummer}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Brukernummer</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{bruker.brukernummer}}</p>
+                            </td>
+                        </tr>
+                        {{/if}}
+
+                        {{#if bruker.telefon}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Telefon</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{bruker.telefon}}</p>
+                            </td>
+                        </tr>
+                        {{/if}}
+                    </table>
+                </div>
+            </div>
+
+            <div class="contentBlock">
+                <div class="contentBlock">
+                    <h2 class="typo-systemtittel">Utlevering</h2>
+                </div>
+                <div class="contentBlock">
+                    <table>
+                        {{#if levering.hast}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Prioritet</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">Saken haster</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Årsak til at det haster</p>
+                            </td>
+                            <td>
+                                {{#block 'behovsmelding/partials/hasteArsaker'}}{{/block}}
+                            </td>
+                        </tr>
+                        {{/if}}
+
+                        {{#levering.automatiskUtledetTilleggsinfo}}
+                        {{#eq . "UTLEVERING_KALENDERAPP"}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Kalenderapp</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">Lisensnummer sendes til Min side på nav.no. For barn under 18 år
+                                    sendes lisensnummer også til folkeregistrert adresse.</p>
+                            </td>
+                        </tr>
+                        {{/eq}}
+                        {{#eq . "ALLE_HJELPEMIDLER_ER_UTLEVERT"}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Obs</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">Alle hjelpemidlene er allerede utlevert av Nav.</p>
+                            </td>
+                        </tr>
+                        {{/eq}}
+                        {{/levering.automatiskUtledetTilleggsinfo}}
+
+                        {{#eq levering.utleveringsmåte "ANNEN_BRUKSADRESSE"}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Leveringsadresse</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.annenUtleveringsadresse.adresse}}, {{levering.annenUtleveringsadresse.postnummer}} {{levering.annenUtleveringsadresse.poststed}}</p>
+                            </td>
+                        </tr>
+                        {{#if levering.annenUtleveringskommune}}
+                            <tr>
+                                <td class="fixedWidthLabel">
+                                    <p class="typo-element">Kommune</p>
+                                </td>
+                                <td>
+                                    <p class="typo-normal">{{levering.annenUtleveringskommune.navn}} ({{levering.annenUtleveringskommune.nummer}})</p>
+                                </td>
+                            </tr>
+                        {{/if}}
+                        {{#if levering.annenUtleveringsbydel}}
+                            <tr>
+                                <td class="fixedWidthLabel">
+                                    <p class="typo-element">Bydel</p>
+                                </td>
+                                <td>
+                                    <p class="typo-normal">{{levering.annenUtleveringsbydel.navn}} ({{levering.annenUtleveringsbydel.nummer}})</p>
+                                </td>
+                            </tr>
+                        {{/if}}
+                        {{#if levering.annenUtleveringMottaker}}
+                            <tr>
+                                <td class="fixedWidthLabel">
+                                    <p class="typo-element">Mottaker</p>
+                                </td>
+                                <td>
+                                    <p class="typo-normal">{{levering.annenUtleveringMottaker}}</p>
+                                </td>
+                            </tr>
+                        {{/if}}
+                        {{/eq}}
+                        {{#eq levering.utleveringsmåte "FOLKEREGISTRERT_ADRESSE"}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Leveringsadresse</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">Folkeregistrert adresse:</p>
+                                <p class="typo-normal">{{bruker.veiadresse.adresse}}, {{bruker.veiadresse.postnummer}} {{bruker.veiadresse.poststed}}</p>
+                            </td>
+                        </tr>
+                        {{/eq}}
+                        {{#eq levering.utleveringsmåte "HJELPEMIDDELSENTRALEN"}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Leveringsadresse</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">Hentes på hjelpemiddelsentralen (Forutsetter at din hjelpemiddelsentral har dette tilbudet)</p>
+                            </td>
+                        </tr>
+                        {{/eq}}
+
+                        {{#eq levering.utleveringKontaktperson "HJELPEMIDDELBRUKER"}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Kontaktperson</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{bruker.navn.fornavn}} {{bruker.navn.etternavn}} (Hjelpemiddelbruker)</p>
+                            </td>
+                        </tr>
+                        {{/eq}}
+                        {{#eq levering.utleveringKontaktperson "HJELPEMIDDELFORMIDLER"}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Kontaktperson</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.navn.fornavn}} {{levering.hjelpemiddelformidler.navn.etternavn}} (Hjelpemiddelformidler)</p>
+                            </td>
+                        </tr>
+                        {{/eq}}
+                        {{#eq levering.utleveringKontaktperson "ANNEN_KONTAKTPERSON"}}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Kontaktperson</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.annenKontaktperson.navn.fornavn}} {{levering.annenKontaktperson.navn.etternavn}}, tlf: {{levering.annenKontaktperson.telefon}}</p>
+                            </td>
+                        </tr>
+                        {{/eq}}
+                        {{#if levering.utleveringMerknad }}
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Merknad til utlevering</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.utleveringMerknad}}</p>
+                            </td>
+                        </tr>
+                        {{/if}}
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="contentBlock">
+                <h2 class="typo-systemtittel">Hjelpemidler og tilbehør</h2>
+            </div>
+
+            {{# each hjelpemidler.hjelpemidler~}}
+            <div class="contentBlock">
+                <table>
+                    <tr>
+                        <td colspan="3">
+                            <p class="typo-etikett-liten" style="text-transform: uppercase">{{produkt.iso8Tittel}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <p class="typo-etikett-liten" style="text-transform: none">{{produkt.delkontrakttittel}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 5em">
+                            <p class="typo-element">{{produkt.hmsArtNr}}</p>
+                        </td>
+                        <td>
+                            <p class="typo-element">{{produkt.artikkelnavn}}</p>
+                        </td>
+                        <td class="alignRight fixedWidthLabel">
+                            <p class="typo-normal">{{antall}} stk.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="chip {{#eq produkt.rangering "1"}}rank1{{/eq}}">
+                                <p class="typo-element">Rangering</p>
+                                <p class="typo-normal">{{produkt.rangering}}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                </table>
+                {{# if tilbehør }}
+                <table>
+                    <tr>
+                        <td style="padding-top: 8px">
+                            <p class="typo-etikett-liten">TILBEHØR</p>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    {{# each tilbehør as |tlbhr|~}}
+                    <tr>
+                        <td style="padding-top: 4px; padding-bottom: 8px; width: 5em">
+                            <p class="typo-etikett-liten-no-text-transform">{{tlbhr.hmsArtNr}}</p>
+                        </td>
+                        <td class="smallerInnerContentBlock" style="padding-top: 4px; padding-bottom: 8px;">
+                            <p class="typo-etikett-liten-no-text-transform">
+                                {{tlbhr.navn}}
+                            </p>
+                            
+                            {{#each tlbhr.saksbehandlingvarsel as |varsel|}}
+                                {{#block 'behovsmelding/partials/varsel' inline=true}}{{/block}}
+                            {{/each}}
+
+                            {{#each tlbhr.opplysninger as |opplysning|}}
+                            <p class="typo-etikett-liten-no-text-transform" style="padding-top: 4px;">
+                                {{opplysning.ledetekst.nb}}: 
+                                {{#if opplysning.innhold.[0].fritekst }}
+                                {{opplysning.innhold.[0].fritekst}}
+                                {{else}}
+                                {{{opplysning.innhold.[0].forhåndsdefinertTekst.nb}}}
+                                {{/if}}
+                            </p>
+                            {{/each}}
+
+                            <p class="typo-etikett-liten-no-text-transform" style="padding-top: 4px;">
+                                {{#eq tlbhr.fritakFraBegrunnelseÅrsak "ER_PÅ_BESTILLINGSORDNING"}}
+                                <em>Begrunnelse er ikke påkrevd for dette tilbehøret.</em>
+                                {{/eq}}
+                                {{#eq tlbhr.fritakFraBegrunnelseÅrsak "ER_SELVFORKLARENDE_TILBEHØR"}}
+                                <em>Begrunnelse er ikke påkrevd for dette tilbehøret.</em>
+                                {{/eq}}
+                                {{#if tlbhr.begrunnelse}}
+                                Begrunnelse for tilbehøret: {{tlbhr.begrunnelse}}
+                                {{/if}}
+                            </p>
+                        </td>
+                        <td class="alignRight" style="padding-top: 4px; padding-bottom: 8px">
+                            <p class="typo-etikett-liten-no-text-transform tlbhr-antall">{{tlbhr.antall}} stk.</p>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </table>
+                {{/if}}
+                <table class="innerContentBlock">
+                    {{#each opplysninger as |opplysning|}}
+                    <tr>
+                        <td style="padding-top: 0.5em" colspan="3">
+                            <p class="typo-normal"><strong>{{opplysning.ledetekst.nb}}</strong></p>
+                            {{#eq opplysning.innholdstype "TEKST"}}
+                                    <p class="typo-normal">
+                                        {{#if opplysning.innhold.[0].fritekst }}
+                                        {{opplysning.innhold.[0].fritekst}}
+                                        {{else}}
+                                        {{{opplysning.innhold.[0].forhåndsdefinertTekst.nb}}}
+                                        {{/if}}
+                                    </p>
+                                {{#if opplysning.innhold.[0].begrepsforklaring}}
+                                <p class="typo-etikett-liten-no-text-transform">
+                                    {{opplysning.innhold.[0].begrepsforklaring.nb}}
+                                </p>
+                                {{/if}}
+                            {{/eq}}
+
+                            {{#eq opplysning.innholdstype "LISTE"}}
+                            <ul style="margin-top: 0">
+                                {{#each innhold as |tekst|}}
+                                <li>
+                                    <p class="typo-normal">
+                                        {{#if tekst.fritekst }}
+                                        {{tekst.fritekst}}
+                                        {{else}}
+                                        {{{tekst.forhåndsdefinertTekst.nb}}}
+                                        {{/if}}
+                                    </p>
+                                    
+                                    {{#if tekst.begrepsforklaring}}
+                                    <p class="typo-etikett-liten-no-text-transform">
+                                        {{tekst.begrepsforklaring.nb}}
+                                    </p>
+                                    {{/if}}
+                                </li>
+                                
+                                {{/each}}
+                            </ul>
+                            {{/eq}}
+
+                            {{#eq opplysning.innholdstype "NØKKEL_VERDI"}}
+                            {{#each innhold as |tekst|}}
+                            <p class="typo-normal" style="margin-bottom: 0.25em;">
+                                <strong style="display: inline-block; width: 10rem;">{{tekst.ledetekst.nb}}</strong>
+                                {{#if tekst.fritekst}}
+                                {{tekst.fritekst}}
+                                {{else}}
+                                {{{tekst.forhåndsdefinertTekst.nb}}}
+                                {{/if}}
+                            </p>
+                            {{/each}}
+                            {{/eq}}
+                        </td>
+                    </tr>
+                    {{/each}}
+
+                    {{#each varsler as |varsel|}}
+                    <tr>
+                        <td style="padding-top: 0.5em;" colspan="3">
+                            {{#block 'behovsmelding/partials/varsel' inline=true}}{{/block}}
+                        </td>
+                    </tr>
+                    {{/each}}
+
+                    {{#if bytter}}
+                    {{# each bytter as |bytte|~}}
+                    <tr>
+                        <td style="padding-top: 0.5em" colspan="3">
+                            <p class="typo-normal">
+                                {{#if bytte.erTilsvarende}}
+                                <strong>Skal byttes inn</strong><br />
+                                {{else}}
+                                <strong>Skal leveres tilbake</strong><br />
+                                {{/if}}
+                                {{bytte.hmsnr}} {{bytte.hjmNavn}}
+                                {{#if bytte.serienr}}
+                                <br />
+                                Serienummer: {{bytte.serienr}}
+                                {{/if}}
+                            </p>
+                        </td>
+                    </tr>
+
+                    {{#if bytte.årsak}}
+                    <tr>
+                        <td style="padding-top: 0.5em" colspan="3">
+                            <p class="typo-normal">
+                                <strong>Begrunnelse for bytte</strong><br />
+                                Hjelpemiddelet skal byttes fordi det er
+                                {{#eq bytte.årsak "UTSLITT"}}
+                                utslitt.
+                                {{/eq}}
+                                {{#eq bytte.årsak "VOKST_FRA"}}
+                                vokst fra.
+                                {{/eq}}
+                                {{#eq bytte.årsak "ENDRINGER_I_INNBYGGERS_FUNKSJON"}}
+                                endringer i personens funksjon slik at hjelpemidlet ikke lenger dekker behovet.
+                                {{/eq}}
+                                {{#eq bytte.årsak "FEIL_STØRRELSE"}}
+                                feil størrelse.
+                                {{/eq}}
+                                {{#eq bytte.årsak "VURDERT_SOM_ØDELAGT_AV_LOKAL_TEKNIKER"}}
+                                ødelagt, etter vurdering av lokal tekniker.
+                                {{/eq}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    {{/if}}
+
+                    {{#each saksbehandlingvarsel as |varsel|}}
+                    <tr>
+                        <td style="padding-top: 0.5em;" colspan="3">
+                            {{#block 'behovsmelding/partials/varsel' inline=true}}{{/block}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </table>
+            </div>
+            {{/each}}
+
+            {{# each hjelpemidler.produktkategorier~}}
+            <div class="contentBlock">
+                <table>
+                    <tr>
+                        <td colspan="3">
+                            <p class="typo-etikett-liten" style="text-transform: none">{{delkontrakttittel}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="typo-element">{{navn}}</p>
+                        </td>
+                        <td class="alignRight fixedWidthLabel">
+                            <p class="typo-normal">{{antall}} stk.</p>
+                        </td>
+                    </tr>                    
+                </table>
+                
+                <table class="innerContentBlock">
+                    {{#each opplysninger as |opplysning|}}
+                    <tr>
+                        <td style="padding-top: 0.5em" colspan="3">
+                            <p class="typo-normal"><strong>{{opplysning.ledetekst.nb}}</strong></p>
+                            {{#eq opplysning.innholdstype "TEKST"}}
+                                    <p class="typo-normal">
+                                        {{#if opplysning.innhold.[0].fritekst }}
+                                        {{opplysning.innhold.[0].fritekst}}
+                                        {{else}}
+                                        {{{opplysning.innhold.[0].forhåndsdefinertTekst.nb}}}
+                                        {{/if}}
+                                    </p>
+                                {{#if opplysning.innhold.[0].begrepsforklaring}}
+                                <p class="typo-etikett-liten-no-text-transform">
+                                    {{opplysning.innhold.[0].begrepsforklaring.nb}}
+                                </p>
+                                {{/if}}
+                            {{/eq}}
+
+                            {{#eq opplysning.innholdstype "LISTE"}}
+                            <ul style="margin-top: 0">
+                                {{#each innhold as |tekst|}}
+                                <li>
+                                    <p class="typo-normal">
+                                        {{#if tekst.fritekst }}
+                                        {{tekst.fritekst}}
+                                        {{else}}
+                                        {{{tekst.forhåndsdefinertTekst.nb}}}
+                                        {{/if}}
+                                    </p>
+                                    
+                                    {{#if tekst.begrepsforklaring}}
+                                    <p class="typo-etikett-liten-no-text-transform">
+                                        {{tekst.begrepsforklaring.nb}}
+                                    </p>
+                                    {{/if}}
+                                </li>
+                                
+                                {{/each}}
+                            </ul>
+                            {{/eq}}
+
+                            {{#eq opplysning.innholdstype "NØKKEL_VERDI"}}
+                            {{#each innhold as |tekst|}}
+                            <p class="typo-normal" style="margin-bottom: 0.25em;">
+                                <strong style="display: inline-block; width: 10rem;">{{tekst.ledetekst.nb}}</strong>
+                                {{#if tekst.fritekst}}
+                                {{tekst.fritekst}}
+                                {{else}}
+                                {{{tekst.forhåndsdefinertTekst.nb}}}
+                                {{/if}}
+                            </p>
+                            {{/each}}
+                            {{/eq}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </table>
+            </div>
+            {{/each}}
+
+            {{#if hjelpemidler.tilbehør}}
+                {{#gt hjelpemidler.tilbehør.length 0}}
+                    <hr />
+                    <div class="contentBlock">
+                        <h3 class="typo-undertittel">Tilbehør</h3>
+                    </div>
+                {{/gt}}
+
+                {{# each hjelpemidler.tilbehør~}}
+                <div class="contentBlock">
+                    <table>
+                        <tr>
+                            <td style="width: 5em">
+                                <p class="typo-element">{{hmsArtNr}}</p>
+                            </td>
+                            <td>
+                                <p class="typo-element">{{navn}}</p>
+                            </td>
+                            <td class="alignRight fixedWidthLabel">
+                                <p class="typo-normal">{{antall}} stk.</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        {{#each saksbehandlingvarsel as |varsel|}}
+                        <tr>
+                            <td style="padding-top: 0.5em;" colspan="3">
+                                {{#block 'behovsmelding/partials/varsel' inline=true}}{{/block}}
+                            </td>
+                        </tr>
+                        {{/each}}
+                        {{#each opplysninger as |opplysning|}}
+                        <tr>
+                            <td style="padding-top: 0.5em" colspan="3">
+                                <p class="typo-normal"><strong>{{opplysning.ledetekst.nb}}</strong></p>
+                                {{#eq opplysning.innholdstype "TEKST"}}
+                                        <p class="typo-normal">
+                                            {{#if opplysning.innhold.[0].fritekst }}
+                                            {{opplysning.innhold.[0].fritekst}}
+                                            {{else}}
+                                            {{{opplysning.innhold.[0].forhåndsdefinertTekst.nb}}}
+                                            {{/if}}
+                                        </p>
+                                    {{#if opplysning.innhold.[0].begrepsforklaring}}
+                                    <p class="typo-etikett-liten-no-text-transform">
+                                        {{opplysning.innhold.[0].begrepsforklaring.nb}}
+                                    </p>
+                                    {{/if}}
+                                {{/eq}}
+
+                                    {{#eq opplysning.innholdstype "LISTE"}}
+                                <ul style="margin-top: 0">
+                                    {{#each innhold as |tekst|}}
+                                    <li>
+                                        <p class="typo-normal">
+                                            {{#if tekst.fritekst }}
+                                            {{tekst.fritekst}}
+                                            {{else}}
+                                            {{{tekst.forhåndsdefinertTekst.nb}}}
+                                            {{/if}}
+                                        </p>
+                                        
+                                        {{#if tekst.begrepsforklaring}}
+                                        <p class="typo-etikett-liten-no-text-transform">
+                                            {{tekst.begrepsforklaring.nb}}
+                                        </p>
+                                        {{/if}}
+                                    </li>
+                                    
+                                    {{/each}}
+                                </ul>
+                                {{/eq}}
+
+                                {{#eq opplysning.innholdstype "NØKKEL_VERDI"}}
+                                {{#each innhold as |tekst|}}
+                                <p class="typo-normal" style="margin-bottom: 0.25em;">
+                                    <strong style="display: inline-block; width: 10rem;">{{tekst.ledetekst.nb}}</strong>
+                                    {{#if tekst.fritekst}}
+                                    {{tekst.fritekst}}
+                                    {{else}}
+                                    {{{tekst.forhåndsdefinertTekst.nb}}}
+                                    {{/if}}
+                                </p>
+                                {{/each}}
+                                {{/eq}}
+                            </td>
+                        </tr>
+                        {{/each}}
+
+                        <tr>
+                            <td style="padding-top: 4px; padding-bottom: 8px; width: 27em;">
+                                <p class="typo-etikett-liten-no-text-transform">
+                                    {{#eq fritakFraBegrunnelseÅrsak "ER_PÅ_BESTILLINGSORDNING"}}
+                                    <em>Begrunnelse er ikke påkrevd for dette tilbehøret.</em>
+                                    {{/eq}}
+                                    {{#eq fritakFraBegrunnelseÅrsak "ER_SELVFORKLARENDE_TILBEHØR"}}
+                                    <em>Begrunnelse er ikke påkrevd for dette tilbehøret.</em>
+                                    {{/eq}}
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                {{/each}}
+            {{/if}}
+            <hr />
+            <div class="contentBlock">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <p class="typo-normal">Hjelpemiddelsentralen vil kunne sende ut tilsvarende produkter fra lager</p>
+                        </td>
+                        <td class="alignRight fixedWidthLabel">
+                            <p class="typo-element">Totalt: {{hjelpemidler.totaltAntall}} stk. inkl. tilbehør</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            {{#if brukersituasjon.funksjonsbeskrivelse}}
+            <div class="innerContentBlock">
+                <div class="contentBlock">
+                    <h2 class="typo-systemtittel">Personens funksjon</h2>
+                    <p>Funksjonsbeskrivelsen skal beskrive hvilke konsekvenser den nedsatte funksjonsevnen har for personen i dagliglivet.</p>
+                </div>
+                <div class="contentBlock">
+                    <div class="field-group">
+                        <p class="typo-element">Sykdom, skade, lyte</p>
+                        <p class="typo-normal">
+                            {{#brukersituasjon.funksjonsbeskrivelse.innbyggersVarigeFunksjonsnedsettelse}}
+                                {{#eq . "ALDERDOMSSVEKKELSE"}}
+                                    Alderdomssvekkelse
+                                {{/eq}}
+                                {{#eq . "ANNEN_VARIG_DIAGNOSE"}}
+                                    Diagnose: {{brukersituasjon.funksjonsbeskrivelse.diagnose}}
+                                {{/eq}}
+                                {{#eq . "ANNEN_DIAGNOSE"}}
+                                    Diagnose: {{brukersituasjon.funksjonsbeskrivelse.diagnose}}
+                                {{/eq}}
+                                {{#eq . "UAVKLART"}}
+                                    Det er uavklart om personen har en varig sykdom, skade eller lyte.
+                                {{/eq}}
+                                {{#eq . "UAVKLART_V2"}}
+                                    Det er uavklart om personen har en sykdom, skade eller lyte som har ført til varig og vesentlig nedsatt funksjonsevne.
+                                {{/eq}}
+                            {{/brukersituasjon.funksjonsbeskrivelse.innbyggersVarigeFunksjonsnedsettelse}}
+                        </p>
+                    </div>
+                    <div class="field-group">
+                        <p class="typo-element">Funksjonsbeskrivelse</p>
+                        <p class="typo-normal" style="white-space: pre-line;">
+                            {{brukersituasjon.funksjonsbeskrivelse.beskrivelse}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+
+            <div class="contentBlock">
+                <h2 class="typo-systemtittel">Hjelpemiddelformidler og oppfølging</h2>
+            </div>
+            <div class="contentBlock">
+                <div class="contentBlock">
+                    <h2 class="typo-undertittel">Hjelpemiddelformidler</h2>
+                </div>
+                <div class="contentBlock">
+                    <table>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Navn</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.navn.fornavn}} {{levering.hjelpemiddelformidler.navn.etternavn}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Arbeidssted</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.arbeidssted}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Stilling</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.stilling}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Adresse</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.adresse.adresse}}, {{levering.hjelpemiddelformidler.adresse.postnummer}} {{levering.hjelpemiddelformidler.adresse.poststed}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Telefon</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.telefon}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Treffes enklest</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.treffesEnklest}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">E-postadresse</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.epost}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="contentBlock">
+                <div class="contentBlock">
+                    <h2 class="typo-undertittel">Oppfølgings- og opplæringsansvarlig</h2>
+                </div>
+                <div class="contentBlock">
+                    {{#eq levering.oppfølgingsansvarlig "HJELPEMIDDELFORMIDLER"}}
+                    <table>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Navn</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.hjelpemiddelformidler.navn.fornavn}} {{levering.hjelpemiddelformidler.navn.etternavn}} (Hjelpemiddelformidler)</p>
+                            </td>
+                        </tr>
+                    </table>
+                    {{/eq}}
+                    {{#eq levering.oppfølgingsansvarlig "ANNEN_OPPFØLGINGSANSVARLIG"}}
+                    <table>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Navn</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.annenOppfølgingsansvarlig.navn.fornavn}} {{levering.annenOppfølgingsansvarlig.navn.etternavn}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Arbeidssted</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.annenOppfølgingsansvarlig.arbeidssted}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Stilling</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.annenOppfølgingsansvarlig.stilling}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Telefon</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.annenOppfølgingsansvarlig.telefon}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fixedWidthLabel">
+                                <p class="typo-element">Ansvar</p>
+                            </td>
+                            <td>
+                                <p class="typo-normal">{{levering.annenOppfølgingsansvarlig.ansvarFor}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                    {{/eq}}
+                </div>
+            </div>
+            
+
+            {{#if vedlegg}}
+                {{#gt vedlegg.length 0}}
+                    <div class="contentBlock">
+                        <h2 class="typo-systemtittel">Vedlegg til denne saken</h2>
+                        <ul>
+                        {{#each vedlegg as |v|}}
+                            <li>
+                                <p class="typo-normal">{{v.navn}}</p>
+                            </li>
+                        {{/each}}
+                        </ul>
+                    </div>
+                {{/gt}}
+            {{/if}}
+
+            <hr />
+            <div class="innerContentBlock">
+                {{#eq bruker.signaturtype "FULLMAKT"}}
+                <div class="contentBlock">
+                    <h2 class="typo-systemtittel">Fullmakt og vilkår</h2>
+                </div>
+                <div class="contentBlock">
+                    <p class="typo-element">Fullmakt til å søke på vegne av {{bruker.navn.fornavn}} {{bruker.navn.etternavn}}</p>
+                    <ul>
+                        <li>
+                            <p class="typo-normal">{{bruker.navn.fornavn}} {{bruker.navn.etternavn}} har signert en fullmakt på at jeg fyller ut og begrunner søknad om hjelpemidler på sine vegne. {{bruker.navn.fornavn}} {{bruker.navn.etternavn}} er kjent med hvilke hjelpemidler det søkes om og er informert om sine rettigheter og plikter.</p>
+                        </li>
+                        <li>
+                            <p class="typo-normal">Fullmakten er arkivert i kommunens arkiv og kan vises frem på forespørsel fra Nav Hjelpemiddelsentral.</p>
+                        </li>
+                    </ul>
+                </div>
+                {{/eq}}
+                {{#eq bruker.signaturtype "IKKE_INNHENTET_FORDI_BYTTE"}}
+                <div class="contentBlock">
+                    <h2 class="typo-systemtittel">Fullmakt og vilkår</h2>
+                    <p class="typo-normal">Det er ikke behov for fullmakt i denne saken fordi personen har et vedtak på tilsvarende hjelpemiddel. Saken kan behandles som en byttesak.</p>
+                </div>
+                {{/eq}}
+                {{#eq bruker.signaturtype "IKKE_INNHENTET_FORDI_KUN_TILBEHØR"}}
+                <div class="contentBlock">
+                    <h2 class="typo-systemtittel">Fullmakt og vilkår</h2>
+                    <p class="typo-normal">Det er ikke innhentet fullmakt i denne saken, da Nav i en tidsbegrenset periode ønsker mer kunnskap om hvorfor det meldes behov for tilbehør i etterkant av en søknad/vedtak om hjelpemiddel.</p>
+                </div>
+                {{/eq}}
+                {{#eq bruker.signaturtype "IKKE_INNHENTET_FORDI_KUN_TILBEHØR_V2"}}
+                <div class="contentBlock">
+                    <h2 class="typo-systemtittel">Fullmakt og vilkår</h2>
+                    <p class="typo-normal">Formidler må ikke innhente fullmakt for å melde behov om tilbehøret. Nav går ut fra at fullmakt ble hentet inn da det ble meldt behov om hjelpemiddelet tilbehøret skal brukes sammen med.</p>
+                    <ul>
+                        <li>
+                            <p class="typo-normal">Formidler bekrefter at personen ønsker at hen melder behov for tilbehøret. Personen er kjent med hvilket tilbehør formidler melder behov om.</p>
+                        </li>
+                    </ul>
+                </div>
+                {{/eq}}
+                {{#eq bruker.signaturtype "IKKE_INNHENTET_FORDI_KUN_TILBEHØR_V3"}}
+                <div class="contentBlock">
+                    <h2 class="typo-systemtittel">Fullmakt og vilkår</h2>
+                    <p class="typo-normal">Formidler må ikke innhente fullmakt for å melde behov om tilbehøret. Nav går ut fra at fullmakt ble hentet inn da det ble meldt behov om hjelpemiddelet tilbehøret skal brukes sammen med.</p>
+                    <ul>
+                        <li>
+                            <p class="typo-normal">Formidler bekrefter at personen har vært involvert og er enig i at formidler melder behov for tilbehøret. Personen er kjent med hvilket tilbehør formidler søker om.</p>
+                        </li>
+                    </ul>
+                </div>
+                {{/eq}}
+                {{#eq bruker.signaturtype "BRUKER_BEKREFTER"}}
+                <div class="contentBlock">
+                    <h2 class="typo-systemtittel">Vilkår</h2>
+                </div>
+                {{/eq}}
+                <div class="contentBlock">
+                    <p class="typo-element">
+                        {{#innsender.rolle}}
+                            {{#eq . "FORMIDLER"}}
+                                Formidler har vurdert at følgende gjelder for {{bruker.navn.fornavn}} {{bruker.navn.etternavn}}
+                            {{/eq}}
+                            {{#eq . "BESTILLER"}}
+                                Bestiller har vurdert at følgende gjelder for {{bruker.navn.fornavn}} {{bruker.navn.etternavn}}
+                            {{/eq}}                    
+                        {{/innsender.rolle}}
+                    </p>
+                    <ul>
+                        {{#each brukersituasjon.vilkår as |vilkår|}}
+                        <li>
+                            <p class="typo-normal">{{ vilkår.tekst.nb }}</p>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+                <div class="contentBlock">
+                    <p class="typo-element">Informasjon om rettigheter og plikter</p>
+                    <p class="typo-normal">På nav.no kan du lese om hjelpemiddelmottakeres rettigheter og plikter og hvordan Nav behandler personopplysninger. På lovdata.no kan du lese om hvilke vilkår som må være oppfylt for å få rett til hjelpemidler i folketrygdloven §10-5, §10-6 og §10-7.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="footer">
+        <span class="soknadsid">{{id}}</span>
+        <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
+    </div>
+
+</body>
+
+</html>

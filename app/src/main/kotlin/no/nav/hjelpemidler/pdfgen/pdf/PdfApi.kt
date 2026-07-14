@@ -14,6 +14,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondOutputStream
 import io.ktor.server.response.respondTextWriter
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.RoutingContext
 import io.ktor.server.routing.post
 import io.ktor.server.util.getValue
 import io.ktor.utils.io.toByteArray
@@ -29,6 +30,9 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.Delbestilling
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
+import no.nav.hjelpemidler.behovsmeldingsmodell.v2.Brukerpassbytte
+import no.nav.hjelpemidler.behovsmeldingsmodell.v2.Innsenderbehovsmelding
+
 import java.io.StringWriter
 
 private val log = KotlinLogging.logger { }
@@ -130,20 +134,43 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
 
     post("/api/delbestilling") {
         val data = call.receive<Delbestilling>()
-        try {
-            val template = fromResource("/delbestilling/delbestilling.hbs")
-            val htmlWriter = StringWriter()
-            templateService.compile(template, data, htmlWriter)
-            call.respondOutputStream(ContentType.Application.Pdf) {
-                pdfService.lagPdf(htmlWriter.toString(), this)
-            }
-        } catch (e: Exception) {
-            log.error(e) { e.message }
-            call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
-        }
+        val templatePath = "/delbestilling/delbestilling.hbs"
+        generatePdfAndRespond(templatePath, templateService, data, pdfService)
+    }
+
+    post("/api/behovsmelding") {
+        val data = call.receive<Innsenderbehovsmelding>()
+        log.info { "Behovsmelding: $data" }
+        val templatePath = "/behovsmelding/innsenderbehovsmelding.hbs"
+        generatePdfAndRespond(templatePath, templateService, data, pdfService)
+    }
+
+    post("/api/brukerpassbytte") {
+        val data = call.receive<Brukerpassbytte>()
+        log.info { "Brukerpassbytte: $data" }
+        val templatePath = "/behovsmelding/brukerpassbytte.hbs"
+        generatePdfAndRespond(templatePath, templateService, data, pdfService)
     }
 }
 
+private suspend fun RoutingContext.generatePdfAndRespond(
+    templatePath: String,
+    templateService: TemplateService,
+    data: Any,
+    pdfService: PdfService
+) {
+    try {
+        val template = fromResource(templatePath)
+        val htmlWriter = StringWriter()
+        templateService.compile(template, data, htmlWriter)
+        call.respondOutputStream(ContentType.Application.Pdf) {
+            pdfService.lagPdf(htmlWriter.toString(), this)
+        }
+    } catch (e: Exception) {
+        log.error(e) { "Feil under generering fra template: $templatePath" }
+        call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template: $templatePath")
+    }
+}
 
 private fun fromResource(resource: String) =
     object {}
