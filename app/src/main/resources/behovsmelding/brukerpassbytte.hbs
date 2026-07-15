@@ -35,7 +35,9 @@
           </div>
 
           <div class='alert info'>
-            <img src="images/information-circle.png" class='info-circle' />
+              <div class='info-circle' >
+                {{> images/info-icon }}
+                </div>
             <p class='typo-element info-tekst'>Brukerpass</p>
             <p class='info-tekst'>
               {{navn.fornavn}} {{navn.etternavn}}
@@ -77,8 +79,8 @@
                 <tr>
                   <td colspan='2'>
                     <div class='pdlOppslagInfo'>
-                        <img src="images/information-circle.png" />
-                      <p class='typo-normal'>Opplysninger fra folkeregisteret</p>
+                        {{> images/info-icon }}
+                        <p class='typo-normal'>Opplysninger fra folkeregisteret</p>
                     </div>
                   </td>
                 </tr>
