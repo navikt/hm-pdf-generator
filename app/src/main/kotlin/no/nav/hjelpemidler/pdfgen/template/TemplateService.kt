@@ -34,6 +34,18 @@ class TemplateService {
         .registerHelper("concat", Helper<Any> { context, options ->
             "${context ?: return@Helper null} ${options.params.joinToString(" ")}".trim()
         })
+        .registerHelper(
+            "eq",
+            Helper<Any?> { context, options ->
+                if (context?.toString() == options.param<Any?>(0)?.toString()) {
+                    options.fn()
+                } else {
+                    options.inverse()
+                }
+            },
+        )
+
+
 
     private val formatter: DateTimeFormatter = DateTimeFormatter
         .ofLocalizedDate(FormatStyle.LONG)
