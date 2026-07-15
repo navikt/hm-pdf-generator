@@ -39,7 +39,7 @@
                 {{#gt saksbehandlingvarsel.length 0 }}
                     <div class="contentBlock">
                         {{#each saksbehandlingvarsel as |varsel|}}
-                            {{#block 'behovsmelding/partials/varsel'}}{{/block}}
+                            {{> partials/varsel}}
                         {{/each}}
                     </div>
                 {{/gt}}
