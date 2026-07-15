@@ -15,13 +15,15 @@
         <title>Søknad om hjelpemidler</title>
         <meta name="description" content="Søknad om hjelpemidler" />
     {{/eq}}
-    {{#block 'behovsmelding/partials/style' }}
-    {{/block}}
+    {{> partials/style}}
 </head>
 
 <body>
     <div id="header">
-        <img class="navlogo" src="images/Navlogo.png" alt="" />
+        {{> nav-logo }}
+    </div>
+    <div class="container">
+
         {{#eq type "BYTTE"}}
         <h1 class="title">Bytte av hjelpemidler</h1>
         {{/eq}}
@@ -31,8 +33,6 @@
         {{#eq type "SØKNAD"}}
         <h1 class="title">Søknad om hjelpemidler</h1>
         {{/eq}}
-    </div>
-    <div class="container">
 
         <div>
             {{#if saksbehandlingvarsel}}
@@ -49,7 +49,9 @@
                 {{#eq prioritet "HAST"}}
                 <div class="contentBlock">
                     <div class="alert warning in-bounds">
-                        <img src="images/warning-icon.svg" class="info-circle" alt="" />
+                        <div class="info-circle" alt="" >
+                            {{> images/warning-icon }}
+                        </div>
                         <p class="typo-normal info-tekst">
                             Hast: formidler har markert saken som hast.
                         </p>
@@ -63,7 +65,7 @@
                                 <p class="typo-element">Årsak til at det haster</p>
                             </td>
                             <td>
-                                {{#block 'behovsmelding/partials/hasteArsaker'}}{{/block}}
+                                {{> partials/hasteArsaker }}
                             </td>
                         </tr>
                     </table>
@@ -107,7 +109,9 @@
                         <tr>
                             <td colspan="2">
                                 <div class="alert" style="padding: 6px 0px 12px 0px">
-                                <img src="images/info-icon-nofill.svg" class="info-icon-small" alt="" />
+                                    <div class="info-icon-small">
+                                        {{> images/info-icon }}
+                                    </div>
                                     <p class="typo-etikett-liten-no-text-transform info-tekst-small">Navn er hentet fra Folkeregisteret</p>
                                 </div>
                             </td>
@@ -355,7 +359,7 @@
                             </p>
                             
                             {{#each tlbhr.saksbehandlingvarsel as |varsel|}}
-                                {{#block 'behovsmelding/partials/varsel' inline=true}}{{/block}}
+                                {{> partials/varsel inline=true}}
                             {{/each}}
 
                             {{#each tlbhr.opplysninger as |opplysning|}}
@@ -743,9 +747,7 @@
                     </div>
                     <div class="field-group">
                         <p class="typo-element">Funksjonsbeskrivelse</p>
-                        <p class="typo-normal" style="white-space: pre-line;">
-                            {{brukersituasjon.funksjonsbeskrivelse.beskrivelse}}
-                        </p>
+                        <p class="typo-normal" style="white-space: pre-line;">{{brukersituasjon.funksjonsbeskrivelse.beskrivelse}}</p>
                     </div>
                 </div>
             </div>

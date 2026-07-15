@@ -6,11 +6,15 @@
   {{/unless}}
   in-bounds">
     {{#eq varsel.type "INFO"}}
-    <img src="info-icon.png" class="info-circle" alt="" />
+    <div class="info-circle" alt="" >
+        {{> images/info-icon}}
+    </div>
     {{/eq}}
 
     {{#eq varsel.type "WARNING"}}
-    <img src="warning-icon.svg" class="warning-icon" alt="" />
+    <div class="warning-icon" alt="" >
+        {{> images/warning-icon}}
+    </div>
     {{/eq}}
     
     <p class="typo-normal info-tekst">{{varsel.tekst.nb}}</p>

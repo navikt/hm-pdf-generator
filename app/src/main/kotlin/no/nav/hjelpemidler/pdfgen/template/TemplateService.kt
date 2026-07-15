@@ -37,11 +37,20 @@ class TemplateService {
         .registerHelper(
             "eq",
             Helper<Any?> { context, options ->
+                //println("context: ${context?.toString()}")
+                //println("option: ${options.param<Any?>(0)?.toString()}")
                 if (context?.toString() == options.param<Any?>(0)?.toString()) {
                     options.fn()
                 } else {
                     options.inverse()
                 }
+            },
+        )
+        .registerHelper(
+            "gt",
+            Helper<Comparable<Any>> { context, options ->
+                val param = options.param(0) as Comparable<Any>
+                if (context > param) options.fn() else options.inverse()
             },
         )
 
