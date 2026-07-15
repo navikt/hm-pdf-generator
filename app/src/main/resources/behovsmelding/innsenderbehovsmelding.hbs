@@ -163,7 +163,7 @@
                                 <p class="typo-element">Årsak til at det haster</p>
                             </td>
                             <td>
-                                {{#block 'behovsmelding/partials/hasteArsaker'}}{{/block}}
+                                {{> partials/hasteArsaker}}
                             </td>
                         </tr>
                         {{/if}}
@@ -454,7 +454,7 @@
                     {{#each varsler as |varsel|}}
                     <tr>
                         <td style="padding-top: 0.5em;" colspan="3">
-                            {{#block 'behovsmelding/partials/varsel' inline=true}}{{/block}}
+                            {{> partials/varsel inline=true}}
                         </td>
                     </tr>
                     {{/each}}
@@ -509,7 +509,7 @@
                     {{#each saksbehandlingvarsel as |varsel|}}
                     <tr>
                         <td style="padding-top: 0.5em;" colspan="3">
-                            {{#block 'behovsmelding/partials/varsel' inline=true}}{{/block}}
+                            {{> partials/varsel inline=true}}
                         </td>
                     </tr>
                     {{/each}}
@@ -624,7 +624,7 @@
                         {{#each saksbehandlingvarsel as |varsel|}}
                         <tr>
                             <td style="padding-top: 0.5em;" colspan="3">
-                                {{#block 'behovsmelding/partials/varsel' inline=true}}{{/block}}
+                                {{> partials/varsel inline=true}}
                             </td>
                         </tr>
                         {{/each}}

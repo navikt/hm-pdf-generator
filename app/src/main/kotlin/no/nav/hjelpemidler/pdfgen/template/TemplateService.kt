@@ -37,8 +37,6 @@ class TemplateService {
         .registerHelper(
             "eq",
             Helper<Any?> { context, options ->
-                //println("context: ${context?.toString()}")
-                //println("option: ${options.param<Any?>(0)?.toString()}")
                 if (context?.toString() == options.param<Any?>(0)?.toString()) {
                     options.fn()
                 } else {
