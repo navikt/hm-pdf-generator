@@ -11,6 +11,8 @@ import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.path
 import io.ktor.server.routing.routing
+import no.nav.hjelpemidler.configuration.Environment
+import no.nav.hjelpemidler.domain.person.TILLAT_SYNTETISKE_FØDSELSNUMRE
 import no.nav.hjelpemidler.pdfgen.pdf.PdfService
 import no.nav.hjelpemidler.pdfgen.pdf.pdfApi
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
@@ -21,6 +23,8 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.main() {
     XRLog.setLoggerImpl(Slf4jLogger())
+
+    TILLAT_SYNTETISKE_FØDSELSNUMRE = !Environment.current.isProd
 
     val pdfService = PdfService()
     val templateService = TemplateService()
