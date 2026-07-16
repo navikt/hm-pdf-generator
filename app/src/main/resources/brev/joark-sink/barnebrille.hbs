@@ -1,0 +1,138 @@
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>Tilskudd ved kjøp av briller til barn via optiker</title>
+    {{> partials/style}}
+  </head>
+  <body>
+    <div id='header'>
+      {{> nav-logo }}
+    </div>
+    <div class='container'>
+
+      <h1 class='title'>Tilskudd ved kjøp av briller til barn via optiker</h1>
+
+      <div class='info'>
+        <div>
+          <h2>Mottatt dato</h2>
+          <span>{{formaterDatoTid opprettet}}</span>
+        </div>
+      </div>
+      <div style='clear:both;'></div>
+
+      <div class='section'>
+        <div class='section-header'>
+          <h2>Virksomhet</h2>
+        </div>
+        <div class='section-inner'>
+          <div class='section-content'>
+            <h3>{{orgNavn}}</h3>
+            <p>{{orgnr}} (virksomhetsnr)</p>
+            <p>{{orgAdresse}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class='section'>
+        <div class='section-header'>
+          <h2>Barn</h2>
+        </div>
+        <div class='section-inner'>
+          <div class='section-content'>
+            <h3>Navn</h3>
+            <p>{{brukersNavn}}</p>
+          </div>
+
+          <div class='section-content'>
+            <h3>Fødselsnummer</h3>
+            <p>{{fnr}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class='section'>
+        <div class='section-header'>
+          <h2>Brillestyrke og støtte</h2>
+        </div>
+        <div class='section-inner'>
+          <div class='section-content'>
+            <table class='fixed-table'>
+              <thead>
+                <tr>
+                  <th>Høyre øye</th>
+                  <th>Sfære (SPH)</th>
+                  <th>Sylinder (CYL)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>{{brilleseddel.høyreSfære}}</td>
+                  <td>{{brilleseddel.høyreSylinder}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class='section-content'>
+            <table class='fixed-table'>
+              <thead>
+                <tr>
+                  <th>Venstre øye</th>
+                  <th>Sfære (SPH)</th>
+                  <th>Sylinder (CYL)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>{{brilleseddel.venstreSfære}}</td>
+                  <td>{{brilleseddel.venstreSylinder}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class='section-content'>
+            <h3>Beløp</h3>
+            <p>{{beløp}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class='section'>
+        <div class='section-header'>
+          <h2>Brille</h2>
+        </div>
+        <div class='section-inner'>
+          <div class='section-content'>
+            <h3>Bestillingsdato</h3>
+            <p>{{bestillingsdato}}</p>
+          </div>
+
+          <div class='section-content'>
+            <h3>Bestillingsreferanse</h3>
+            <p>{{bestillingsreferanse}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class='section'>
+        <div class='section-header'>
+          <h2>Vilkår</h2>
+        </div>
+        <div class='section-inner'>
+          <div class='section-content'>
+            <h3>{{brukersNavn}} fyller vilkårene for å motta støtte til
+              barnebriller</h3>
+            <ul>
+              <li>{{brukersNavn}} er medlem av folketrygden</li>
+              <li>{{brukersNavn}} har ikke fått brillestøtte hittil i år {{bestillingsår}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

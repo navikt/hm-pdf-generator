@@ -32,6 +32,8 @@ import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import no.nav.hjelpemidler.behovsmeldingsmodell.v2.Brukerpassbytte
 import no.nav.hjelpemidler.behovsmeldingsmodell.v2.Innsenderbehovsmelding
+import no.nav.hjelpemidler.configuration.Environment
+import no.nav.hjelpemidler.pdfgen.modell.Barnebrille
 
 import java.io.StringWriter
 
@@ -134,21 +136,37 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
 
     post("/api/delbestilling") {
         val data = call.receive<Delbestilling>()
+        if (!isProd) {
+            log.info { "Delbestilling: $data" }
+        }
         val templatePath = "/delbestilling/delbestilling.hbs"
         generatePdfAndRespond(templatePath, templateService, data, pdfService)
     }
 
     post("/api/behovsmelding") {
         val data = call.receive<Innsenderbehovsmelding>()
-        log.info { "Behovsmelding: $data" }
+        if (!isProd) {
+            log.info { "Behovsmelding: $data" }
+        }
         val templatePath = "/behovsmelding/innsenderbehovsmelding.hbs"
         generatePdfAndRespond(templatePath, templateService, data, pdfService)
     }
 
     post("/api/brukerpassbytte") {
         val data = call.receive<Brukerpassbytte>()
-        log.info { "Brukerpassbytte: $data" }
+        if (!isProd) {
+            log.info { "Brukerpassbytte: $data" }
+        }
         val templatePath = "/behovsmelding/brukerpassbytte.hbs"
+        generatePdfAndRespond(templatePath, templateService, data, pdfService)
+    }
+
+    post("/api/barnebrille") {
+        val data = call.receive<Barnebrille>()
+        if (!isProd) {
+            log.info { "Barnebrille: $data" }
+        }
+        val templatePath = "/brev/joark-sink/barnebrille.hbs"
         generatePdfAndRespond(templatePath, templateService, data, pdfService)
     }
 }
@@ -179,3 +197,5 @@ private fun fromResource(resource: String) =
         .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
 
 enum class Målform { BOKMÅL, NYNORSK }
+
+val isProd = Environment.current.isProd

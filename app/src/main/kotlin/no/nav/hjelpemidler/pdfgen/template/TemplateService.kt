@@ -8,8 +8,11 @@ import com.vladsch.flexmark.ext.gfm.tasklist.TaskListExtension
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
 import no.nav.hjelpemidler.localization.LOCALE_NORWEGIAN_BOKMÅL
+import no.nav.hjelpemidler.time.ZONE_ID_EUROPE_OSLO
 import java.io.Writer
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -29,7 +32,10 @@ class TemplateService {
             } ?: return@Helper null)
         })
         .registerHelper("formaterDato", Helper<LocalDate> { context, _ ->
-            formatter.format(context ?: return@Helper null)
+            dateFormatter.format(context ?: return@Helper null)
+        })
+        .registerHelper("formaterDatoTid", Helper<LocalDateTime> { context, _ ->
+            dateTimeFormatter.format(context ?: return@Helper null).dropLast(4)
         })
         .registerHelper("concat", Helper<Any> { context, options ->
             "${context ?: return@Helper null} ${options.params.joinToString(" ")}".trim()
@@ -54,8 +60,13 @@ class TemplateService {
 
 
 
-    private val formatter: DateTimeFormatter = DateTimeFormatter
+    private val dateFormatter: DateTimeFormatter = DateTimeFormatter
         .ofLocalizedDate(FormatStyle.LONG)
+        .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
+
+    private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter
+        .ofLocalizedDateTime(FormatStyle.LONG)
+        .withZone(ZONE_ID_EUROPE_OSLO)
         .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
 
     fun compile(template: String, context: Any, writer: Writer) {
