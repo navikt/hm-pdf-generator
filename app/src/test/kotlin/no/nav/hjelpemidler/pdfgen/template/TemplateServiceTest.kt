@@ -12,10 +12,13 @@ class TemplateServiceTest {
         val writer = StringWriter()
 
         templateService.compile(
-            "{{#if (eq first second)}}same{{else}}different{{/if}}",
+            "{{#eq first second}}same{{else}}different{{/eq}}",
             mapOf("first" to "abc", "second" to "abc"),
             writer,
         )
+
+        val foo = writer.toString()
+        println(foo)
 
         assertEquals("same", writer.toString())
     }
@@ -25,7 +28,7 @@ class TemplateServiceTest {
         val writer = StringWriter()
 
         templateService.compile(
-            "{{#if (eq first second)}}same{{else}}different{{/if}}",
+            "{{#eq first second}}same{{else}}different{{/eq}}",
             mapOf("first" to "abc", "second" to "def"),
             writer,
         )
