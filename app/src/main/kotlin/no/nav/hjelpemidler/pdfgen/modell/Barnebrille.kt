@@ -1,6 +1,5 @@
 package no.nav.hjelpemidler.pdfgen.modell
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -16,14 +15,14 @@ data class Barnebrille (
     val bestillingsår: Int = bestillingsdato.year,
     val bestillingsreferanse: String,
     val beløp: BigDecimal,
-
-    @JsonAlias("opprettetDato")
     val opprettet: LocalDateTime,
 )
 
 data class Brilleseddel(
-    val høyreSfære: String,
-    val høyreSylinder: String,
-    val venstreSfære: String,
-    val venstreSylinder: String,
+    val høyreSfære: BigDecimal,
+    val høyreSylinder: BigDecimal,
+    val høyreAdd: BigDecimal,
+    val venstreSfære: BigDecimal,
+    val venstreSylinder: BigDecimal,
+    val venstreAdd: BigDecimal,
 )

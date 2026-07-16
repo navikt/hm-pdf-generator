@@ -162,8 +162,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
     }
 
     post("/api/barnebrille") {
-        val data = call.receiveText()
-        //val data = call.receive<Barnebrille>()
+        val data = call.receive<Barnebrille>()
         if (!isProd) {
             log.info { "Barnebrille: $data" }
         }
