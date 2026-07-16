@@ -35,7 +35,7 @@ class TemplateService {
             dateFormatter.format(context ?: return@Helper null)
         })
         .registerHelper("formaterDatoTid", Helper<LocalDateTime> { context, _ ->
-            dateTimeFormatter.format(context ?: return@Helper null).dropLast(4)
+            dateTimeFormatter.format(context ?: return@Helper null)
         })
         .registerHelper("concat", Helper<Any> { context, options ->
             "${context ?: return@Helper null} ${options.params.joinToString(" ")}".trim()
@@ -65,8 +65,7 @@ class TemplateService {
         .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
 
     private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter
-        .ofLocalizedDateTime(FormatStyle.LONG)
-        .withZone(ZONE_ID_EUROPE_OSLO)
+        .ofLocalizedDateTime(FormatStyle.SHORT)
         .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
 
     fun compile(template: String, context: Any, writer: Writer) {
