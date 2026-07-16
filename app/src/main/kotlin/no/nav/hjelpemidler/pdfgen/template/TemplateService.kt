@@ -10,11 +10,14 @@ import com.vladsch.flexmark.parser.Parser
 import no.nav.hjelpemidler.localization.LOCALE_NORWEGIAN_BOKMÅL
 import no.nav.hjelpemidler.time.ZONE_ID_EUROPE_OSLO
 import java.io.Writer
+import java.math.BigDecimal
+import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 
 private val extensions = listOf(TaskListExtension.create())
 private val parser = Parser.builder().extensions(extensions).build()
@@ -36,6 +39,9 @@ class TemplateService {
         })
         .registerHelper("formaterDatoTid", Helper<LocalDateTime> { context, _ ->
             dateTimeFormatter.format(context ?: return@Helper null)
+        })
+        .registerHelper("formaterKroner", Helper<BigDecimal> { context, _ ->
+            kronerFormatter.format(context ?: return@Helper null)
         })
         .registerHelper("concat", Helper<Any> { context, options ->
             "${context ?: return@Helper null} ${options.params.joinToString(" ")}".trim()
@@ -67,6 +73,11 @@ class TemplateService {
     private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter
         .ofLocalizedDateTime(FormatStyle.SHORT)
         .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
+
+    private val kronerFormatter: NumberFormat = NumberFormat
+        .getNumberInstance(LOCALE_NORWEGIAN_BOKMÅL)
+        .apply { minimumFractionDigits = 2 }
+
 
     fun compile(template: String, context: Any, writer: Writer) {
         handlebars.compileInline(template).apply(context, writer)
