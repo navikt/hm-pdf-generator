@@ -39,7 +39,7 @@ java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
 testing {
     suites {
         val test by getting(JvmTestSuite::class) {
-            useKotlinTest(libs.versions.kotlin.asProvider())
+            useKotlinTest(libs.versions.kotlin)
             dependencies {
                 implementation(libs.hotlibs.test)
                 implementation(libs.ktor.server.test.host)
