@@ -62,6 +62,60 @@ class PdfApiTest {
         body.size shouldBe kombinertPdf.size
     }
 
+    private val svartidsbrevJson = """
+        {
+          "navn": "Berømt Aktivitet",
+          "fødselsnummer": "26848497710",
+          "saksnummer": "1005",
+          "dato": "2026-11-17T09:00:00Z",
+          "saksbehandler": "Kari Saksbehandler",
+          "enhet": "Nav Hjelpemiddelsentral Oslo",
+          "antallUker": "4 uker"
+        }
+    """.trimIndent()
+
+    @Test
+    fun `Skal lage svartidsbrev som PDF`() = testApplication {
+        application { main() }
+
+        for (målform in listOf("bokmål", "nynorsk")) {
+            val response = client.post("/api/brev/hotsak/svartidsbrevJournalforing/$målform") {
+                contentType(ContentType.Application.Json)
+                setBody(svartidsbrevJson)
+            }
+            response.status shouldBe HttpStatusCode.OK
+            response.contentType() shouldBe ContentType.Application.Pdf
+        }
+    }
+
+    @Test
+    fun `Skal gi 400 ved manglende felt i svartidsbrev`() = testApplication {
+        application { main() }
+
+        val response = client.post("/api/brev/hotsak/svartidsbrevJournalforing/bokmål") {
+            contentType(ContentType.Application.Json)
+            setBody(svartidsbrevJson.replace("2026-11-17T09:00:00Z", "ikke-en-dato"))
+        }
+        response.status shouldBe HttpStatusCode.BadRequest
+
+        val manglerFelt = client.post("/api/brev/hotsak/svartidsbrevJournalforing/bokmål") {
+            contentType(ContentType.Application.Json)
+            setBody("""{"navn": "Berømt Aktivitet"}""")
+        }
+        manglerFelt.status shouldBe HttpStatusCode.BadRequest
+    }
+
+    @Test
+    fun `Skal gi 400 ved ukjent mappe`() = testApplication {
+        application { main() }
+
+        val response = client.post("/api/brev/ukjent/svartidsbrevJournalforing/bokmål") {
+            contentType(ContentType.Application.Json)
+            setBody(svartidsbrevJson)
+        }
+        response.status shouldBe HttpStatusCode.BadRequest
+    }
+
     private suspend fun lagPdf(html: String): ByteArray = ByteArrayOutputStream().use {
         pdfService.lagPdf(html, it)
         it.toByteArray()

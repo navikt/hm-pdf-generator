@@ -28,6 +28,8 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.Delbestilling
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
+import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføring
+import io.ktor.server.plugins.BadRequestException
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import java.io.StringWriter
 
@@ -101,6 +103,10 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
         try {
             val mappe: String by call.parameters
             val brevId: String by call.parameters
+            if (mappe !in gyldigeMapper) {
+                call.respond(HttpStatusCode.BadRequest, "ukjent mappe")
+                return@post
+            }
             val målform =
                 call.parameters["målform"]?.let { runCatching { Målform.valueOf(it.uppercase()) }.getOrNull() }
                     ?: Målform.BOKMÅL
@@ -111,6 +117,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
                 "barnebrillerInnhenteOpplysninger" -> call.receive<BarnebrillerInnhenteOpplysninger>()
                 "journalfortNotatHotsak" -> call.receive<JournalfortNotatHotsak>()
                 "barnebrillerAvvisningDirekteoppgjor" -> call.receive<BarnebrillerAvvisningDirekteoppgjor>()
+                "svartidsbrevJournalforing" -> call.receive<SvartidsbrevJournalføring>()
                 else -> {
                     call.respond(HttpStatusCode.BadRequest, "ukjent brevkode")
                     return@post
@@ -122,8 +129,14 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
             call.respondOutputStream(ContentType.Application.Pdf) {
                 pdfService.lagPdf(htmlWriter.toString(), this)
             }
+        } catch (e: BadRequestException) {
+            // Ikke logg e/cause: Jackson-meldinger kan inneholde verdier fra request, f.eks. fødselsnummer.
+            log.warn { "Ugyldig input til brev ${call.parameters["brevId"]}: ${e::class.simpleName}" }
+            call.respond(HttpStatusCode.BadRequest, "Ugyldig input")
         } catch (e: Exception) {
-            log.error(e) { e.message }
+            val brevId = call.parameters["brevId"]
+            log.error { "Feil under generering av brev $brevId: ${e::class.simpleName}" }
+            log.teamError(e) { "Feil under generering av brev $brevId" }
             call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
         }
     }
@@ -150,5 +163,7 @@ private fun fromResource(resource: String) =
         .javaClass
         .inputStream(resource)
         .use { it.buffered().readAllBytes().toString(Charsets.UTF_8) }
+
+private val gyldigeMapper = setOf("hotsak", "brille-api")
 
 enum class Målform { BOKMÅL, NYNORSK }
