@@ -1,8 +1,14 @@
-# Svartidsbrev
+# Vi treng meir tid for å behandle søknaden din om hjelpemiddel
 
-Hei,
+Vi fekk søknaden din om hjelpemiddel {{formaterDato mottattDato}}. Vi skriv til deg fordi det vil ta lengre tid enn 1 månad å behandle saka di. {{årsak}}
 
-Saka di er under behandling, men vil ta tid. Du må rekne med {{antallUker}} behandlingstid.
+## Når kan eg få svar?
+
+Saka di blir behandla så snart som mogleg, og seinast innan {{antallUker}} frå dagens dato. Viss saka ikkje blir avgjord i løpet av denne tida, vil du høyre nærmare frå oss.
+
+## Du må melde frå til Nav om endringar
+
+Viss det skjer endringar i livssituasjonen din som kan ha betydning for retten din til hjelpemiddel eller tilrettelegging, må du melde frå til Nav. Viss du til dømes flyttar til utlandet, eller får varig opphald på sjukeheim eller institusjon, må du gi Nav beskjed. Dette følgjer av folketrygdlova § 21-3.
 
 ## Du har rett til innsyn i saka di
 
@@ -10,10 +16,10 @@ Du har rett til å sjå dokumenta i saka di. Dette følgjer av forvaltningslova 
 
 ## Har du spørsmål?
 
-Vi har plikt til å rettleie deg om rettane og pliktene dine i saka di, både før, under og etter saksbehandlinga. Dette følgjer av forvaltningslova § 11.
+Vi har plikt til å rettleie deg om rettane og pliktene dine i saka, både før, under og etter saksbehandlinga. Dette følgjer av forvaltningslova § 11.
 
 Du finn meir informasjon på [nav.no/hjelpemidler](https://nav.no/hjelpemidler).
 
 På [nav.no/kontakt](https://nav.no/kontakt) kan du skrive til oss.
 
-Om du ikkje finn svar på [nav.no](https://nav.no), kan du ringe oss på telefon 55 55 11 11 kvardagar 09.00-11.15 og 12.15-14.30.
+Om du ikkje finn svar på [nav.no](https://nav.no), kan du ringje oss på telefon 55 55 11 11 kvardagar 09.00-11.15 og 12.15-14.30.

@@ -68,9 +68,11 @@ class PdfApiTest {
           "fødselsnummer": "26848497710",
           "saksnummer": "1005",
           "dato": "2026-11-17T09:00:00Z",
+          "mottattDato": "2026-10-01",
           "saksbehandler": "Kari Saksbehandler",
           "enhet": "Nav Hjelpemiddelsentral Oslo",
-          "antallUker": "4 uker"
+          "antallUker": "4 uker",
+          "årsak": "Vi venter på opplysninger fra kommunen."
         }
     """.trimIndent()
 

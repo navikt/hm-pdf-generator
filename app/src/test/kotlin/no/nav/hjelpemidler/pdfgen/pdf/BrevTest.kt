@@ -210,15 +210,21 @@ class BrevTest {
         genererPdfFraTemplateResource("/brev/brille-api/barnebrillerAvvisningDirekteoppgjor.nynorsk.hbs", data)
     }
 
-    private fun svartidsbrev(verge: String? = null, antallUker: String = "4 uker") = SvartidsbrevJournalføring(
+    private fun svartidsbrev(
+        verge: String? = null,
+        antallUker: String = "4 uker",
+        årsak: String = "Vi venter på opplysninger fra kommunen.",
+    ) = SvartidsbrevJournalføring(
         navn = "Berømt Aktivitet",
         fødselsnummer = "26848497710",
         saksnummer = "1005",
         dato = Instant.parse("2026-11-16T23:30:00Z"),
+        mottattDato = LocalDate.of(2026, 10, 1),
         saksbehandler = "Kari Saksbehandler",
         enhet = "Nav Hjelpemiddelsentral Oslo",
         verge = verge,
         antallUker = antallUker,
+        årsak = årsak,
     )
 
     private fun html(resource: String, data: Any): String =
@@ -235,13 +241,15 @@ class BrevTest {
         val medVerge = html("/brev/hotsak/svartidsbrevJournalforing.bokmal.hbs", svartidsbrev(verge = "Verge Vergesen"))
         medVerge shouldContain "Verge Vergesen"
         medVerge shouldContain "Saken gjelder:"
-        medVerge shouldContain "4 uker behandlingstid"
+        medVerge shouldContain "innen 4 uker fra dagens dato"
+        medVerge shouldContain "1. oktober 2026"
+        medVerge shouldContain "Vi venter på opplysninger fra kommunen."
         medVerge shouldContain "17. november 2026"
 
         val utenVerge = html("/brev/hotsak/svartidsbrevJournalforing.bokmal.hbs", svartidsbrev(antallUker = "1 uke"))
         utenVerge shouldNotContain "Verge:"
         utenVerge shouldContain "Navn:"
-        utenVerge shouldContain "1 uke behandlingstid"
+        utenVerge shouldContain "innen 1 uke fra dagens dato"
     }
 
     @Test
@@ -249,7 +257,8 @@ class BrevTest {
         val html = html("/brev/hotsak/svartidsbrevJournalforing.nynorsk.hbs", svartidsbrev(verge = "Verge Vergesen", antallUker = "4 veker"))
         html shouldContain "Verje:"
         html shouldContain "Saken gjeld:"
-        html shouldContain "4 veker behandlingstid"
+        html shouldContain "innan 4 veker frå dagens dato"
+        html shouldContain "1. oktober 2026"
         html shouldContain "Med venleg helsing"
     }
 
@@ -263,7 +272,7 @@ class BrevTest {
     fun `svartidsbrev escaper markdown i verdier`() {
         val html = html(
             "/brev/hotsak/svartidsbrevJournalforing.bokmal.hbs",
-            svartidsbrev(antallUker = "[lenke](https://example.com) **fet** <i>x</i>"),
+            svartidsbrev(årsak = "[lenke](https://example.com) **fet** <i>x</i>"),
         )
         html shouldNotContain "<a href=\"https://example.com"
         html shouldNotContain "<strong>"
