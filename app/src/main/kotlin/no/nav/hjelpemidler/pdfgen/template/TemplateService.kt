@@ -1,5 +1,6 @@
 package no.nav.hjelpemidler.pdfgen.template
 
+import com.github.jknack.handlebars.EscapingStrategy
 import com.github.jknack.handlebars.Handlebars
 import com.github.jknack.handlebars.Handlebars.SafeString
 import com.github.jknack.handlebars.Helper
@@ -12,8 +13,10 @@ import no.nav.hjelpemidler.time.ZONE_ID_EUROPE_OSLO
 import java.io.Writer
 import java.math.BigDecimal
 import java.text.NumberFormat
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -22,26 +25,39 @@ import java.util.Locale
 private val extensions = listOf(TaskListExtension.create())
 private val parser = Parser.builder().extensions(extensions).build()
 private val renderer = HtmlRenderer.builder().extensions(extensions).build()
+private val OSLO = ZoneId.of("Europe/Oslo")
+
+private val formatter: DateTimeFormatter = DateTimeFormatter
+    .ofLocalizedDate(FormatStyle.LONG)
+    .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
+
+private val formaterDato = Helper<LocalDate> { context, _ ->
+    formatter.format(context ?: return@Helper null)
+}
+
+// Backtick, <, >, & og anførselstegn håndteres av HTML_ENTITY, som gjør dem til entiteter markdown ikke tolker.
+private val MARKDOWN_TEGN = Regex("""[\\*_\[\]()#+\-.!|~{}]""")
+
+private val markdownHandlebars: Handlebars = Handlebars()
+    .with(EscapingStrategy { verdi ->
+        if (verdi == null) "" else EscapingStrategy.HTML_ENTITY.escape(verdi.toString().replace(MARKDOWN_TEGN) { "\\" + it.value })
+    })
+    .registerHelper("formaterDato", formaterDato)
+
+private fun renderMarkdown(markdown: String): String =
+    renderer.render(parser.parse(markdown))
+        // Avkryssingsbokser som er krysset ut funker litt dårlig med openhtmltopdf, bytter de ut med
+        // karakterer fra fonten som viser avkryssingsboks med og uten kryss.
+        .replace(Regex("<input[^>]*checked[^>]*>"), "&#x2611;")
+        .replace(Regex("<input[^>]*>"), "&#x2610;")
 
 class TemplateService {
     private val handlebars: Handlebars = Handlebars(ClassPathTemplateLoader("/delmaler/"))
         .registerHelper("markdown", Helper<String> { context, _ ->
-            SafeString(context?.let {
-                renderer.render(parser.parse(it))
-                    // Avkryssingsbokser som er krysset ut funker litt dårlig med openhtmltopdf, bytter de ut med
-                    // karakterer fra fonten som viser avkryssingsboks med og uten kryss.
-                    .replace(Regex("<input[^>]*checked[^>]*>"), "&#x2611;")
-                    .replace(Regex("<input[^>]*>"), "&#x2610;")
-            } ?: return@Helper null)
+            SafeString(renderMarkdown(context ?: return@Helper null))
         })
         .registerHelper("formaterDato", Helper<LocalDate> { context, _ ->
-            dateFormatter.format(context ?: return@Helper null)
-        })
-        .registerHelper("formaterDatoTid", Helper<LocalDateTime> { context, _ ->
-            dateTimeFormatter.format(context ?: return@Helper null)
-        })
-        .registerHelper("formaterKroner", Helper<BigDecimal> { context, _ ->
-            kronerFormatter.format(context ?: return@Helper null)
+            formatter.format(context ?: return@Helper null)
         })
         .registerHelper("concat", Helper<Any> { context, options ->
             "${context ?: return@Helper null} ${options.params.joinToString(" ")}".trim()

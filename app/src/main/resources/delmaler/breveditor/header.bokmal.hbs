@@ -1,0 +1,6 @@
+<header class="header">{{> nav-logo}}<div class="header-row"><dl>
+{{#if verge}}<dt>Verge:</dt><dd>{{verge}}</dd><br />{{/if}}
+<dt>{{#if verge}}Saken gjelder{{else}}Navn{{/if}}:</dt><dd>{{navn}}</dd>
+<dt>Fødselsnummer:</dt><dd>{{fødselsnummer}}</dd>
+<dt>Saksnummer:</dt><dd>{{saksnummer}}</dd>
+</dl><span>{{formaterInstant dato}}</span></div></header>

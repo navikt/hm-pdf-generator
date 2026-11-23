@@ -8,10 +8,14 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerAvvisningDirekteoppgjorBegr
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
+import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføring
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringWriter
+import java.time.Instant
 import java.time.LocalDate
 
 class BrevTest {
@@ -204,5 +208,75 @@ class BrevTest {
         )
         genererPdfFraTemplateResource("/brev/brille-api/barnebrillerAvvisningDirekteoppgjor.bokmal.hbs", data)
         genererPdfFraTemplateResource("/brev/brille-api/barnebrillerAvvisningDirekteoppgjor.nynorsk.hbs", data)
+    }
+
+    private fun svartidsbrev(
+        verge: String? = null,
+        antallUker: String = "4 uker",
+        årsak: String = "Vi venter på opplysninger fra kommunen.",
+    ) = SvartidsbrevJournalføring(
+        navn = "Berømt Aktivitet",
+        fødselsnummer = "26848497710",
+        saksnummer = "1005",
+        dato = Instant.parse("2026-11-16T23:30:00Z"),
+        mottattDato = LocalDate.of(2026, 10, 1),
+        saksbehandler = "Kari Saksbehandler",
+        enhet = "Nav Hjelpemiddelsentral Oslo",
+        verge = verge,
+        antallUker = antallUker,
+        årsak = årsak,
+    )
+
+    private fun html(resource: String, data: Any): String =
+        StringWriter().also { templateService.compile(fromResrouce(resource), data, it) }.toString()
+
+    @Test
+    fun `Template svartidsbrevJournalforing`() {
+        genererPdfFraTemplateResource("/brev/hotsak/svartidsbrevJournalforing.bokmal.hbs", svartidsbrev(verge = "Verge Vergesen"))
+        genererPdfFraTemplateResource("/brev/hotsak/svartidsbrevJournalforing.nynorsk.hbs", svartidsbrev())
+    }
+
+    @Test
+    fun `svartidsbrev bokmål med og uten verge`() {
+        val medVerge = html("/brev/hotsak/svartidsbrevJournalforing.bokmal.hbs", svartidsbrev(verge = "Verge Vergesen"))
+        medVerge shouldContain "Verge Vergesen"
+        medVerge shouldContain "Saken gjelder:"
+        medVerge shouldContain "innen 4 uker fra dagens dato"
+        medVerge shouldContain "1. oktober 2026"
+        medVerge shouldContain "Vi venter på opplysninger fra kommunen."
+        medVerge shouldContain "17. november 2026"
+
+        val utenVerge = html("/brev/hotsak/svartidsbrevJournalforing.bokmal.hbs", svartidsbrev(antallUker = "1 uke"))
+        utenVerge shouldNotContain "Verge:"
+        utenVerge shouldContain "Navn:"
+        utenVerge shouldContain "innen 1 uke fra dagens dato"
+    }
+
+    @Test
+    fun `svartidsbrev nynorsk`() {
+        val html = html("/brev/hotsak/svartidsbrevJournalforing.nynorsk.hbs", svartidsbrev(verge = "Verge Vergesen", antallUker = "4 veker"))
+        html shouldContain "Verje:"
+        html shouldContain "Saken gjeld:"
+        html shouldContain "innan 4 veker frå dagens dato"
+        html shouldContain "1. oktober 2026"
+        html shouldContain "Med venleg helsing"
+    }
+
+    @Test
+    fun `svartidsbrev escaper HTML i verdier`() {
+        val html = html("/brev/hotsak/svartidsbrevJournalforing.bokmal.hbs", svartidsbrev(verge = "<b>x</b>"))
+        html shouldNotContain "<b>x</b>"
+    }
+
+    @Test
+    fun `svartidsbrev escaper markdown i verdier`() {
+        val html = html(
+            "/brev/hotsak/svartidsbrevJournalforing.bokmal.hbs",
+            svartidsbrev(årsak = "[lenke](https://example.com) **fet** <i>x</i>"),
+        )
+        html shouldNotContain "<a href=\"https://example.com"
+        html shouldNotContain "<strong>"
+        html shouldNotContain "<i>x</i>"
+        html shouldContain "[lenke](https://example.com) **fet**"
     }
 }
