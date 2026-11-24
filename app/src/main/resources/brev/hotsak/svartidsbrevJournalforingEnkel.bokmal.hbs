@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Brev om svartid fra Nav</title>
+  <style>
+    @page {
+      margin: 64pt 56pt 74pt 56pt;
+      @bottom-right {
+        font-family: 'Source Sans 3', sans-serif;
+        content: 'Side ' counter(page) ' av ' counter(pages);
+      }
+      @bottom-left {
+        font-family: 'Source Sans 3', sans-serif;
+        content: 'Saksnummer {{saksnummer}}';
+      }
+    }
+    html, body {
+      font-size: 11pt;
+      font-weight: normal;
+      font-family: 'Source Sans 3', sans-serif;
+      line-height: 16pt;
+    }
+  </style>
+  {{> breveditor/stil-v1}}
+</head>
+<body>
+  {{> breveditor/header.bokmal}}
+  <main>{{markdownMal "breveditor/svartidsbrev-journalføring-enkel.bokmal"}}</main>
+  <footer>Med vennlig hilsen <br />{{saksbehandler}} <br />{{enhet}}</footer>
+</body>
+</html>
