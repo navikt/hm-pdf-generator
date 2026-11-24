@@ -1,0 +1,24 @@
+{
+  "fnr": "26848497710",
+  "orgnr": "123456789",
+  "sakId": "1",
+  "brukersNavn": "Testbarn Testesen",
+  "orgNavn": "Testoptiker",
+  "orgAdresse": "Testveien 1, 0001 Teststed",
+  "navnAvsender": "Testavsender",
+  "brilleseddel": {
+    "høyreSfære": -2.5,
+    "høyreSylinder": 0.75,
+    "venstreSfære": 1.25,
+    "venstreSylinder": -0.5
+  },
+  "bestillingsdato": "2026-11-20",
+  "bestillingsår": 2026,
+  "bestillingsreferanse": "Testreferanse",
+  "satsBeskrivelse": "Testsats",
+  "satsBeløp": 2475,
+  "beløp": 1200.75,
+  "dokumenttype": "KRAV_BARNEBRILLER_OPTIKER",
+  "dokumentTittel": "Tilskudd ved kjøp av briller til barn via optiker",
+  "opprettet": "2026-11-24T10:15:30"
+}

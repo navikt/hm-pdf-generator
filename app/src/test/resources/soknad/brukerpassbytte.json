@@ -1,0 +1,12 @@
+{
+  "id": "00000000-0000-0000-0000-000000000002",
+  "navn": {"fornavn": "Test", "etternavn": "Testesen"},
+  "hjmBrukersFnr": "26848497710",
+  "innsendingsdato": "2026-11-24",
+  "folkeregistrertAdresse": {"adresse": "Testveien 1", "postnummer": "0001", "poststed": "Teststed"},
+  "hjelpemiddel": {"hmsArtNr": "123456", "artikkelnavn": "Testhjelpemiddel", "iso6Tittel": "Testkategori"},
+  "bytteårsak": "ØDELAGT",
+  "byttebegrunnelse": "Testbegrunnelse bekrefter behovet",
+  "utleveringsmåte": "OPPGITT_ADRESSE",
+  "annenUtleveringsadresse": {"adresse": "Testveien 2", "postnummer": "0002", "poststed": "Annet teststed"}
+}

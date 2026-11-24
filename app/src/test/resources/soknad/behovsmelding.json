@@ -1,0 +1,125 @@
+{
+  "id": "00000000-0000-0000-0000-000000000001",
+  "type": "SØKNAD",
+  "innsendingsdato": "2026-11-24",
+  "prioritet": "HAST",
+  "kunTilskuddRimeligeHjelpemidler": false,
+  "bruker": {
+    "navn": {"fornavn": "Test", "etternavn": "Testesen"},
+    "fnr": "26848497710",
+    "kilde": "PDL",
+    "signaturtype": "FULLMAKT"
+  },
+  "saksbehandlingvarsel": [
+    {"type": "INFO", "tekst": {"nb": "Informasjon i testsaken"}},
+    {"type": "WARNING", "tekst": {"nb": "Advarsel i testsaken"}}
+  ],
+  "levering": {
+    "utleveringsmåte": "FOLKEREGISTRERT_ADRESSE",
+    "folkeregistrertAdresse": {"adresse": "Testveien 1", "postnummer": "0001", "poststed": "Teststed"},
+    "hast": {"hasteårsaker": ["TERMINALPLEIE", "ANNET"], "hastBegrunnelse": "Testbegrunnelse"},
+    "oppfølgingsansvarlig": "ANNEN_OPPFØLGINGSANSVARLIG",
+    "annenOppfølgingsansvarlig": {
+      "navn": {"fornavn": "Test", "etternavn": "Ansvarlig"},
+      "arbeidssted": "Testkontoret",
+      "stilling": "Teststilling",
+      "telefon": "00000000",
+      "epost": "test@example.invalid",
+      "ansvarFor": "Testopplæring",
+      "erGjortOppmerksomPåOpplæringsansvar": true
+    }
+  },
+  "hjelpemidler": {
+    "hjelpemidler": [
+      {
+        "produkt": {"hmsArtNr": "123456", "artikkelnavn": "Hoftestøtter", "rangering": "1"},
+        "antall": 1,
+        "opplysninger": [],
+        "tilbehør": [
+          {
+            "hmsArtNr": "123457",
+            "navn": "Testtilbehør",
+            "antall": 1,
+            "opplysninger": [],
+            "saksbehandlingvarsel": [{"type": "WARNING", "tekst": {"nb": "Inline testvarsel"}}]
+          }
+        ]
+      }
+    ],
+    "tilbehør": [],
+    "produktkategorier": [
+      {
+        "type": "DØRAUTOMATIKK",
+        "navn": "Dørautomatikk",
+        "antall": 1,
+        "opplysninger": [],
+        "hjelpemidler": [{"hmsArtNr": "223456", "navn": "Kategoriens hjelpemiddel", "antall": 2}],
+        "tilbehør": [{"hmsArtNr": "223457", "navn": "Kategoriens tilbehør", "antall": 3, "opplysninger": []}],
+        "komponenter": [
+          {
+            "navn": "Testdør",
+            "opplysninger": [
+              {
+                "ledetekst": {"nb": "Testmål"},
+                "innholdstype": "TEKST",
+                "innhold": [{"fritekst": "90 cm"}]
+              }
+            ],
+            "vedlegg": [{"navn": "testdor.pdf"}]
+          }
+        ],
+        "vedlegg": [{"navn": "kategori.pdf"}]
+      },
+      {
+        "type": "SPYL_OG_TØRKEFUNKSJON",
+        "navn": "Veggmontert toalett",
+        "antall": 1,
+        "opplysninger": [
+          {
+            "key": {"id": "SPYL_OG_TØRKEFUNKSJON_TOALETT_LENGDE"},
+            "ledetekst": {"nb": "Lengde veggmontert"},
+            "innholdstype": "TEKST",
+            "innhold": [{"fritekst": "70 cm"}]
+          },
+          {
+            "key": {"id": "SPYL_OG_TØRKEFUNKSJON_AVSTAND_VEGG_TIL_PORSELENSKANT"},
+            "ledetekst": {"nb": "Avstand fra vegg"},
+            "innholdstype": "TEKST",
+            "innhold": [{"fritekst": "75 cm"}]
+          }
+        ],
+        "vedlegg": []
+      },
+      {
+        "type": "SPYL_OG_TØRKEFUNKSJON",
+        "navn": "Gulvmontert toalett",
+        "antall": 1,
+        "opplysninger": [
+          {
+            "key": {"id": "SPYL_OG_TØRKEFUNKSJON_TOALETT_LENGDE"},
+            "ledetekst": {"nb": "Lengde gulvmontert"},
+            "innholdstype": "TEKST",
+            "innhold": [{"fritekst": "65 cm"}]
+          },
+          {
+            "key": {"id": "SPYL_OG_TØRKEFUNKSJON_AVSTAND_SISTERNE_TIL_PORSELENSKANT"},
+            "ledetekst": {"nb": "Avstand fra sisterne"},
+            "innholdstype": "TEKST",
+            "innhold": [{"fritekst": "20 cm"}]
+          }
+        ]
+      },
+      {
+        "type": "STELLEBORD_VEGGMONTERT",
+        "navn": "Stellebord",
+        "antall": 1,
+        "opplysninger": [],
+        "vedlegg": [{"navn": "stellebord.pdf"}]
+      }
+    ]
+  },
+  "brukersituasjon": {
+    "funksjonsbeskrivelse": {"diagnoser": ["ANNEN_VARIG_DIAGNOSE"], "beskrivelse": "Testtekst\nmed to linjer"}
+  },
+  "vedlegg": [{"navn": "fullmakt.pdf"}]
+}
