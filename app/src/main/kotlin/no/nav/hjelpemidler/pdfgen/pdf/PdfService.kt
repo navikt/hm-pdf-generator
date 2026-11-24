@@ -14,6 +14,7 @@ import org.apache.pdfbox.io.RandomAccessReadBuffer
 import org.apache.pdfbox.multipdf.PDFMergerUtility
 import org.apache.pdfbox.pdfparser.PDFStreamParser
 import org.apache.pdfbox.pdfwriter.ContentStreamWriter
+import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.common.PDStream
 import org.jsoup.Jsoup
 import org.jsoup.helper.W3CDom
@@ -26,7 +27,7 @@ import java.io.OutputStream
 private val log = KotlinLogging.logger {}
 
 class PdfService {
-    fun lagPdf(html: String, outputStream: OutputStream) {
+    fun lagPdf(html: String, outputStream: OutputStream, fontSubstitution: Boolean = true) {
         log.debug { "Lager PDF" }
         withLoggingContext("html" to html) { log.teamDebug { "Lager PDF" } }
 
@@ -43,17 +44,20 @@ class PdfService {
 
         val document = parseHtml(sanitizedHtml)
         val rawPdf = ByteArrayOutputStream()
-        PdfRendererBuilder()
-            .useColorProfile(colorProfile)
-            .useFontFamily(sourceSans3)
-            .useFontFamily(sourceSansPro)
-            .useCacheStore(PdfRendererBuilder.CacheStore.PDF_FONT_METRICS, cacheStore)
-            .usePdfUaAccessibility(true)
-            .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_2_A)
-            .useSVGDrawer(BatikSVGDrawer())
-            .withW3cDocument(document, "")
-            .toStream(rawPdf)
-            .run()
+        PDDocument().use { pdfDocument ->
+            PdfRendererBuilder()
+                .usePDDocument(pdfDocument)
+                .useColorProfile(colorProfile)
+                .useFontFamily(sourceSans3)
+                .useFontFamily(sourceSansPro, if (fontSubstitution) null else pdfDocument)
+                .useCacheStore(PdfRendererBuilder.CacheStore.PDF_FONT_METRICS, cacheStore)
+                .usePdfUaAccessibility(true)
+                .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_2_A)
+                .useSVGDrawer(BatikSVGDrawer())
+                .withW3cDocument(document, "")
+                .toStream(rawPdf)
+                .run()
+        }
 
         // openhtmltopdf emits BDC marked-content with named Properties resource references
         // (/Span /PropX BDC). Apple PDFKit (used by macOS Preview and VoiceOver) only supports
