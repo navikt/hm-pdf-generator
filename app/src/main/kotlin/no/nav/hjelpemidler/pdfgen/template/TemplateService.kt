@@ -9,18 +9,12 @@ import com.vladsch.flexmark.ext.gfm.tasklist.TaskListExtension
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
 import no.nav.hjelpemidler.localization.LOCALE_NORWEGIAN_BOKMÅL
-import no.nav.hjelpemidler.time.ZONE_ID_EUROPE_OSLO
 import java.io.Writer
-import java.math.BigDecimal
-import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
 
 private val extensions = listOf(TaskListExtension.create())
 private val parser = Parser.builder().extensions(extensions).build()
@@ -56,44 +50,22 @@ class TemplateService {
         .registerHelper("markdown", Helper<String> { context, _ ->
             SafeString(renderMarkdown(context ?: return@Helper null))
         })
-        .registerHelper("formaterDato", Helper<LocalDate> { context, _ ->
-            formatter.format(context ?: return@Helper null)
+        // Rendrer en markdown-malfil fra /delmaler/. Variabler escapes for både markdown og HTML,
+        // slik at verdier fra request vises som ren tekst.
+        .registerHelper("markdownMal", Helper<String> { navn, options ->
+            val ressurs = "/delmaler/$navn.md"
+            val mal = TemplateService::class.java.getResourceAsStream(ressurs)
+                ?.use { it.readAllBytes().toString(Charsets.UTF_8) }
+                ?: error("Fant ikke markdown-mal: $ressurs")
+            SafeString(renderMarkdown(markdownHandlebars.compileInline(mal).apply(options.context)))
+        })
+        .registerHelper("formaterDato", formaterDato)
+        .registerHelper("formaterInstant", Helper<Instant> { context, _ ->
+            formatter.format(context?.atZone(OSLO) ?: return@Helper null)
         })
         .registerHelper("concat", Helper<Any> { context, options ->
             "${context ?: return@Helper null} ${options.params.joinToString(" ")}".trim()
         })
-        .registerHelper(
-            "eq",
-            Helper<Any?> { context, options ->
-                if (context?.toString() == options.param<Any?>(0)?.toString()) {
-                    options.fn()
-                } else {
-                    options.inverse()
-                }
-            },
-        )
-        .registerHelper(
-            "gt",
-            Helper<Comparable<Any>> { context, options ->
-                val param = options.param(0) as Comparable<Any>
-                if (context > param) options.fn() else options.inverse()
-            },
-        )
-
-
-
-    private val dateFormatter: DateTimeFormatter = DateTimeFormatter
-        .ofLocalizedDate(FormatStyle.LONG)
-        .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
-
-    private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter
-        .ofLocalizedDateTime(FormatStyle.SHORT)
-        .withLocale(LOCALE_NORWEGIAN_BOKMÅL)
-
-    private val kronerFormatter: NumberFormat = NumberFormat
-        .getNumberInstance(LOCALE_NORWEGIAN_BOKMÅL)
-        .apply { minimumFractionDigits = 2 }
-
 
     fun compile(template: String, context: Any, writer: Writer) {
         handlebars.compileInline(template).apply(context, writer)

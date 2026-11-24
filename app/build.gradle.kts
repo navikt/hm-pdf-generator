@@ -11,7 +11,6 @@ dependencies {
     implementation(libs.hotlibs.http)
     implementation(libs.hotlibs.logging)
     implementation(libs.hotlibs.serialization)
-    implementation(libs.hotlibs.behovsmelding)
 
     implementation(libs.handlebars)
     implementation(libs.jsoup)

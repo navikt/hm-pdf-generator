@@ -6,11 +6,13 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.asFlow
+import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.request.accept
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
+import io.ktor.server.response.respondBytes
 import io.ktor.server.response.respondOutputStream
 import io.ktor.server.response.respondTextWriter
 import io.ktor.server.routing.Route
@@ -30,18 +32,15 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.Delbestilling
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføring
-import io.ktor.server.plugins.BadRequestException
+import no.nav.hjelpemidler.pdfgen.template.SoknadTemplateService
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
-import no.nav.hjelpemidler.behovsmeldingsmodell.v2.Brukerpassbytte
-import no.nav.hjelpemidler.behovsmeldingsmodell.v2.Innsenderbehovsmelding
-import no.nav.hjelpemidler.configuration.Environment
-import no.nav.hjelpemidler.pdfgen.modell.Barnebrille
-
+import java.io.ByteArrayOutputStream
 import java.io.StringWriter
 
 private val log = KotlinLogging.logger { }
 
 fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
+    val soknadTemplateService by lazy { SoknadTemplateService() }
 
     post("/api/html-til-pdf") {
         val html = call.receiveText()
@@ -149,57 +148,46 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
 
     post("/api/delbestilling") {
         val data = call.receive<Delbestilling>()
-        if (!isProd) {
-            log.info { "Delbestilling: $data" }
+        try {
+            val template = fromResource("/delbestilling/delbestilling.hbs")
+            val htmlWriter = StringWriter()
+            templateService.compile(template, data, htmlWriter)
+            call.respondOutputStream(ContentType.Application.Pdf) {
+                pdfService.lagPdf(htmlWriter.toString(), this)
+            }
+        } catch (e: Exception) {
+            log.error(e) { e.message }
+            call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
         }
-        val templatePath = "/delbestilling/delbestilling.hbs"
-        generatePdfAndRespond(templatePath, templateService, data, pdfService)
     }
 
     post("/api/behovsmelding") {
-        val data = call.receive<Innsenderbehovsmelding>()
-        if (!isProd) {
-            log.info { "Behovsmelding: $data" }
-        }
-        val templatePath = "/behovsmelding/innsenderbehovsmelding.hbs"
-        generatePdfAndRespond(templatePath, templateService, data, pdfService)
+        generateSoknadPdfAndRespond("innsenderbehovsmelding", soknadTemplateService, pdfService)
     }
 
     post("/api/brukerpassbytte") {
-        val data = call.receive<Brukerpassbytte>()
-        if (!isProd) {
-            log.info { "Brukerpassbytte: $data" }
-        }
-        val templatePath = "/behovsmelding/brukerpassbytte.hbs"
-        generatePdfAndRespond(templatePath, templateService, data, pdfService)
+        generateSoknadPdfAndRespond("brukerpassbytte", soknadTemplateService, pdfService)
     }
 
     post("/api/barnebrille") {
-        val data = call.receive<Barnebrille>()
-        if (!isProd) {
-            log.info { "Barnebrille: $data" }
-        }
-        val templatePath = "/brev/joark-sink/barnebrille.hbs"
-        generatePdfAndRespond(templatePath, templateService, data, pdfService)
+        generateSoknadPdfAndRespond("barnebrille", soknadTemplateService, pdfService)
     }
 }
 
-private suspend fun RoutingContext.generatePdfAndRespond(
-    templatePath: String,
-    templateService: TemplateService,
-    data: Any,
-    pdfService: PdfService
+private suspend fun RoutingContext.generateSoknadPdfAndRespond(
+    template: String,
+    soknadTemplateService: SoknadTemplateService,
+    pdfService: PdfService,
 ) {
+    val data = call.receive<Map<String, Any?>>()
     try {
-        val template = fromResource(templatePath)
-        val htmlWriter = StringWriter()
-        templateService.compile(template, data, htmlWriter)
-        call.respondOutputStream(ContentType.Application.Pdf) {
-            pdfService.lagPdf(htmlWriter.toString(), this)
-        }
+        val output = ByteArrayOutputStream()
+        pdfService.lagPdf(soknadTemplateService.html(template, data), output, fontSubstitution = false)
+        call.respondBytes(output.toByteArray(), ContentType.Application.Pdf)
     } catch (e: Exception) {
-        log.error(e) { "Feil under generering fra template: $templatePath" }
-        call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template: $templatePath")
+        log.error { "Feil under generering av PDF $template: ${e::class.simpleName}" }
+        log.teamError(e) { "Feil under generering av PDF: $template" }
+        call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
     }
 }
 
@@ -212,5 +200,3 @@ private fun fromResource(resource: String) =
 private val gyldigeMapper = setOf("hotsak", "brille-api")
 
 enum class Målform { BOKMÅL, NYNORSK }
-
-val isProd = Environment.current.isProd
