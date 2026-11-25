@@ -10,7 +10,8 @@ Gradle brukes som byggverktøy og er bundlet inn.
 ```
 
 ## Kjøre lokalt
-Start applikasjonen i Idea
+Start applikasjonen i Idea. Kjører port 8082 hvis du kjører opp API-et lokalt. 
+Overstyr `Pdfgen.api_base_url` hvis generatoren kjører på annen måte.
 
 ## PDF-er for behovsmeldinger og barnebrillekrav
 
