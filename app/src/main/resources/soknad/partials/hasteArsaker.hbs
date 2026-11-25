@@ -1,0 +1,31 @@
+{{#eq levering.hast.hasteårsaker.length 1 }}
+<p class="typo-normal">
+    {{#eq levering.hast.hasteårsaker.[0] "UTVIKLING_AV_TRYKKSÅR"}}Det er stor fare for utvikling av trykksår, eller for
+    å hindre videre utvikling av trykksår.{{/eq}}
+    {{#eq levering.hast.hasteårsaker.[0] "TERMINALPLEIE"}}Personen har behov for terminalpleie.{{/eq}}
+    {{#eq levering.hast.hasteårsaker.[0] "UTSKRIVING_FRA_SYKEHUS_SOM_IKKE_KAN_PLANLEGGES_V3"}}Personen skal skrives ut
+    fra sykehus eller rehabilitering uten at det var mulig å planlegge. Det er derfor behov for hjelpemidler til stell
+    og pleie slik at utskrivingen kan gjennomføres.{{/eq}}
+    {{#eq levering.hast.hasteårsaker.[0] "RASK_FORVERRING_AV_ALVORLIG_DIAGNOSE"}}Det har skjedd en rask forverring av en
+    alvorlig diagnose.{{/eq}}
+    {{#eq levering.hast.hasteårsaker.[0] "ANNET"}}{{levering.hast.hastBegrunnelse}}{{/eq}}
+</p>
+{{/eq}}
+
+{{#gt levering.hast.hasteårsaker.length 1 }}
+<ul style="margin: 0; padding: 0 0 0 16px;">
+    {{#each levering.hast.hasteårsaker}}
+    {{#eq this "UTVIKLING_AV_TRYKKSÅR"}}<li>Det er stor fare for utvikling av trykksår, eller for å hindre videre
+        utvikling av trykksår.</li>{{/eq}}
+    {{#eq this "TERMINALPLEIE"}}<li>Personen har behov for terminalpleie.</li>{{/eq}}
+    {{#eq this "UTSKRIVING_FRA_SYKEHUS_SOM_IKKE_KAN_PLANLEGGES_V3"}}<li>Personen skal skrives ut fra sykehus eller
+        rehabilitering uten at det var mulig å planlegge. Det er derfor behov for hjelpemidler til stell og pleie slik
+        at utskrivingen kan gjennomføres.</li>{{/eq}}
+    {{#eq this "RASK_FORVERRING_AV_ALVORLIG_DIAGNOSE"}}<li>Det har skjedd en rask forverring av en alvorlig diagnose.
+    </li>{{/eq}}
+    {{/each}}
+    {{#if levering.hast.hastBegrunnelse}}
+    <li>{{levering.hast.hastBegrunnelse}}</li>
+    {{/if}}
+</ul>
+{{/gt}}

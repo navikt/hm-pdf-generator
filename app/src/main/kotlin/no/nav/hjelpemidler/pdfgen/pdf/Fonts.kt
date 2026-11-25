@@ -3,8 +3,13 @@ package no.nav.hjelpemidler.pdfgen.pdf
 import com.openhtmltopdf.extend.FSSupplier
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.FSFontUseCase
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.FontStyle
+import com.openhtmltopdf.pdfboxout.PDFontSupplier
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.hjelpemidler.collections.enumSetOf
+import org.apache.fontbox.ttf.TTFParser
+import org.apache.pdfbox.io.RandomAccessReadBuffer
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.pdmodel.font.PDType0Font
 import java.io.InputStream
 
 class FontFamily(
@@ -66,7 +71,23 @@ private fun PdfRendererBuilder.useFont(font: Font): PdfRendererBuilder =
         }
     )
 
-fun PdfRendererBuilder.useFontFamily(family: FontFamily): PdfRendererBuilder {
-    family.forEach(::useFont)
+fun PdfRendererBuilder.useFontFamily(family: FontFamily, fontDocument: PDDocument? = null): PdfRendererBuilder {
+    family.forEach { font ->
+        if (fontDocument == null) {
+            useFont(font)
+        } else {
+            val bytes = font.supply().use(InputStream::readAllBytes)
+            val trueTypeFont = TTFParser().parse(RandomAccessReadBuffer(bytes))
+            fontDocument.registerTrueTypeFontForClosing(trueTypeFont)
+            trueTypeFont.setEnableGsub(false)
+            useFont(
+                PDFontSupplier(PDType0Font.load(fontDocument, trueTypeFont, font.subset)),
+                font.family,
+                font.weight,
+                font.style,
+                font.subset,
+            )
+        }
+    }
     return this
 }

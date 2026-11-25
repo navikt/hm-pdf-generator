@@ -43,6 +43,7 @@ testing {
             dependencies {
                 implementation(libs.hotlibs.test)
                 implementation(libs.ktor.server.test.host)
+                implementation("ch.qos.logback:logback-classic")
             }
         }
     }

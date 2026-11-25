@@ -11,9 +11,11 @@ import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
+import io.ktor.server.response.respondBytes
 import io.ktor.server.response.respondOutputStream
 import io.ktor.server.response.respondTextWriter
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.RoutingContext
 import io.ktor.server.routing.post
 import io.ktor.server.util.getValue
 import io.ktor.utils.io.toByteArray
@@ -31,12 +33,15 @@ import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføring
 import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføringEnkel
 import io.ktor.server.plugins.BadRequestException
+import no.nav.hjelpemidler.pdfgen.template.SoknadTemplateService
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
+import java.io.ByteArrayOutputStream
 import java.io.StringWriter
 
 private val log = KotlinLogging.logger { }
 
 fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
+    val soknadTemplateService by lazy { SoknadTemplateService() }
 
     post("/api/html-til-pdf") {
         val html = call.receiveText()
@@ -157,8 +162,36 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
             call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
         }
     }
+
+    post("/api/behovsmelding") {
+        generateSoknadPdfAndRespond("innsenderbehovsmelding", soknadTemplateService, pdfService)
+    }
+
+    post("/api/brukerpassbytte") {
+        generateSoknadPdfAndRespond("brukerpassbytte", soknadTemplateService, pdfService)
+    }
+
+    post("/api/barnebrille") {
+        generateSoknadPdfAndRespond("barnebrille", soknadTemplateService, pdfService)
+    }
 }
 
+private suspend fun RoutingContext.generateSoknadPdfAndRespond(
+    template: String,
+    soknadTemplateService: SoknadTemplateService,
+    pdfService: PdfService,
+) {
+    val data = call.receive<Map<String, Any?>>()
+    try {
+        val output = ByteArrayOutputStream()
+        pdfService.lagPdf(soknadTemplateService.html(template, data), output, fontSubstitution = false)
+        call.respondBytes(output.toByteArray(), ContentType.Application.Pdf)
+    } catch (e: Exception) {
+        log.error { "Feil under generering av PDF $template: ${e::class.simpleName}" }
+        log.teamError(e) { "Feil under generering av PDF: $template" }
+        call.respond(HttpStatusCode.InternalServerError, "Feil under generering fra template")
+    }
+}
 
 private fun fromResource(resource: String) =
     object {}
