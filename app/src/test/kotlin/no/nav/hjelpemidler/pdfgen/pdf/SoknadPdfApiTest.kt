@@ -36,6 +36,7 @@ class SoknadPdfApiTest {
                 4,
                 listOf(
                     "Søknad om hjelpemidler",
+                    "Leveringsadresse Folkeregistrert adresse: Testveien 1, 0001 Teststed",
                     "Kategoriens hjelpemiddel",
                     "Kategoriens tilbehør",
                     "Testdør",

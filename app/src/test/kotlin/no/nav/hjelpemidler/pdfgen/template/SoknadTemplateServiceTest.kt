@@ -34,6 +34,8 @@ class SoknadTemplateServiceTest {
         }
         document.select("img.toalettmaal-bilde").size shouldBe 2
         document.select("#header .title").text() shouldBe "Søknad om hjelpemidler"
+        document.select("tr").single { it.selectFirst("td")?.text() == "Leveringsadresse" }
+            .text() shouldBe "Leveringsadresse Folkeregistrert adresse: Testveien 1, 0001 Teststed"
         html shouldContain "background: #DADE99"
     }
 

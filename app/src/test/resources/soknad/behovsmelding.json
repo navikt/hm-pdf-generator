@@ -7,6 +7,7 @@
   "bruker": {
     "navn": {"fornavn": "Test", "etternavn": "Testesen"},
     "fnr": "26848497710",
+    "veiadresse": {"adresse": "Testveien 1", "postnummer": "0001", "poststed": "Teststed"},
     "kilde": "PDL",
     "signaturtype": "FULLMAKT"
   },
@@ -16,7 +17,6 @@
   ],
   "levering": {
     "utleveringsmåte": "FOLKEREGISTRERT_ADRESSE",
-    "folkeregistrertAdresse": {"adresse": "Testveien 1", "postnummer": "0001", "poststed": "Teststed"},
     "hast": {"hasteårsaker": ["TERMINALPLEIE", "ANNET"], "hastBegrunnelse": "Testbegrunnelse"},
     "oppfølgingsansvarlig": "ANNEN_OPPFØLGINGSANSVARLIG",
     "annenOppfølgingsansvarlig": {
