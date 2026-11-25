@@ -1,5 +1,10 @@
 package no.nav.hjelpemidler.pdfgen.pdf
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.LoggerContext
+import ch.qos.logback.classic.turbo.TurboFilter
+import ch.qos.logback.core.spi.FilterReply
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.ktor.client.call.body
@@ -15,8 +20,11 @@ import no.nav.hjelpemidler.serialization.jackson.jsonMapper
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
+import org.slf4j.Marker
 import tools.jackson.module.kotlin.readValue
 import java.io.File
+import java.util.concurrent.ConcurrentLinkedQueue
 
 class SoknadPdfApiTest {
     @Test
@@ -122,12 +130,44 @@ class SoknadPdfApiTest {
     @Test
     fun `rendering failures do not return a partial PDF response`() = testApplication {
         application { main() }
-        val response = client.post("/api/brukerpassbytte") {
-            contentType(ContentType.Application.Json)
-            setBody(json("brukerpassbytte").replace("2026-11-24", "invalid-date"))
+        val expectedMessages = listOf(
+            "Feil under generering av PDF brukerpassbytte: HandlebarsException",
+            "Feil under generering av PDF: brukerpassbytte",
+        )
+        val capturedMessages = ConcurrentLinkedQueue<String>()
+        val loggerContext = LoggerFactory.getILoggerFactory() as LoggerContext
+        val filter = object : TurboFilter() {
+            override fun decide(
+                marker: Marker?,
+                logger: Logger,
+                level: Level,
+                format: String?,
+                params: Array<out Any?>?,
+                throwable: Throwable?,
+            ): FilterReply {
+                if (logger.name == "no.nav.hjelpemidler.pdfgen.pdf.PdfApi" &&
+                    level == Level.ERROR && format in expectedMessages
+                ) {
+                    capturedMessages.add(requireNotNull(format))
+                    return FilterReply.DENY
+                }
+                return FilterReply.NEUTRAL
+            }
         }
-        response.status shouldBe HttpStatusCode.InternalServerError
-        response.contentType() shouldBe ContentType.Text.Plain.withCharset(Charsets.UTF_8)
+        filter.start()
+        loggerContext.addTurboFilter(filter)
+        try {
+            val response = client.post("/api/brukerpassbytte") {
+                contentType(ContentType.Application.Json)
+                setBody(json("brukerpassbytte").replace("2026-11-24", "invalid-date"))
+            }
+            response.status shouldBe HttpStatusCode.InternalServerError
+            response.contentType() shouldBe ContentType.Text.Plain.withCharset(Charsets.UTF_8)
+            capturedMessages.toList() shouldBe expectedMessages
+        } finally {
+            loggerContext.turboFilterList.remove(filter)
+            filter.stop()
+        }
     }
 
     private fun data(name: String): Map<String, Any?> = jsonMapper.readValue(json(name))

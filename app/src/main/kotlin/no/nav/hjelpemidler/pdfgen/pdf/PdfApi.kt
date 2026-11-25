@@ -6,7 +6,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.asFlow
-import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.request.accept
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
