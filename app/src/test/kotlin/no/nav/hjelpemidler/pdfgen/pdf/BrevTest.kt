@@ -9,6 +9,7 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnhenteOpplysninger
 import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføring
+import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføringEnkel
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
@@ -278,5 +279,34 @@ class BrevTest {
         html shouldNotContain "<strong>"
         html shouldNotContain "<i>x</i>"
         html shouldContain "[lenke](https://example.com) **fet**"
+    }
+
+    private fun svartidsbrevEnkel(antallUker: String = "4 uker") = SvartidsbrevJournalføringEnkel(
+        navn = "Berømt Aktivitet",
+        fødselsnummer = "26848497710",
+        saksnummer = "1006",
+        dato = Instant.parse("2026-11-16T23:30:00Z"),
+        mottattDato = LocalDate.of(2026, 10, 1),
+        saksbehandler = "Kari Saksbehandler",
+        enhet = "Nav Hjelpemiddelsentral Oslo",
+        antallUker = antallUker,
+    )
+
+    @Test
+    fun `Template svartidsbrevJournalforingEnkel`() {
+        genererPdfFraTemplateResource("/brev/hotsak/svartidsbrevJournalforingEnkel.bokmal.hbs", svartidsbrevEnkel())
+        genererPdfFraTemplateResource("/brev/hotsak/svartidsbrevJournalforingEnkel.nynorsk.hbs", svartidsbrevEnkel(antallUker = "4 veker"))
+    }
+
+    @Test
+    fun `svartidsbrev enkel bokmål og nynorsk`() {
+        val bokmål = html("/brev/hotsak/svartidsbrevJournalforingEnkel.bokmal.hbs", svartidsbrevEnkel())
+        bokmål shouldContain "1. oktober 2026"
+        bokmål shouldContain "innen 4 uker fra dagens dato"
+        bokmål shouldContain "Navn:"
+
+        val nynorsk = html("/brev/hotsak/svartidsbrevJournalforingEnkel.nynorsk.hbs", svartidsbrevEnkel(antallUker = "4 veker"))
+        nynorsk shouldContain "innan 4 veker frå dagens dato"
+        nynorsk shouldContain "Med venleg helsing"
     }
 }

@@ -91,6 +91,22 @@ class PdfApiTest {
     }
 
     @Test
+    fun `Skal lage enkelt svartidsbrev som PDF uten årsak`() = testApplication {
+        application { main() }
+
+        val utenÅrsak = svartidsbrevJson.replace(",\n  \"årsak\": \"Vi venter på opplysninger fra kommunen.\"", "")
+        check("årsak" !in utenÅrsak)
+        for (målform in listOf("bokmål", "nynorsk")) {
+            val response = client.post("/api/brev/hotsak/svartidsbrevJournalforingEnkel/$målform") {
+                contentType(ContentType.Application.Json)
+                setBody(utenÅrsak)
+            }
+            response.status shouldBe HttpStatusCode.OK
+            response.contentType() shouldBe ContentType.Application.Pdf
+        }
+    }
+
+    @Test
     fun `Skal gi 400 ved manglende felt i svartidsbrev`() = testApplication {
         application { main() }
 

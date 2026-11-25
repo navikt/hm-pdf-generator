@@ -17,3 +17,15 @@ data class SvartidsbrevJournalføring(
     @get:JvmName("getÅrsak")
     val årsak: String,
 )
+
+data class SvartidsbrevJournalføringEnkel(
+    val navn: String,
+    val fødselsnummer: String,
+    val saksnummer: String,
+    val dato: Instant,
+    val mottattDato: LocalDate,
+    val saksbehandler: String,
+    val enhet: String,
+    val verge: String? = null,
+    val antallUker: String,
+)

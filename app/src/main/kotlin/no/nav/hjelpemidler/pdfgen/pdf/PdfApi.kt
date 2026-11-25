@@ -32,6 +32,8 @@ import no.nav.hjelpemidler.pdfgen.modell.BarnebrillerInnvilgetHotsak
 import no.nav.hjelpemidler.pdfgen.modell.Delbestilling
 import no.nav.hjelpemidler.pdfgen.modell.JournalfortNotatHotsak
 import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføring
+import no.nav.hjelpemidler.pdfgen.modell.SvartidsbrevJournalføringEnkel
+import io.ktor.server.plugins.BadRequestException
 import no.nav.hjelpemidler.pdfgen.template.SoknadTemplateService
 import no.nav.hjelpemidler.pdfgen.template.TemplateService
 import java.io.ByteArrayOutputStream
@@ -123,6 +125,7 @@ fun Route.pdfApi(pdfService: PdfService, templateService: TemplateService) {
                 "journalfortNotatHotsak" -> call.receive<JournalfortNotatHotsak>()
                 "barnebrillerAvvisningDirekteoppgjor" -> call.receive<BarnebrillerAvvisningDirekteoppgjor>()
                 "svartidsbrevJournalforing" -> call.receive<SvartidsbrevJournalføring>()
+                "svartidsbrevJournalforingEnkel" -> call.receive<SvartidsbrevJournalføringEnkel>()
                 else -> {
                     call.respond(HttpStatusCode.BadRequest, "ukjent brevkode")
                     return@post
