@@ -90,6 +90,7 @@ class SoknadPdfApiTest {
                 .resolve("soknad-$fixture.pdf").writeBytes(bytes)
             Loader.loadPDF(bytes).use { pdf ->
                 pdf.numberOfPages shouldBe expectedPages
+                pdf.documentCatalog.language shouldBe "nb"
                 val text = PDFTextStripper().getText(pdf).replace(Regex("\\s+"), " ")
                 if (fixture != "barnebrille") text shouldContain "24.11.2026"
                 for (expected in expectedText) {
