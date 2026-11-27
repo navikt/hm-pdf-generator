@@ -13,7 +13,7 @@ data class SvartidsbrevJournalføring(
     val enhet: String,
     val verge: String? = null,
     val antallUker: String,
-    // Kotlin lager getteren getårsak, mens Handlebars leter etter getÅrsak.
+    // Kotlin lager getteren getårsak, mens Handlebars leter etter getÅrsak
     @get:JvmName("getÅrsak")
     val årsak: String,
 )
